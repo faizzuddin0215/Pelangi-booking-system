@@ -1,23 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- <style>
-    /* Container for side-by-side layout */
-    .form-container {
-        display: flex;
-        flex-wrap: wrap; /* Allows wrapping for smaller screens */
-        gap: 2rem; /* Space between tables */
-    }
 
-    /* Make sure the tables are responsive */
-    .pickup-table-container,
-    .dropoff-table-container {
-        flex: 1; /* Equal space for both tables */
-        min-width: 300px; /* Ensure tables don't shrink too much */
-        max-width: 50%; /* Each table takes up half the width on large screens */
-    }
-
-</style> --}}
 <script src="https://cdn.tailwindcss.com"></script>
     <!-- Optionally configure Tailwind with custom settings -->
 <script>
