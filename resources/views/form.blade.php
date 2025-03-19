@@ -73,40 +73,6 @@
         <div class="p-6 text-gray-900 dark:text-gray-100">
             <div class="flex justify-between items-center flex-wrap">
                 @if ($booking_id)
-                    {{-- <nav class="mb-4" aria-label="Breadcrumb">
-                        <ol class="flex flex-wrap items-center space-x-3 text-sm text-gray-600 dark:text-gray-300">
-                            
-                            <li>
-                                <a id="page1" href="{{ url('form') }}?booking={{ $booking_id }}" class="text-indigo-600 font-semibold">
-                                    Basic Information
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page2" href="{{ url('form2', ['booking_id' => $booking_id, 'amend_id' => $amend_id]) }}" class="hover:text-indigo-500">
-                                    Room Details
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page3" href="{{ url('form3', ['booking_id' => $booking_id, 'amend_id' => $amend_id]) }}" class="hover:text-indigo-500">
-                                    Land Transfer & Optional
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page4" href="{{ url('form4', ['booking_id' => $booking_id, 'amend_id' => $amend_id]) }}" class="hover:text-indigo-500">
-                                    Remarks
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page5" href="{{ url('form5', ['booking_id' => $booking_id, 'amend_id' => $amend_id]) }}" class="hover:text-indigo-500">
-                                    Summary & Payment
-                                </a>
-                            </li>
-                        </ol>
-                    </nav> --}}
                     <!-- Navigation -->
                     <nav class="mb-4">
                         <!-- Hamburger Button (Visible on Mobile) -->

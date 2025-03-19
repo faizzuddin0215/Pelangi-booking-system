@@ -37,40 +37,6 @@
         <div class="p-6 text-gray-900 dark:text-gray-100">
             <!-- Breadcrumb Container -->
             <div class="flex justify-between items-center flex-wrap">
-                {{-- <nav class="mb-4" aria-label="Breadcrumb">
-                    <ol class="flex flex-wrap items-center space-x-3 text-sm text-gray-600 dark:text-gray-300">
-                        
-                        <li>
-                            <a href="{{ url('form') }}?booking={{ $bookings->booking_id }}&amend={{$amendId}}" class="hover:text-indigo-500">
-                                Basic Information
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form2', [$bookings->booking_id, $amendId]) }}" class="text-indigo-600 font-semibold">
-                                Room Details
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form3', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
-                                Land Transfer & Optional
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form4', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
-                                Remarks
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form5', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
-                                Summary & Payment
-                            </a>
-                        </li>
-                    </ol>
-                </nav> --}}
                 <nav class="mb-4">
                     <!-- Mobile Menu Toggle -->
                     <input type="checkbox" id="menu-toggle" class="peer hidden">
