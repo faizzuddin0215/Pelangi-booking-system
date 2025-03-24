@@ -498,13 +498,35 @@
             const page5 = document.getElementById('page5');
             page5.href = `form5/${bookingId}/0`;
 
-            fetchBookingData(bookingId);
+            searchBookingData(bookingId);
 
             document.getElementById('formButton').textContent = 'Saved Changes';
         } else {
             alert("Please enter a Booking ID.");
         }
     };
+
+    function searchBookingData(bookingId) {
+        var amendId = 0;
+        amendID = amendId ? parseInt(amendId, 10) : 0;
+        // Send an AJAX request to the server
+        fetch('form/' + bookingId + '/getBookingData/' + amendID)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    var amendBookingData = data.amendBooking;
+                    populateAmendDropdown(amendBookingData, data.booking);
+                    // Update form fields with the received data
+                    fillFormFields(data.booking, data.password, amendID);
+                } else {
+                    alert('Booking not found.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching booking data:', error);
+            });
+
+    }
 
     function fetchBookingData(bookingId) {
         var amendId = "{{ $amend_id }}";

@@ -1138,21 +1138,21 @@
             total_package: document.getElementById('package_amount').textContent,
             agent: document.getElementById('agent').value,
             paxRoom: {
-                double: document.getElementById('sum_double_pax_input').value,
-                triple: document.getElementById('sum_triple_pax_input').value,
-                quad: document.getElementById('sum_quad_pax_input').value,
+                double: document.getElementById('sum_double_pax_input')?.value || 0,
+                triple: document.getElementById('sum_triple_pax_input')?.value || 0,
+                quad: document.getElementById('sum_quad_pax_input')?.value || 0,
 
-                sea_double: document.getElementById('sea_sum_double_pax_input').value,
-                sea_triple: document.getElementById('sea_sum_triple_pax_input').value,
-                sea_quad: document.getElementById('sea_sum_quad_pax_input').value,
+                sea_double: document.getElementById('sea_sum_double_pax_input')?.value || 0,
+                sea_triple: document.getElementById('sea_sum_triple_pax_input')?.value || 0,
+                sea_quad: document.getElementById('sea_sum_quad_pax_input')?.value || 0,
 
-                // room_double: document.getElementById('sum_double_pax').value,
-                // room_triple: document.getElementById('sum_triple_pax').value,
-                // room_quad: document.getElementById('sum_quad_pax').value,
+                room_double: document.getElementById('sum_double_pax').textContent.trim(),
+                room_triple: document.getElementById('sum_triple_pax').textContent.trim(),
+                room_quad: document.getElementById('sum_quad_pax').textContent.trim(),
 
-                // room_sea_double: document.getElementById('sea_sum_double_pax').value,
-                // room_sea_triple: document.getElementById('sea_sum_triple_pax').value,
-                // room_sea_quad: document.getElementById('sea_sum_quad_pax').value,
+                room_sea_double: document.getElementById('sea_sum_double_pax').textContent.trim(),
+                room_sea_triple: document.getElementById('sea_sum_triple_pax').textContent.trim(),
+                room_sea_quad: document.getElementById('sea_sum_quad_pax').textContent.trim(),
             },
             pax: {
                 double_adult_pax: parseFloat(getValue('double_adult_pax').replace(/,/g, '')),
