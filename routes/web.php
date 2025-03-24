@@ -43,6 +43,8 @@ Route::post('/form4/{bookingId}', [FormController::class, 'updateField'])->name(
 Route::get('/form5/{bookingId}/{amendId}', [FormController::class, 'form5'])->name('form5');
 Route::get('/form5/{bookingId}/{amendId}', [FormController::class, 'totalDetails']);
 Route::post('/form5/{bookingId}', [FormController::class, 'changeDeposit']); 
+Route::post('/form5/{bookingId}/save', [FormController::class, 'savePayment']); 
+Route::post('/form5/{bookingId}/addPayment', [FormController::class, 'addPayment']); 
 
 Route::get('/check_in_out_report', [ReportController::class, 'index'])->name('check_in_out_report');
 Route::get('/check_in_out_report', [ReportController::class, 'report'])->name('check_in_out_report');

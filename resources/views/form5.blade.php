@@ -212,6 +212,79 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <br />
+                            <div class="overflow-x-auto">
+                                <table class="table-auto min-w-[600px] w-full border border-gray-300 text-left">
+                                    <thead class="bg-gray-100">
+                                        <tr class="text-xs">
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Date</th>
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Amount</th>
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Bank</th>
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Bank Details</th>
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($receipts as $key => $receipt)
+                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
+                                            <input type="hidden" name="aiid[]" id="aiid_{{ $key }}" value="{{ $receipt->AI_ID }}">
+                                            
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <input type="date" name="date[]" id="datePicker_{{ $key }}" class="border px-2 py-1 w-full text-xs" 
+                                                    value="{{ $receipt->paid_date ? \Carbon\Carbon::parse($receipt->paid_date)->format('Y-m-d') : '' }}">
+                                            </td>
+                            
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <input type="number" name="amount[]" id="amount_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
+                                                    value="{{ $receipt->amount }}">
+                                            </td>
+                            
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <input type="text" name="bank[]" id="bank_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
+                                                    value="{{ $receipt->bank }}">
+                                            </td>
+                            
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <input type="text" name="bank_details[]" id="bank_details_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
+                                                    value="{{ $receipt->bank_details }}">
+                                            </td>
+                            
+                                            <td class="border border-gray-300 px-2 py-2 text-center">
+                                                {{ $receipt->ID }}
+                                            </td>
+                                        </tr>
+                                        @endforeach                             
+                            
+                                        <!-- Summary Rows -->
+                                        <tr class="bg-gray-100 hover:bg-gray-200 text-xs">
+                                            <td class="border border-gray-300 px-2 py-2"><strong>Last Paid: {{ $lastpaid->paid_date }}</strong></td>
+                                            <td class="border border-gray-300 px-2 py-2" colspan=4>
+                                                {{ number_format($totalpay ?? 0, 2) }}
+                                            </td>
+                                        </tr> 
+                                        <tr class="bg-gray-100 hover:bg-gray-200 text-xs">
+                                            <td class="border border-gray-300 px-2 py-2"><strong>Balance (RM)</strong></td>
+                                            <td class="border border-gray-300 px-2 py-2" colspan=4>
+                                                {{ number_format(($grand_total_with_sst - $totalpay) ?? 0, 2) }}
+                                            </td>
+                                        </tr>
+                                    </tbody>    
+                                </table>
+                            </div>
+                            
+                            <!-- Add Row Button -->
+                            <button onclick="addRow()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-xs block w-full sm:w-auto">Add Row</button>
+                                                        <br/>
+                            <div class="flex justify-end space-x-4">
+                                <button
+                                    type="button"
+                                    id="save"
+                                    class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-xs"
+                                    onclick="save()"
+                                >
+                                    Save
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -251,6 +324,101 @@
             .catch(error => console.error("Error updating field:", error));
         }, doneTypingInterval);
 
+    }
+
+    function save() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
+
+        let rows = document.querySelectorAll("tbody tr:not(:last-child):not(:nth-last-child(2))");
+        let receiptData = [];
+
+        rows.forEach((row, index) => {
+            let aiInput = row.querySelector("input[name='aiid[]']");
+            let dateInput = row.querySelector("input[name='date[]']");
+            let amountInput = row.querySelector("input[name='amount[]']");
+            let bankInput = row.querySelector("input[name='bank[]']");
+            let bankDetailsInput = row.querySelector("input[name='bank_details[]']");
+
+            // ✅ Skip empty rows (if all inputs are missing)
+            if (!aiInput && !dateInput && !amountInput && !bankInput && !bankDetailsInput) {
+                console.warn(`Row ${index + 1} is empty, skipping...`);
+                return;
+            }
+
+            if (aiInput && dateInput && amountInput && bankInput && bankDetailsInput) {
+                let amountValue = amountInput.value.trim();
+                receiptData.push({
+                    ai_id: aiInput.value.trim(),
+                    date: dateInput.value.trim(),
+                    amount: amountValue !== "" ? parseFloat(amountValue) : 0,
+                    bank: bankInput.value.trim(),
+                    bank_details: bankDetailsInput.value.trim(),
+                    amend_id: amendId
+                });
+            } else {
+                console.warn(`Missing input fields in row ${index + 1}, skipping...`);
+            }
+        });
+
+        const saveButton = document.getElementById("saveButton");
+        if (saveButton) saveButton.disabled = true;
+
+        fetch(`{{ url('/form5') }}/${bookingId}/save`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({ receiptData })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            alert("Successfully Updated!");
+            // window.location.href = `{{ url('form5') }}/${bookingId}/${amendId}`;
+        })
+        .catch(error => {
+            console.error("Error updating records:", error);
+            alert("An error occurred while updating records. Please try again.");
+        })
+        .finally(() => {
+            if (saveButton) saveButton.disabled = false;
+        });
+    }
+
+    function addRow() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
+
+        fetch(`{{ url('/form5') }}/${bookingId}/addPayment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                booking_id: bookingId,
+                amendId : amendId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the related table cells dynamically
+                // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
+                location.reload();
+            } else {
+                alert(data.message || 'Failed to fetch pickup details');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching pickup details:', error);
+        });
     }
 
 </script>

@@ -14,6 +14,7 @@ use App\Models\OptionalCodeBooking;
 use App\Models\Pickup;
 use App\Models\PickupDetails;
 use App\Models\Rates;
+use App\Models\receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -380,7 +381,6 @@ class FormController extends Controller
     {   
         // Fetch the booking data based on the provided booking ID
         $booking = Bookings::where('booking_id', $bookingId)->where('amend_id', $amendID)->first();
-
         $amendBooking = Bookings::query()
         ->where('booking_id', $bookingId)
         ->where('amend_id', '>', 0)
@@ -532,7 +532,6 @@ class FormController extends Controller
 
         $days = (int)$check_in->diffInDays($check_out) + 1;
         $nights = (int)$check_in->diffInDays($check_out); 
-        info($days);
 
         $total_pickup = $pickups->sum('total_pickup_rate');
 
@@ -1005,13 +1004,8 @@ class FormController extends Controller
             'deluxe_triple'  => $paxRoom['sea_triple'],
             'deluxe_quad'  => $paxRoom['sea_quad'],
 
-            // 'room_double'    => $paxRoom['room_double'] ?? 0,
-            // 'room_triple'    => $paxRoom['room_triple'] ?? 0,
-            // 'room_quad'      => $paxRoom['room_quad'] ?? 0,
-            // 'deluxe_double'  => $paxRoom['room_sea_double'],
-            // 'deluxe_triple'  => $paxRoom['room_sea_triple'],
-            // 'deluxe_quad'  => $paxRoom['room_sea_quad'],
         ];
+
         
         $fields = [
             'double_adult_pax' => 'd_adult_pax',
@@ -1093,6 +1087,21 @@ class FormController extends Controller
         ->where('booking_id', $bookingId)
         ->where('amend_id', $request->amendid)
         ->update($updateData);
+
+        if ($paxRoom['room_double'] || $paxRoom['room_triple'] || $paxRoom['room_quad'] ||
+        $paxRoom['room_sea_double'] || $paxRoom['room_sea_triple'] || $paxRoom['room_sea_quad']) {
+            Bookings::query()
+            ->where('booking_id', $bookingId)
+            ->where('amend_id', $request->amendid)
+            ->update([
+                'room_double'    => $paxRoom['room_double'],
+                'room_triple'    => $paxRoom['room_triple'],
+                'room_quad'      => $paxRoom['room_quad'],
+                'deluxe_double'  => $paxRoom['room_sea_double'],
+                'deluxe_triple'  => $paxRoom['room_sea_triple'],
+                'deluxe_quad'    => $paxRoom['room_sea_quad'],
+            ]);
+        }
 
         return response()->json([
             'message' => 'Dates updated successfully.',
@@ -1863,17 +1872,10 @@ class FormController extends Controller
 
     public function totalDetails($bookingId, $amendId) {
 
-        // if ($amendId == 0) {
-            $bookings = Bookings::query()
-            ->where('booking_id', $bookingId)
-            ->where('amend_id', $amendId)
-            ->first();
-        // } else {
-        //     $bookings = BookingsAmend::query()
-        //     ->where('booking_id', $bookingId)
-        //     ->where('amend_id', $amendId)
-        //     ->first();
-        // }
+        $bookings = Bookings::query()
+        ->where('booking_id', $bookingId)
+        ->where('amend_id', $amendId)
+        ->first();
 
         $check_in = Carbon::parse( $bookings->check_in); // Start date
         $check_out = Carbon::parse( $bookings->check_out);   // End date
@@ -1938,24 +1940,14 @@ class FormController extends Controller
 
         $deposit = $grand_total_with_sst * 0.20;
 
-        // if ($amendId == 0) {
-            Bookings::query()
-            ->where('booking_id', $bookingId)
-            ->where('amend_id', $amendId)
-            ->update([
-                'landtransfer_total' => $landTransfer,
-                'optional_total' => $optionalArrangements,
-                'deposit_amount'  =>  $deposit,
-            ]);
-        // } else {
-        //     BookingsAmend::query()
-        //     ->where('booking_id', $bookingId)
-        //     ->update([
-        //         'landtransfer_total' => $landTransfer,
-        //         'optional_total' => $optionalArrangements,
-        //         'deposit_amount'  =>  $deposit,
-        //     ]);
-        // }
+        Bookings::query()
+        ->where('booking_id', $bookingId)
+        ->where('amend_id', $amendId)
+        ->update([
+            'landtransfer_total' => $landTransfer,
+            'optional_total' => $optionalArrangements,
+            'deposit_amount'  =>  $deposit,
+        ]);
 
         $total_sst = ($bookings->package_total + $landTransfer + $total_optional) / 1.08 * 0.08;
 
@@ -1963,7 +1955,88 @@ class FormController extends Controller
 
         $amount_due = $grand_total_with_sst - $deposit;
 
-        return view('form5', compact('bookings', 'total_optional_no_sst', 'total_sst',  'grand_total_with_sst', 'days', 'nights', 'total_amount_no_sst', 'deposit', 'amount_due', 'amendId'));
+        $receipts = receipt::query()
+        ->where('booking_ID', $bookingId)
+        ->get();
+
+        $totalpay = $receipts->sum('amount');
+        $lastpaid = receipt::query()
+        ->where('booking_ID', $bookingId)
+        ->orderBy('AI_ID', 'desc')
+        ->first();
+
+        $countreceipt = $receipts->count();
+
+        if ($countreceipt == 0) {
+            $latestReceipt = Receipt::query()
+            ->where('ID', '>', 0)
+            ->orderBy('AI_ID', 'desc')
+            ->value('ID');
+
+            receipt::insert([
+                'ID'            => $latestReceipt + 1,
+                'booking_ID'    => $bookingId,
+                'paid_date'  => now(),
+                'issue_date'  => now(),
+                'payment_from'  =>  '',
+                'amount'        =>  0,
+            ]);
+
+        }
+
+        return view('form5', compact('bookings', 'total_optional_no_sst', 'total_sst',  'grand_total_with_sst', 'days', 'nights', 'total_amount_no_sst', 'deposit', 'amount_due', 'amendId', 'receipts', 'totalpay', 'lastpaid'));
+    }
+
+    public function savePayment(Request $request, $bookingId) {
+    
+        // ✅ Loop through each receipt in the `receiptData` array
+        foreach ($request->receiptData as $receipt) {
+            // ✅ Validate required fields (ensure 'ai_id' exists)
+            if (!isset($receipt['ai_id']) || !isset($receipt['date']) || !isset($receipt['amount'])) {
+                continue; // Skip incomplete records
+            }
+    
+            // ✅ Get Payment From
+            $payment_for = 'Security Deposit for Booking ' . $bookingId;
+            $payment_from = Bookings::query()
+                ->where('booking_id', $bookingId)
+                ->where('amend_id', $receipt['amend_id']) // Use `$receipt['amend_id']` instead of `$request->amend_id`
+                ->value('company');
+    
+            // ✅ Update each record properly
+            Receipt::query()
+                ->where('booking_id', $bookingId)
+                ->where('AI_ID', $receipt['ai_id'])
+                ->update([
+                    'amount'        => $receipt['amount'] ?? 0, // Convert empty values to `0`
+                    'bank'          => $receipt['bank'] ?? null, // Convert empty to `NULL`
+                    'bank_details'  => $receipt['bank_details'] ?? null,
+                    'paid_date'     => $receipt['date'] ?? null,
+                    'issue_date'    => now(),
+                    'payment_for'   => $payment_for,
+                    'payment_from'  => $payment_from
+                ]);
+        }
+    
+        return response()->json(['success' => true, 'message' => 'Successfully updated']);
+    }
+    
+    public function addPayment(Request $request, $bookingId) {
+        $latestReceipt = Receipt::query()
+        ->where('ID', '>', 0)
+        ->orderBy('AI_ID', 'desc')
+        ->value('ID');
+
+        receipt::insert([
+            'ID'            => $latestReceipt + 1,
+            'booking_ID'    => $bookingId,
+            'paid_date'  => now(),
+            'issue_date'  => now(),
+            'payment_from'  =>  '',
+            'amount'        =>  0,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Successfully updated']);
     }
 
     public function deletePickup(Request $request,$id)

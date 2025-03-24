@@ -1127,7 +1127,6 @@
                 sea_quad_toddler_price: parseFloat(getValue('sea_quad_toddler').replace(/,/g, ''))
             }
         };
-        console.log(paxData);
 
         fetch(`{{ url('/form2') }}/${bookingId}`, {
             method: "POST",
