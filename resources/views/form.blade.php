@@ -498,7 +498,7 @@
             const page5 = document.getElementById('page5');
             page5.href = `form5/${bookingId}/0`;
 
-            searchBookingData(bookingId);
+            fetchBookingData(bookingId, 0);
 
             document.getElementById('formButton').textContent = 'Saved Changes';
         } else {
@@ -506,30 +506,12 @@
         }
     };
 
-    function searchBookingData(bookingId) {
-        var amendId = 0;
-        amendID = amendId ? parseInt(amendId, 10) : 0;
-        // Send an AJAX request to the server
-        fetch('form/' + bookingId + '/getBookingData/' + amendID)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    var amendBookingData = data.amendBooking;
-                    populateAmendDropdown(amendBookingData, data.booking);
-                    // Update form fields with the received data
-                    fillFormFields(data.booking, data.password, amendID);
-                } else {
-                    alert('Booking not found.');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching booking data:', error);
-            });
-
-    }
-
-    function fetchBookingData(bookingId) {
-        var amendId = "{{ $amend_id }}";
+    function fetchBookingData(bookingId, amend) {
+        if (amend == 0) {
+            var amendId = 0;
+        } else {
+            var amendId = "{{ $amend_id }}";
+        }
         amendID = amendId ? parseInt(amendId, 10) : 0;
         // Send an AJAX request to the server
         fetch('form/' + bookingId + '/getBookingData/' + amendID)
@@ -584,17 +566,15 @@
         // Handle selection change
         amendSelect.onchange = function () {
             const selectedValue = this.value; // Get selected value
-            handleAmendmentSelection(selectedValue);
+            handleAmendmentSelection(selectedValue, booking.booking_id);
         };
     }    
-    function handleAmendmentSelection(amendID) {
-        // var bookingId = document.getElementById('booking_id').value;
-        var bookingId = "{{ $booking_id }}";
+    function handleAmendmentSelection(amendID, bookingId) {
 
         if (bookingId) {
             bookingId = bookingId;
         } else {
-            bookingId = document.getElementById('booking_id').value;
+            var bookingId = "{{ $booking_id }}";
         }
         if (bookingId) {
             // Send an AJAX request to the server
@@ -616,7 +596,7 @@
                     // Update form fields with the received data
                     fillFormFields(data.booking, data.password, amendID);
                 } else {
-                    alert('Booking not found.');
+                    alert('Booking not found23.');
                 }
             })
             .catch(error => {

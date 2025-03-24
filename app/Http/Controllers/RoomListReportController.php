@@ -12,16 +12,13 @@ class RoomListReportController extends Controller
     public function index()
     {
         $bookings = collect(); 
-        info($bookings);
         return view('room_list_report', compact('bookings'));
     }
 
     public function report(Request $request)
     {
         $fdate = '';
-        // info($fdate);
         $tdate = '';
-        // info($tdate);
 
         $search = '';
         

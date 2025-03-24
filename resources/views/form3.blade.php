@@ -1121,7 +1121,6 @@
 
         const newPaxValue = event.target.value;
         const pickupId = rowId;
-        console.log(`Updated pax value for row ${rowId}: ${newPaxValue}`);
         
         fetch(`{{ url('/form3') }}/${bookingId}`, {
             method: 'POST',
@@ -1140,7 +1139,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // Update the related table cells dynamically
                 document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 $('#total_pickup').val(data.total_pickup);
@@ -1174,7 +1172,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // Update the related table cells dynamically
                 // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();
@@ -1235,7 +1232,6 @@
 
         const newPaxValue = event.target.value;
         const dropoffId = rowId;
-        console.log(`Updated pax value for row ${rowId}: ${newPaxValue}`);
         
         fetch(`{{ url('/form3') }}/${bookingId}`, {
             method: 'POST',
@@ -1254,7 +1250,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // Update the related table cells dynamically
                 document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();
@@ -1287,7 +1282,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // Update the related table cells dynamically
                 // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();
@@ -1489,7 +1483,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // Update the related table cells dynamically
                 document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.optional_total;
                 // $('#total_pickup').val(data.total_pickup);
@@ -1523,7 +1516,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // Update the related table cells dynamically
                 // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();
@@ -1697,7 +1689,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();
             } else {
@@ -1795,7 +1786,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();
             } else {

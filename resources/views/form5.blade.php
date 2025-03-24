@@ -362,8 +362,6 @@
             }
         });
 
-        console.log("Final Receipt Data:", receiptData);
-
         const saveButton = document.getElementById("saveButton");
         if (saveButton) saveButton.disabled = true;
 
@@ -411,7 +409,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(data);
                 // Update the related table cells dynamically
                 // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();

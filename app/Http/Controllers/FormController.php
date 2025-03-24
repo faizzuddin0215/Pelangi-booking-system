@@ -380,9 +380,7 @@ class FormController extends Controller
     public function getBookingData($bookingId, $amendID)
     {   
         // Fetch the booking data based on the provided booking ID
-        info($amendID);
         $booking = Bookings::where('booking_id', $bookingId)->where('amend_id', $amendID)->first();
-        info($booking);
         $amendBooking = Bookings::query()
         ->where('booking_id', $bookingId)
         ->where('amend_id', '>', 0)
@@ -1990,7 +1988,6 @@ class FormController extends Controller
     }
 
     public function savePayment(Request $request, $bookingId) {
-        info($request->all()); // ✅ Logs the full request for debugging
     
         // ✅ Loop through each receipt in the `receiptData` array
         foreach ($request->receiptData as $receipt) {
