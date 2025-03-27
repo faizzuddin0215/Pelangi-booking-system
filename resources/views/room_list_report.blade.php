@@ -111,8 +111,8 @@
                                                 <th class="border border-gray-300 p-2 print:p-[2px]">Rooms</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px]">Room Allocated</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px]">Remarks</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Booking ID</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Name List</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">ID</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">NL</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -120,10 +120,10 @@
                                                 @foreach ($booking_details as $cnt => $group)
                                                 @php $row = $group->first(); @endphp
                                                 <tr class="odd:bg-white even:bg-gray-50">
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[85px] print:w-[50px]">
                                                         {{ $row->check_in }}
                                                     </td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[85px] print:w-[50px]">
                                                         {{ $row->check_out }}
                                                     </td>
                                                     @if ($row->nights)
@@ -140,10 +140,10 @@
                                                         {{$row->group_name}} ({{ $row->company }})
                                                     </td>
 
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[60px] print:w-[35px]">
                                                         {{ $row->pax_adult ?? '_' }} {{ $row->pax_child ?? '_' }} {{ $row->pax_toddler ?? '_' }} {{ $row->pax_pax_foc_tl ?? '_' }}
                                                     </td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[100px] print:w-[60px]">
                                                         @php
                                                             $roomTypes = ['Q', 'T', 'D', 'DL'];
                                                             $deluxeRoomTypes = ['Deluxe_Q', 'Deluxe_T', 'Deluxe_D'];
@@ -167,7 +167,9 @@
                                                             {{ $row->booking_id }}
                                                         </a>
                                                     </td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">NL ({{ $row->pax_adult + $row->pax_child + $row->pax_toddler }})</td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[60px] print:w-[30px]">
+                                                        NL ({{ $row->pax_adult + $row->pax_child + $row->pax_toddler }})
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                             @else

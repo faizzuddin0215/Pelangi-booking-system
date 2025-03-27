@@ -75,6 +75,12 @@
                                 Summary & Payment
                             </a>
                         </li>
+                        <li><span class="text-gray-400">|</span></li>
+                        <li>
+                            <a href="{{ url('invoice', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
+                                Invoice
+                            </a>
+                        </li>
                     </ol>
                 
                     <!-- Mobile Dropdown Menu -->
@@ -102,6 +108,11 @@
                         <li>
                             <a href="{{ url('form5', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                                 Summary & Payment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('invoice', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Invoice
                             </a>
                         </li>
                     </ol>
@@ -230,26 +241,30 @@
                                             <input type="hidden" name="aiid[]" id="aiid_{{ $key }}" value="{{ $receipt->AI_ID }}">
                                             
                                             <td class="border border-gray-300 px-2 py-2">
-                                                <input type="date" name="date[]" id="datePicker_{{ $key }}" class="border px-2 py-1 w-full text-xs" 
-                                                    value="{{ $receipt->paid_date ? \Carbon\Carbon::parse($receipt->paid_date)->format('Y-m-d') : '' }}">
+                                                {{-- <input type="date" name="date[]" id="datePicker_{{ $key }}" class="border px-2 py-1 w-full text-xs" 
+                                                    value="{{ $receipt->paid_date ? \Carbon\Carbon::parse($receipt->paid_date)->format('Y-m-d') : '' }}"> --}}
+                                                {{ $receipt->paid_date ? \Carbon\Carbon::parse($receipt->paid_date)->format('Y-m-d') : '' }}
                                             </td>
                             
                                             <td class="border border-gray-300 px-2 py-2">
-                                                <input type="number" name="amount[]" id="amount_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
-                                                    value="{{ $receipt->amount }}">
+                                                {{-- <input type="number" name="amount[]" id="amount_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
+                                                    value="{{ $receipt->amount }}"> --}}
+                                                {{ $receipt->amount }}
                                             </td>
                             
                                             <td class="border border-gray-300 px-2 py-2">
-                                                <input type="text" name="bank[]" id="bank_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
-                                                    value="{{ $receipt->bank }}">
+                                                {{-- <input type="text" name="bank[]" id="bank_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500"  --}}
+                                                    {{-- value="{{ $receipt->bank }}"> --}}
+                                                 {{ $receipt->bank }}
                                             </td>
                             
                                             <td class="border border-gray-300 px-2 py-2">
-                                                <input type="text" name="bank_details[]" id="bank_details_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
-                                                    value="{{ $receipt->bank_details }}">
+                                                {{-- <input type="text" name="bank_details[]" id="bank_details_{{ $key }}" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
+                                                    value="{{ $receipt->bank_details }}"> --}}
+                                                {{ $receipt->bank_details }}
                                             </td>
                             
-                                            <td class="border border-gray-300 px-2 py-2 text-center">
+                                            <td class="border border-gray-300 px-2 py-2">
                                                 {{ $receipt->ID }}
                                             </td>
                                         </tr>
@@ -257,7 +272,7 @@
                             
                                         <!-- Summary Rows -->
                                         <tr class="bg-gray-100 hover:bg-gray-200 text-xs">
-                                            <td class="border border-gray-300 px-2 py-2"><strong>Last Paid: {{ $lastpaid->paid_date }}</strong></td>
+                                            <td class="border border-gray-300 px-2 py-2"><strong>Last Paid: {{ $lastpaid->paid_date ?? 0 }}</strong></td>
                                             <td class="border border-gray-300 px-2 py-2" colspan=4>
                                                 {{ number_format($totalpay ?? 0, 2) }}
                                             </td>
@@ -270,11 +285,62 @@
                                         </tr>
                                     </tbody>    
                                 </table>
+                                <br />
+                                <table class="table-auto min-w-[600px] w-full border border-gray-300 text-left">
+                                    <thead class="bg-gray-100">
+                                        <tr class="text-xs">
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Date</th>
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Amount</th>
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Bank</th>
+                                            <th class="border border-gray-300 px-2 py-2 font-semibold text-gray-700">Bank Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <input type="date" name="date" id="datePicker" class="border px-2 py-1 w-full text-xs" 
+                                                    value="">
+                                               
+                                            </td>
+                            
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <input type="number" name="amount" id="amount" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
+                                                    value="">
+                                                
+                                            </td>
+                            
+                                            {{-- <td class="border border-gray-300 px-2 py-2">
+                                                <input type="text" name="bank" id="bank" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" value="">
+                                                
+                                            </td> --}}
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <select name="bank" id="bank" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500">
+                                                    <option value="">Select a bank</option>
+                                                    <option value="CIMB">CIMB</option>
+                                                    <option value="HLBB">HLBB</option>
+                                                    <option value="HLIB">HLIB</option>
+                                                    <option value="MBB">MBB</option>
+                                                    <option value="RHB">RHB</option>
+                                                    <option value="UOB">UOB</option>
+                                                    <option value="Cash">Cash</option>
+                                                </select>
+                                            </td>
+                            
+                                            <td class="border border-gray-300 px-2 py-2">
+                                                <input type="text" name="bank_details" id="bank_details" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500" 
+                                                    value="">
+                                            </td>
+                                        </tr>
+                                    </tbody>    
+                                </table>
                             </div>
                             
                             <!-- Add Row Button -->
-                            <button onclick="addRow()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-xs block w-full sm:w-auto">Add Row</button>
-                                                        <br/>
+                            <div class="flex justify-end space-x-4">
+                                <button onclick="generatepayment()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-xs block w-full sm:w-auto">Generate Payment</button>
+                                <button onclick="viewinvoice()" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg text-xs block w-full sm:w-auto">View Invoice</button>
+                            </div>
+                            {{-- <br/>
                             <div class="flex justify-end space-x-4">
                                 <button
                                     type="button"
@@ -284,7 +350,7 @@
                                 >
                                     Save
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -390,10 +456,26 @@
         });
     }
 
-    function addRow() {
+    function viewinvoice() {
         const urlParams = new URLSearchParams(window.location.search);
         const bookingId = window.location.pathname.split('/')[4];
         const amendId = window.location.pathname.split('/')[5];
+        window.location.href = "{{ url('invoice') }}/" + bookingId + "/" + amendId;
+
+    }
+
+    function generatepayment() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
+
+        const paymentDetails = {
+            date : document.getElementById('datePicker').value,
+            amount : document.getElementById('amount').value,
+            bank : document.getElementById('bank').value,
+            bank_details : document.getElementById('bank_details').value,
+        };
+        console.log(paymentDetails);
 
         fetch(`{{ url('/form5') }}/${bookingId}/addPayment`, {
             method: 'POST',
@@ -403,17 +485,16 @@
             },
             body: JSON.stringify({
                 booking_id: bookingId,
-                amendId : amendId
+                amendId : amendId,
+                paymentDetails
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update the related table cells dynamically
-                // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
                 location.reload();
             } else {
-                alert(data.message || 'Failed to fetch pickup details');
+                alert(data.message || 'Failed to add a new row');
             }
         })
         .catch(error => {

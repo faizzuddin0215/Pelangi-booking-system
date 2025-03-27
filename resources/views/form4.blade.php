@@ -59,6 +59,12 @@
                                 Summary & Payment
                             </a>
                         </li>
+                        <li><span class="text-gray-400">|</span></li>
+                        <li>
+                            <a href="{{ url('invoice', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
+                                Invoice
+                            </a>
+                        </li>
                     </ol>
                 
                     <!-- Mobile Dropdown Menu -->
@@ -86,6 +92,11 @@
                         <li>
                             <a href="{{ url('form5', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                                 Summary & Payment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('invoice', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Invoice
                             </a>
                         </li>
                     </ol>
