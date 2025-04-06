@@ -91,37 +91,66 @@
                 </form>
                 <div id="printArea" class="text-lg print:text-[6px]">
                     <div class="flex flex-col space-y-4">
-                        Driver Report<br />
-                        Date: {{ \Carbon\Carbon::parse($fdate)->format('d/m/Y') }}
+                        
                         {{-- <div class="card bg-white shadow rounded-lg"> --}}
-                            <div class="p-4">
+                            <div class="p-4 pb-5">
+                                Driver Report 
+                                ({{ \Carbon\Carbon::parse($fdate)->format('d/m/Y') }})
                                 <div class="overflow-x-auto text-sm print:text-[7px]">
-                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[8px] leading-tight">
+                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[14px] leading-tight">
                                         <thead>
                                             <tr>
-                                                <th colspan="8" class="text-left font-bold text-gray-700 border-b border-gray-300 p-2">PICKUP</th>
+                                                <th colspan="8" class="text-left font-bold text-gray-700 border border-gray-800 p-2">PICKUP</th>
                                             </tr>
                                             <tr class="bg-gray-100 text-left">
-                                                {{-- <th class="border border-gray-300 p-2 print:p-[2px]">#</th> --}}
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">#</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[400px] whitespace-nowrap">Group Name (Company)</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[300px] whitespace-nowrap">Contact</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Pax</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[400px] whitespace-nowrap text-center">Pax</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[500px] whitespace-nowrap">Transport Type (Pax)</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Booking ID</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Rooms</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">NL</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Driver</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Name List</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($bookings as $cnt => $group)
+                                            @foreach ($bookings as $group)
                                             @php $row = $group->first(); @endphp
                                             <tr class="odd:bg-white even:bg-gray-50">
-                                                {{-- <td class="border border-gray-300 p-2 print:p-[2px]">{{ $cnt }}</td> --}}
-                                                <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row->group_name }}</td>
-                                                <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row->group_contact }}</td>
+                                                <td class="border border-gray-300 p-2 print:p-[2px]">{{ $loop->iteration }}</td>
                                                 <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                    {{ $row->pax_adult ?? '_' }} {{ $row->pax_child ?? '_' }} {{ $row->pax_toddler ?? '_' }} {{ $row->pax_foc_tl ?? '_' }}
+                                                    {{ $row->group_name }}
+                                                    @if(!empty($row->company))
+                                                        ({{ $row->company }})
+                                                    @endif
+                                                </td>
+                                                <td class="border border-gray-300 p-2 print:p-[2px] w-[50px]">{{ $row->group_contact }}</td>
+                                                <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {{ $row->pax_adult ?: '' }}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {{ $row->pax_child ?: '' }}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {{ $row->pax_toddler ?: '' }}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {!! '&nbsp;' !!}
+                                                        {{ $row->pax_foc_tl ?: '' }}
                                                 </td>
                                                 <td class="border border-gray-300 p-2 print:p-[2px]">
                                                     {!! implode('<br/>', array_filter([
@@ -136,22 +165,35 @@
                                                          {{ $row->booking_id }}
                                                      </a>
                                                 </td>
-                                                <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                    {{ implode(' ', $group->pluck('rooms')->filter()->toArray()) }}
-                                                </td>
-                                                <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                </td>
                                                 <td class="border border-gray-300 p-2 print:p-[2px]">NL ({{ $row->pax_adult + $row->pax_child + $row->pax_toddler }})</td>
+                                                <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                </td>
                                             </tr>
                                             @endforeach
                                             <tr>
                                                 <td></td>
                                                 <td></td>
-                                                <td>
-                                                    {{ $sumpax['sumpax_adult'] }} 
-                                                    {{ $sumpax['sumpax_child'] }} 
-                                                    {{ $sumpax['sumpax_toddler'] }} 
-                                                    {{ $sumpax['sumpax_tl'] }}
+                                                <td></td>
+                                                <td class="w-[550px]">
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax['sumpax_adult'] }}A 
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax['sumpax_child'] }}C 
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax['sumpax_toddler'] }}T 
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax['sumpax_tl'] }}T/L
                                                 </td>
                                             </tr>
                                         </tbody>                                
@@ -167,35 +209,62 @@
                         {{-- <div class="card bg-white shadow rounded-lg"> --}}
                             <div class="p-4">
                                 <div class="overflow-x-auto text-sm print:text-[7px]">
-                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[8px] leading-tight">
+                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[14px] leading-tight">
                                         <thead>
                                             <tr>
-                                                <th colspan="8" class="text-left font-bold text-gray-700 border-b border-gray-300 p-2">DROPOFF</th>
+                                                <th colspan="8" class="text-left font-bold text-gray-700 border border-gray-800 p-2">DROPOFF</th>
                                             </tr>
                                             <tr class="bg-gray-100 text-left">
-                                                {{-- <th class="border border-gray-300 p-2 print:p-[2px]">#</th> --}}
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">#</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[400px] whitespace-nowrap">Group Name (Company)</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[300px] whitespace-nowrap">Contact</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Pax</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[400px] whitespace-nowrap text-center">Pax</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[500px] whitespace-nowrap">Transport Type (Pax)</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Booking ID</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Rooms</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">NL</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Driver</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Name List</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($dropoffs as $cnt => $group)
+                                            @foreach ($dropoffs as $group)
                                                 @php
                                                     // Get the first row from the group to display common data
                                                     $row2 = $group->first();
                                                 @endphp
                                                 <tr class="odd:bg-white even:bg-gray-50">
-                                                    {{-- <td class="border border-gray-300 p-2 print:p-[2px]">{{ $cnt }}</td> --}}
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row2->group_name }}</td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row2->group_contact }}</td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $loop->iteration }}</td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                        {{ $row2->pax_adult ?? '_' }} {{ $row2->pax_child ?? '_' }} {{ $row2->pax_toddler ?? '_' }} {{ $row2->pax_foc_tl ?? '_' }}
+                                                        {{ $row2->group_name }}@if(!empty($row2->company))
+                                                        ({{ $row2->company }})
+                                                        @endif
+                                                    </td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row2->group_contact }}</td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]"> 
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $row2->pax_adult ?: '' }}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $row2->pax_child ?: '' }}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $row2->pax_toddler ?: '' }}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $row2->pax_foc_tl ?: '' }}
                                                     </td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">
                                                         {{-- {{ $row2->dropoff01_method ? $row2->dropoff01_method . " ({$row2->dropoff01_method}) <br/>" : null }} 
@@ -214,23 +283,34 @@
                                                             {{ $row2->booking_id }}
                                                         </a>
                                                     </td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                        {{ implode(' ', $group->pluck('rooms')->filter()->toArray()) }}
-                                                    </td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                        
-                                                    </td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">NL ({{ $row2->pax_adult + $row2->pax_child + $row2->pax_toddler }})</td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]"></td>
                                                 </tr>
                                             @endforeach
                                             <tr>
                                                 <td></td>
                                                 <td></td>
-                                                <td>
-                                                    {{ $sumpax_dropoff['sumpax_dropoff_adult'] }} 
-                                                    {{ $sumpax_dropoff['sumpax_dropoff_child'] }} 
-                                                    {{ $sumpax_dropoff['sumpax_dropoff_toddler'] }} 
-                                                    {{ $sumpax_dropoff['sumpax_dropoff_tl'] }}
+                                                <td></td>
+                                                <td class="w-[550px]">
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax_dropoff['sumpax_dropoff_adult'] }}A 
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax_dropoff['sumpax_dropoff_child'] }}C
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax_dropoff['sumpax_dropoff_toddler'] }}T
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {!! '&nbsp;' !!}
+                                                    {{ $sumpax_dropoff['sumpax_dropoff_tl'] }}T/L
                                                 </td>
                                             </tr>
                                         </tbody>

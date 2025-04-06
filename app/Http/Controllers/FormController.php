@@ -748,12 +748,15 @@ class FormController extends Controller
 
     public function changeValue(Request $request, $bookingId) {   
         $check_in = Carbon::parse( $request->check_in); // Start date
+        info($check_in);
         $check_out = Carbon::parse( $request->check_out);   // End date
+        info($check_out);
 
         $days = $check_in->diffInDays($check_out) + 1; // Including both start and end date
         $nights = $check_in->diffInDays($check_out); 
         
         $days = $days;
+        info($days);
 
         if ($request->type == 'date') {
 
@@ -769,7 +772,7 @@ class FormController extends Controller
 
             $holiday_rates = 0;
 
-            if ($days > 3) {
+            if ($days >= 3) {
                 $date_after_two_night = $check_in->addDays(2);
                 $previousDate = $check_out->subDay();
 
@@ -780,16 +783,24 @@ class FormController extends Controller
                 ->select('c.*', 'r.*')
                 ->get();
 
+                $chck_in = Carbon::parse( $request->check_in);
+                $chck_out = Carbon::parse( $request->check_out)->subDay();
+                $find_rate_school_hol = DB::table('calendar as c')
+                ->join('rates as r', 'c.price_ID', '=', 'r.price_ID')
+                ->whereBetween('c.dates', [$chck_in, $chck_out])
+                ->select('c.*', 'r.*')
+                ->get();
                 $holiday_rates = 0;
-                foreach ($add_rates as $row) {
+                foreach ($find_rate_school_hol as $row) {
                     if ($row->school_hol == 1) {
                         $holiday_rates += 25;
                     }
                 }
 
-                $extra_charge_adult = $add_rates->sum('add_a');
-                $extra_charge_child = $add_rates->sum('add_c');
-
+                if ($days > 3) {
+                    $extra_charge_adult = $add_rates->sum('add_a');
+                    $extra_charge_child = $add_rates->sum('add_c');
+                }
             }
 
             $double_adult_rates = $rates->double_a + $extra_charge_adult + $holiday_rates;
@@ -803,6 +814,9 @@ class FormController extends Controller
             $triple_toddler_rates = 100;
 
             $quad_adult_rates = $rates->quad_a + $extra_charge_adult + $holiday_rates;
+            info('$rates->quad_a -> '.$rates->quad_a);
+            info('extra_charge_adult -> '.$extra_charge_adult);
+            info('holiday_rates -> '.$holiday_rates);
             $quad_adult_mat_rates = $rates->quad_m_a + $extra_charge_adult + $holiday_rates;
             $quad_child_rates =  $rates->quad_c + $extra_charge_child + $holiday_rates;
             $quad_child_mat_rates = $rates->quad_m_c + $extra_charge_child + $holiday_rates;
@@ -2036,24 +2050,24 @@ class FormController extends Controller
         ->orderBy('AI_ID', 'desc')
         ->first();
 
-        $countreceipt = $receipts->count();
+        // $countreceipt = $receipts->count();
 
-        if ($countreceipt == 0) {
-            $latestReceipt = Receipt::query()
-            ->where('ID', '>', 0)
-            ->orderBy('AI_ID', 'desc')
-            ->value('ID');
+        // if ($countreceipt == 0) {
+        //     $latestReceipt = Receipt::query()
+        //     ->where('ID', '>', 0)
+        //     ->orderBy('AI_ID', 'desc')
+        //     ->value('ID');
 
-            receipt::insert([
-                'ID'            => $latestReceipt + 1,
-                'booking_ID'    => $bookingId,
-                'paid_date'  => now(),
-                'issue_date'  => now(),
-                'payment_from'  =>  '',
-                'amount'        =>  0,
-            ]);
+        //     receipt::insert([
+        //         'ID'            => $latestReceipt + 1,
+        //         'booking_ID'    => $bookingId,
+        //         'paid_date'  => now(),
+        //         'issue_date'  => now(),
+        //         'payment_from'  =>  '',
+        //         'amount'        =>  0,
+        //     ]);
 
-        }
+        // }
 
         return view('form5', compact('bookings', 'total_optional_no_sst', 'total_sst',  'grand_total_with_sst', 'days', 'nights', 'total_amount_no_sst', 'deposit', 'amount_due', 'amendId', 'receipts', 'totalpay', 'lastpaid'));
     }

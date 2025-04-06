@@ -91,33 +91,35 @@
                 </form>
                 <div id="printArea" class="text-lg print:text-[6px]">
                     <div class="flex flex-col space-y-4">
-                        Check In Out Report <br />
-                        Date: {{ \Carbon\Carbon::parse($fdate)->format('d/m/Y') }}
                         {{-- <div class="card bg-white shadow rounded-lg"> --}}
                             <div class="p-4">
+                                Check In Out Report 
+                                ({{ \Carbon\Carbon::parse($fdate)->format('d/m/Y') }})        
                                 <div class="overflow-x-auto text-sm print:text-[7px]">
-                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[8px] leading-tight">
+                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[12px] leading-tight">
                                         <thead>
                                             <tr>
-                                                <th colspan="8" class="text-left font-bold text-gray-700 border-b border-gray-300 p-2">PICKUP</th>
+                                                <th colspan="8" class="text-left font-bold text-gray-700 border border-gray-800 p-2">PICKUP</th>
                                             </tr>
-                                            <tr class="bg-gray-100 text-left">
-                                                {{-- <th class="border border-gray-300 p-2 print:p-[2px]">#</th> --}}
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[400px] whitespace-nowrap">Group Name (Company)</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[300px] whitespace-nowrap">Contact</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Pax</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[500px] whitespace-nowrap">Transport Type (Pax)</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Booking ID</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Rooms</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Name List</th>
+                                            <tr class="bg-gray-100 text-left border border-gray-800">
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[50px]">#</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[400px] whitespace-nowrap">Group Name (Company)</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[300px] whitespace-nowrap">Contact</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Pax</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[500px] whitespace-nowrap">Transport Type (Pax)</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Booking ID</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Rooms</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Name List</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($bookings as $cnt => $group)
+                                            @foreach ($bookings as $group)
                                             @php $row = $group->first(); @endphp
                                             <tr class="odd:bg-white even:bg-gray-50">
-                                                {{-- <td class="border border-gray-300 p-2 print:p-[2px]">{{ $cnt }}</td> --}}
-                                                <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row->group_name }}</td>
+                                                <td class="border border-gray-300 p-2 print:p-[2px]">{{ $loop->iteration }}</td>
+                                                <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row->group_name }}@if(!empty($row->company))
+                                                    ({{ $row->company }})
+                                                @endif</td>
                                                 <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row->group_contact }}</td>
                                                 <td class="border border-gray-300 p-2 print:p-[2px]">
                                                     {{ $row->pax_adult ?? '_' }} {{ $row->pax_child ?? '_' }} {{ $row->pax_toddler ?? '_' }} {{ $row->pax_foc_tl ?? '_' }}
@@ -162,13 +164,13 @@
                         {{-- <div class="card bg-white shadow rounded-lg"> --}}
                             <div class="p-4">
                                 <div class="overflow-x-auto text-sm print:text-[7px]">
-                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[8px] leading-tight">
+                                    <table class="table-auto w-full border-collapse border border-gray-800 text-[12px] print:text-[12px] leading-tight">
                                         <thead>
                                             <tr>
-                                                <th colspan="8" class="text-left font-bold text-gray-700 border-b border-gray-300 p-2">DROPOFF</th>
+                                                <th colspan="8" class="text-left font-bold text-gray-700 border border-gray-800 p-2">DROPOFF</th>
                                             </tr>
                                             <tr class="bg-gray-100 text-left">
-                                                {{-- <th class="border border-gray-300 p-2 print:p-[2px]">#</th> --}}
+                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[50px]">#</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[400px] whitespace-nowrap">Group Name (Company)</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[300px] whitespace-nowrap">Contact</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Pax</th>
@@ -179,14 +181,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($dropoffs as $cnt => $group)
+                                            @foreach ($dropoffs as $group)
                                                 @php
                                                     // Get the first row from the group to display common data
                                                     $row2 = $group->first();
                                                 @endphp
                                                 <tr class="odd:bg-white even:bg-gray-50">
-                                                    {{-- <td class="border border-gray-300 p-2 print:p-[2px]">{{ $cnt }}</td> --}}
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row2->group_name }}</td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $loop->iteration }}</td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row2->group_name }}@if(!empty($row2->company))
+                                                        ({{ $row2->company }})
+                                                    @endif</td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row2->group_contact }}</td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">
                                                         {{ $row2->pax_adult ?? '_' }} {{ $row2->pax_child ?? '_' }} {{ $row2->pax_toddler ?? '_' }} {{ $row2->pax_foc_tl ?? '_' }}

@@ -120,7 +120,7 @@
                         <div class="form-container flex flex-col gap-8">
                             <div class="pickup-table-container w-full">
                                 <h2 class="text-xs font-bold text-gray-700 mb-4">Remarks For Customer</h2>
-                                <div id="custRemark" class="w-full overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
+                                <div id="custRemark" class="w-full overflow-x-auto">
                                     {{-- <input 
                                         type="text" 
                                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
@@ -136,9 +136,45 @@
                                         >{{ $bookings->remarks_customer }}
                                     </textarea>
                                 </div>
+                                <br />
+                                <h2 class="text-xs font-bold text-gray-700 mb-4">Internal Remarks</h2>
+                                <div class="w-full overflow-x-auto">
+                                    {{-- <input 
+                                        type="text" 
+                                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                                        placeholder="Enter your text here..."
+                                        value="{{ $bookings->internal_remarks }}"
+                                        oninput="updateField({{ $bookings->booking_id }}, 'internal_remarks', this.value)"
+                                    /> --}}
+                                    <textarea 
+                                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                                        rows="3"
+                                        placeholder="Enter your text here..."
+                                        oninput="updateField({{ $bookings->booking_id }}, 'internal_remarks', this.value)"
+                                        >{{ $bookings->internal_remarks }}
+                                    </textarea>
+                                </div>
+                                <br />
+                                <h2 class="text-xs font-bold text-gray-700 mb-4">Dive Centre</h2>
+                                <div class="w-full overflow-x-auto">
+                                    {{-- <input 
+                                        type="text" 
+                                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                                        placeholder="Enter your text here..."
+                                        value="{{ $bookings->divecentre_remarks }}"
+                                        oninput="updateField({{ $bookings->booking_id }}, 'divecentre_remarks', this.value)"
+                                    /> --}}
+                                    <textarea 
+                                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                                        rows="3"
+                                        placeholder="Enter your text here..."
+                                        oninput="updateField({{ $bookings->booking_id }}, 'divecentre_remarks', this.value)"
+                                        >{{ $bookings->divecentre_remarks }}
+                                    </textarea>
+                                </div>
                             </div>
                     
-                            <div class="form-container flex flex-row gap-8">
+                            {{-- <div class="form-container flex flex-row gap-8">
                                 <div class="pickup-table-container w-1/2">
                                     <h2 class="text-xs font-bold text-gray-700 mb-4">Internal Remarks</h2>
                                     <div class="w-full overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
@@ -164,14 +200,14 @@
                                         />
                                     </div>
                                 </div>
-                            </div>          
+                            </div>           --}}
             
                         </div>
                         <br />
                         <div class="form-container flex flex-col gap-8">
                             <div class="pickup-table-container w-full">
                                 <h2 class="text-xs font-bold text-gray-700 mb-4">Amendments</h2>
-                                <div class="w-full overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
+                                <div class="w-full overflow-x-auto">
                                     <div class="overflow-x-auto">
                                         <table class="w-full border-collapse border border-gray-300 text-xs">
                                             <!-- Adjust column widths -->
@@ -290,7 +326,7 @@
     }
 
     let typingTimers = {};
-    const doneTypingInterval = 1000; // Delay before sending update (1 second)
+    const doneTypingInterval = 2000; // Delay before sending update (1 second)
 
     function updateField(bookingId, field, value) {
         // Clear previous timeout

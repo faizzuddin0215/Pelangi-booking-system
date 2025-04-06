@@ -316,9 +316,7 @@
                                             <td class="border border-gray-300 px-2 py-2">
                                                 <select name="bank" id="bank" class="w-full border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500">
                                                     <option value="">Select a bank</option>
-                                                    <option value="CIMB">CIMB</option>
-                                                    <option value="HLBB">HLBB</option>
-                                                    <option value="HLIB">HLIB</option>
+                                                    <option value="HLBB">HLB</option>
                                                     <option value="MBB">MBB</option>
                                                     <option value="RHB">RHB</option>
                                                     <option value="UOB">UOB</option>

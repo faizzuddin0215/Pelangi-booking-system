@@ -3,6 +3,7 @@
 use App\Http\Controllers\CheckInReportController;
 use App\Http\Controllers\DriverReportController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\PaymentSummaryReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoomListReportController;
@@ -60,6 +61,10 @@ Route::post('/driver_report', [DriverReportController::class, 'filter'])->name('
 Route::get('/room_list_report', [RoomListReportController::class, 'index'])->name('room_list_report');
 Route::get('/room_list_report', [RoomListReportController::class, 'report'])->name('room_list_report');
 Route::post('/room_list_report', [RoomListReportController::class, 'filter'])->name('room_list_report.filter');
+
+Route::get('/payment_summary_report', [PaymentSummaryReportController::class, 'index'])->name('payment_summary_report');
+Route::get('/payment_summary_report', [PaymentSummaryReportController::class, 'report'])->name('payment_summary_report');
+Route::post('/payment_summary_report', [PaymentSummaryReportController::class, 'filter'])->name('payment_summary_report.filter');
 
 Route::get('/check_in_report', [CheckInReportController::class, 'index'])->name('check_in_report');
 Route::get('/check_in_report', [CheckInReportController::class, 'report'])->name('check_in_report');

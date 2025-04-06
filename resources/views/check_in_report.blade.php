@@ -91,29 +91,28 @@
                 </form>
                 <div id="printArea" class="text-lg print:text-[6px]">
                     <div class="flex flex-col space-y-4">
-                        Check In Report<br />
-                        Date: {{ \Carbon\Carbon::parse($fdate)->format('d/m/Y') }}
                         {{-- <div class="card bg-white shadow rounded-lg"> --}}
                             <div class="p-4">
+                                Check In Report ({{ \Carbon\Carbon::parse($fdate)->format('d/m/Y') }})
                                 <div class="overflow-x-auto text-sm print:text-[7px]">
-                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[8px] leading-tight">
+                                    <table class="table-auto w-full border-collapse border border-gray-300 text-[12px] print:text-[12px] leading-tight">
                                         <thead>
                                             <tr class="bg-gray-100 text-left">
-                                                {{-- <th class="border border-gray-300 p-2 print:p-[2px]">#</th> --}}
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[200px] whitespace-nowrap">Pickup</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[300px] whitespace-nowrap">Booking's Details</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Pax</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Rooms</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[200px] whitespace-nowrap">Dropoff</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px] w-[400px] whitespace-nowrap">Customer Remark</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[10px]">#</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[200px] whitespace-nowrap">Pickup</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[300px] whitespace-nowrap">Booking's Details</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Pax</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[100px] whitespace-nowrap">Rooms</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[200px] whitespace-nowrap">Dropoff</th>
+                                                <th class="border border-gray-800 p-2 print:p-[2px] w-[400px] whitespace-nowrap">Customer Remark</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @if ($bookings && count($bookings) > 0)
-                                                @foreach ($bookings as $cnt => $group)
+                                                @foreach ($bookings as $group)
                                                 @php $row = $group->first(); @endphp
                                                 <tr class="odd:bg-white even:bg-gray-50">
-                                                    {{-- <td class="border border-gray-300 p-2 print:p-[2px]">{{ $cnt }}</td> --}}
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $loop->iteration }}</td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">
                                                         {!! implode('<br/>', array_filter([
                                                             $row->pickup01_method ? $row->pickup01_method . " ({$row->pickup01_pax})" : null,
