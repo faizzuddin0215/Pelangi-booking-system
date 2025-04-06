@@ -112,6 +112,12 @@
                                     Summary & Payment
                                 </a>
                             </li>
+                            <li><span class="text-gray-400">|</span></li>
+                            <li>
+                                <a id="invoice" href="{{ url('invoice', ['booking_id' => $booking_id, 'amend_id' => $amend_id]) }}" class="hover:text-indigo-500">
+                                    Invoice
+                                </a>
+                            </li>
                         </ol>
 
                         <!-- Mobile Dropdown (Appears when Checkbox is Checked) -->
@@ -141,43 +147,15 @@
                                     Summary & Payment
                                 </a>
                             </li>
+                            <li>
+                                <a id="invoice" href="{{ url('invoice', ['booking_id' => $booking_id, 'amend_id' => $amend_id]) }}" class="block p-2 bg-gray-100 dark:bg-gray-700 rounded-md">
+                                    Invoice
+                                </a>
+                            </li>
                         </ol>
                     </nav>
 
                 @else
-                    {{-- <nav class="mb-4" aria-label="Breadcrumb">
-                        <ol class="flex flex-wrap items-center space-x-3 text-sm text-gray-600 dark:text-gray-300">
-                            <li>
-                                <a id="page1" href="{{ url('form') }}?booking={{ $booking_id }}" class="text-indigo-600 font-semibold">
-                                    Basic Information
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page2" href="" class="hover:text-indigo-500">
-                                    Room Details
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page3" href="" class="hover:text-indigo-500">
-                                    Land Transfer & Optional
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page4" href="" class="hover:text-indigo-500">
-                                    Remarks
-                                </a>
-                            </li>
-                            <li><span class="text-gray-400">|</span></li>
-                            <li>
-                                <a id="page5" href="" class="hover:text-indigo-500">
-                                    Summary & Payment
-                                </a>
-                            </li>
-                        </ol>
-                    </nav> --}}
                     <!-- Navigation -->
                     <nav class="mb-4">
                         <!-- Hamburger Button (Mobile Only) -->
@@ -217,6 +195,12 @@
                                     Summary & Payment
                                 </a>
                             </li>
+                            <li><span class="text-gray-400">|</span></li>
+                            <li>
+                                <a id="invoice" href="" class="hover:text-indigo-500">
+                                    Invoice
+                                </a>
+                            </li>
                         </ol>
 
                         <!-- Mobile Dropdown Menu (Appears when checked) -->
@@ -244,6 +228,11 @@
                             <li>
                                 <a id="page5" href="" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                                     Summary & Payment
+                                </a>
+                            </li>
+                            <li>
+                                <a id="invoice" href="" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    Invoice
                                 </a>
                             </li>
                         </ol>
@@ -431,6 +420,14 @@
                                                     {{ number_format($booking->optional_total, 2, '.', ',') }}
                                                 </td>
                                             </tr>
+                                            {{-- <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
+                                                <td class="border border-gray-300 px-4 py-2 text-gray-700">
+                                                    Optional Arrangement (RM) SST Free
+                                                </td>
+                                                <td class="border border-gray-300 px-4 py-2 text-gray-700">
+                                                    {{ number_format($total_optional_no_sst, 2, '.', ',') }}
+                                                </td>
+                                            </tr> --}}
                                             <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
                                                 <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                     <strong>Total (RM)</strong>
@@ -497,6 +494,8 @@
             page4.href = `form4/${bookingId}0`;
             const page5 = document.getElementById('page5');
             page5.href = `form5/${bookingId}/0`;
+            const invoice = document.getElementById('invoice');
+            invoice.href = `invoice/${bookingId}/0`;
 
             fetchBookingData(bookingId, 0);
 
@@ -596,7 +595,7 @@
                     // Update form fields with the received data
                     fillFormFields(data.booking, data.password, amendID);
                 } else {
-                    alert('Booking not found23.');
+                    alert('Booking not found.');
                 }
             })
             .catch(error => {
@@ -690,6 +689,51 @@
         const landTransferTotal = Number(booking.landtransfer_total) || 0;
         const optionalTotal = Number(booking.optional_total) || 0;
 
+        const optional01_total = 0;
+        const optional02_total = 0;
+        const optional03total = 0;
+        const optional04_total = 0;
+        const optional05_total = 0;
+
+        const optional01_total_no_sst = 0;
+        const optional02_total_no_sst = 0;
+        const optional03_total_no_sst = 0;
+        const optional04_total_no_sst = 0;
+        const optional05_total_no_sst = 0;
+
+        if (booking.optional01_GST == 1) {
+            optional01_total = booking.optional01_total;
+        } else {
+            optional01_total_no_sst = booking.optional01_total;
+        }
+
+        if (booking.optional02_GST == 1) {
+            optional02_total = booking.optional02_total;
+        } else {
+            optional02_total_no_sst = booking.optional02_total;
+        }
+
+        if (booking.optional03_GST == 1) {
+            optional03_total = booking.optional03_total;
+        } else {
+            optional03_total_no_sst = booking.optional03_total;
+        }
+
+        if (booking.optional04_GST == 1) {
+            optional04_total = booking.optional04_total;
+        } else {
+            optional04_total_no_sst = booking.optional04_total;
+        }
+
+        if (booking.optional05_GST == 1) {
+            optional05_total = booking.optional05_total;
+        } else {
+            optional05_total_no_sst = booking.optional05_total;
+        }
+
+        const total_optional = optional01_total + optional02_total + optional03_total + optional04_total + optional05_total;
+        const total_optional_no_sst = optional01_total_no_sst + optional02_total_no_sst + optional03_total_no_sst + optional04_total_no_sst + optional05_total_no_sst;
+
         const totalAmount = packageTotal + landTransferTotal + optionalTotal;
 
         summaryContainer.innerHTML = `
@@ -729,6 +773,14 @@
                                         ${booking.optional_total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </td>
                                 </tr>
+                                <tr class="bg-gray-50">
+                                        <td class="border border-gray-300 px-4 py-2">
+                                            Optional Arrangement (RM) SST Free
+                                        </td>
+                                        <td class="border border-gray-300 px-4 py-2">
+                                            ${total_optional_no_sst.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        </td>
+                                    </tr>
                                 <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
                                     <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                         <strong>Total (RM)</strong>
@@ -746,23 +798,6 @@
             </div>
         `;
 
-        // navigatianContainer.innerHTML =  `
-        //     <ol class="flex flex-wrap items-center space-x-3 text-sm text-gray-600 dark:text-gray-300">
-        //         <li>
-        //             <a href="form?booking=${booking.booking_id}" class="text-indigo-600 font-semibold">
-        //                 Basic Information
-        //             </a>
-        //         </li>
-        //         <li><span class="text-gray-400">|</span></li>
-        //         <li><a href="form2/${booking.booking_id}" class="hover:text-indigo-500">Room Details</a></li>
-        //         <li><span class="text-gray-400">|</span></li>
-        //         <li><a href="form3/${booking.booking_id}" class="hover:text-indigo-500">Land Transfer & Optional</a></li>
-        //         <li><span class="text-gray-400">|</span></li>
-        //         <li><a href="form4/${booking.booking_id}" class="hover:text-indigo-500">Remarks</a></li>
-        //         <li><span class="text-gray-400">|</span></li>
-        //         <li><a href="form5/${booking.booking_id}" class="hover:text-indigo-500">Summary & Payment</a></li>
-        //     </ol>
-        // `;
         navigatianContainer.innerHTML = `
             <nav class="mb-4">
                 <!-- Mobile Hamburger Button -->
@@ -786,6 +821,8 @@
                     <li><a href="form4/${booking.booking_id}" class="hover:text-indigo-500">Remarks</a></li>
                     <li><span class="text-gray-400">|</span></li>
                     <li><a href="form5/${booking.booking_id}" class="hover:text-indigo-500">Summary & Payment</a></li>
+                    <li><span class="text-gray-400">|</span></li>
+                    <li><a href="invoice/${booking.booking_id}" class="hover:text-indigo-500">Invoice</a></li>
                 </ol>
 
                 <!-- Mobile Dropdown Menu (Hidden by default) -->
@@ -813,6 +850,11 @@
                     <li>
                         <a href="form5/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                             Summary & Payment
+                        </a>
+                    </li>
+                    <li>
+                        <a href="invoice/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            Invoice
                         </a>
                     </li>
                 </ol>

@@ -381,6 +381,7 @@ class FormController extends Controller
     {   
         // Fetch the booking data based on the provided booking ID
         $booking = Bookings::where('booking_id', $bookingId)->where('amend_id', $amendID)->first();
+
         $amendBooking = Bookings::query()
         ->where('booking_id', $bookingId)
         ->where('amend_id', '>', 0)
@@ -388,12 +389,59 @@ class FormController extends Controller
 
         $password = NamelistUser::where('booking_id', $bookingId)->value('password');
 
+        $optional01_total = 0;
+        $optional02_total = 0;
+        $optional03_total = 0;
+        $optional04_total = 0;
+        $optional05_total = 0;
+
+        $optional01_total_no_sst = 0;
+        $optional02_total_no_sst = 0;
+        $optional03_total_no_sst = 0;
+        $optional04_total_no_sst = 0;
+        $optional05_total_no_sst = 0;
+        info($booking->optional01_GST);
+
+        if ($booking->optional01_GST == 1) {
+            $optional01_total = $booking->optional01_total;
+        } else {
+            $optional01_total_no_sst = $booking->optional01_total;
+        }
+
+        if ($booking->optional02_GST == 1) {
+            $optional02_total = $booking->optional02_total;
+        } else {
+            $optional02_total_no_sst = $booking->optional02_total;
+        }
+
+        if ($booking->optional03_GST == 1) {
+            $optional03_total = $booking->optional03_total;
+        } else {
+            $optional03_total_no_sst = $booking->optional03_total;
+        }
+
+        if ($booking->optional04_GST == 1) {
+            $optional04_total = $booking->optional04_total;
+        } else {
+            $optional04_total_no_sst = $booking->optional04_total;
+        }
+
+        if ($booking->optional05_GST == 1) {
+            $optional05_total = $booking->optional05_total;
+        } else {
+            $optional05_total_no_sst = $booking->optional05_total;
+        }
+
+        $total_optional = $optional01_total + $optional02_total + $optional03_total + $optional04_total + $optional05_total;
+        $total_optional_no_sst = $optional01_total_no_sst + $optional02_total_no_sst + $optional03_total_no_sst + $optional04_total_no_sst + $optional05_total_no_sst;
+        info($total_optional_no_sst);
         if ($booking) {
             return response()->json([
                 'success' => true,
                 'password'=> $password,
                 'booking' => $booking,
-                'amendBooking' => $amendBooking
+                'amendBooking' => $amendBooking,
+                'total_optional_no_sst' => $total_optional_no_sst
             ]);
         } else {
             return response()->json([
@@ -700,12 +748,15 @@ class FormController extends Controller
 
     public function changeValue(Request $request, $bookingId) {   
         $check_in = Carbon::parse( $request->check_in); // Start date
+        info($check_in);
         $check_out = Carbon::parse( $request->check_out);   // End date
+        info($check_out);
 
         $days = $check_in->diffInDays($check_out) + 1; // Including both start and end date
         $nights = $check_in->diffInDays($check_out); 
         
         $days = $days;
+        info($days);
 
         if ($request->type == 'date') {
 
@@ -721,7 +772,7 @@ class FormController extends Controller
 
             $holiday_rates = 0;
 
-            if ($days > 3) {
+            if ($days >= 3) {
                 $date_after_two_night = $check_in->addDays(2);
                 $previousDate = $check_out->subDay();
 
@@ -732,16 +783,24 @@ class FormController extends Controller
                 ->select('c.*', 'r.*')
                 ->get();
 
+                $chck_in = Carbon::parse( $request->check_in);
+                $chck_out = Carbon::parse( $request->check_out)->subDay();
+                $find_rate_school_hol = DB::table('calendar as c')
+                ->join('rates as r', 'c.price_ID', '=', 'r.price_ID')
+                ->whereBetween('c.dates', [$chck_in, $chck_out])
+                ->select('c.*', 'r.*')
+                ->get();
                 $holiday_rates = 0;
-                foreach ($add_rates as $row) {
+                foreach ($find_rate_school_hol as $row) {
                     if ($row->school_hol == 1) {
                         $holiday_rates += 25;
                     }
                 }
 
-                $extra_charge_adult = $add_rates->sum('add_a');
-                $extra_charge_child = $add_rates->sum('add_c');
-
+                if ($days > 3) {
+                    $extra_charge_adult = $add_rates->sum('add_a');
+                    $extra_charge_child = $add_rates->sum('add_c');
+                }
             }
 
             $double_adult_rates = $rates->double_a + $extra_charge_adult + $holiday_rates;
@@ -755,6 +814,9 @@ class FormController extends Controller
             $triple_toddler_rates = 100;
 
             $quad_adult_rates = $rates->quad_a + $extra_charge_adult + $holiday_rates;
+            info('$rates->quad_a -> '.$rates->quad_a);
+            info('extra_charge_adult -> '.$extra_charge_adult);
+            info('holiday_rates -> '.$holiday_rates);
             $quad_adult_mat_rates = $rates->quad_m_a + $extra_charge_adult + $holiday_rates;
             $quad_child_rates =  $rates->quad_c + $extra_charge_child + $holiday_rates;
             $quad_child_mat_rates = $rates->quad_m_c + $extra_charge_child + $holiday_rates;
@@ -1121,6 +1183,11 @@ class FormController extends Controller
     public function form5($bookingId, $amendId) {
         // Use the bookingId for logic or pass it to the view
         return view('form5', compact('bookingId', 'amendId'));
+    }
+
+    public function invoice($bookingId, $amendId) {
+        // Use the bookingId for logic or pass it to the view
+        return view('invoice', compact('bookingId', 'amendId'));
     }
 
     public function pickupDetails($bookingId, $amendId) {
@@ -1908,7 +1975,7 @@ class FormController extends Controller
         ->first();
         $optional01_total = 0;
         $optional02_total = 0;
-        $optional03total = 0;
+        $optional03_total = 0;
         $optional04_total = 0;
         $optional05_total = 0;
 
@@ -1930,9 +1997,27 @@ class FormController extends Controller
             $optional02_total_no_sst = $find_total_optional->optional02_total;
         }
 
+        if ($find_total_optional->optional03_GST == 1) {
+            $optional03_total = $find_total_optional->optional03_total;
+        } else {
+            $optional03_total_no_sst = $find_total_optional->optional03_total;
+        }
+
+        if ($find_total_optional->optional04_GST == 1) {
+            $optional04_total = $find_total_optional->optional04_total;
+        } else {
+            $optional04_total_no_sst = $find_total_optional->optional04_total;
+        }
+
+        if ($find_total_optional->optional05_GST == 1) {
+            $optional05_total = $find_total_optional->optional05_total;
+        } else {
+            $optional05_total_no_sst = $find_total_optional->optional05_total;
+        }
+
         // $total_optional = $find_total_optional->optional01_total + $find_total_optional->optional02_total + $find_total_optional->optional03_total + $find_total_optional->optional04_total + $find_total_optional->optional05_total;
-        $total_optional = $optional01_total + $optional02_total;
-        $total_optional_no_sst = $optional01_total_no_sst + $optional02_total_no_sst;
+        $total_optional = $optional01_total + $optional02_total + $optional03_total + $optional04_total + $optional05_total;
+        $total_optional_no_sst = $optional01_total_no_sst + $optional02_total_no_sst + $optional03_total_no_sst + $optional04_total_no_sst + $optional05_total_no_sst;
 
         $optionalArrangements = $total_optional;
 
@@ -1965,24 +2050,24 @@ class FormController extends Controller
         ->orderBy('AI_ID', 'desc')
         ->first();
 
-        $countreceipt = $receipts->count();
+        // $countreceipt = $receipts->count();
 
-        if ($countreceipt == 0) {
-            $latestReceipt = Receipt::query()
-            ->where('ID', '>', 0)
-            ->orderBy('AI_ID', 'desc')
-            ->value('ID');
+        // if ($countreceipt == 0) {
+        //     $latestReceipt = Receipt::query()
+        //     ->where('ID', '>', 0)
+        //     ->orderBy('AI_ID', 'desc')
+        //     ->value('ID');
 
-            receipt::insert([
-                'ID'            => $latestReceipt + 1,
-                'booking_ID'    => $bookingId,
-                'paid_date'  => now(),
-                'issue_date'  => now(),
-                'payment_from'  =>  '',
-                'amount'        =>  0,
-            ]);
+        //     receipt::insert([
+        //         'ID'            => $latestReceipt + 1,
+        //         'booking_ID'    => $bookingId,
+        //         'paid_date'  => now(),
+        //         'issue_date'  => now(),
+        //         'payment_from'  =>  '',
+        //         'amount'        =>  0,
+        //     ]);
 
-        }
+        // }
 
         return view('form5', compact('bookings', 'total_optional_no_sst', 'total_sst',  'grand_total_with_sst', 'days', 'nights', 'total_amount_no_sst', 'deposit', 'amount_due', 'amendId', 'receipts', 'totalpay', 'lastpaid'));
     }
@@ -2027,16 +2112,32 @@ class FormController extends Controller
         ->orderBy('AI_ID', 'desc')
         ->value('ID');
 
-        receipt::insert([
+        $payment_for = 'Security Deposit for Booking ' . $bookingId;
+        $payment_from = Bookings::query()
+            ->select('company', 'attention')
+            ->where('booking_id', $bookingId)
+            ->where('amend_id', $request->amendId)
+            ->first();
+        
+        $payment_from = $payment_from->company ? $payment_from->company : $payment_from->attention;
+
+        $newReceipt = Receipt::create([
             'ID'            => $latestReceipt + 1,
             'booking_ID'    => $bookingId,
-            'paid_date'  => now(),
-            'issue_date'  => now(),
-            'payment_from'  =>  '',
-            'amount'        =>  0,
+            'paid_date'     => $request->paymentDetails['date'],
+            'issue_date'    => now(),
+            'payment_from'  => $payment_from,
+            'payment_for'   => $payment_for,
+            'amount'        => $request->paymentDetails['amount'],
+            'bank'          => $request->paymentDetails['bank'],
+            'bank_details'  => $request->paymentDetails['bank_details'],
         ]);
-
-        return response()->json(['success' => true, 'message' => 'Successfully updated']);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully updated',
+            'receipt' => $newReceipt
+        ]);    
     }
 
     public function deletePickup(Request $request,$id)
@@ -2217,6 +2318,141 @@ class FormController extends Controller
         ]);
 
         return response()->json(['success' => true, 'message' => 'Successfully updated']);
+    }
+
+    public function totalDetailsInvoice($bookingId, $amendId) {
+
+        $bookings = Bookings::query()
+        ->where('booking_id', $bookingId)
+        ->where('amend_id', $amendId)
+        ->first();
+
+        $check_in = Carbon::parse( $bookings->check_in); // Start date
+        $check_out = Carbon::parse( $bookings->check_out);   // End date
+
+        $days = $check_in->diffInDays($check_out) + 1; // Including both start and end date
+        $nights = $check_in->diffInDays($check_out); 
+
+        $total_pickup = pickupDetails::query()
+        ->where('booking_id', $bookingId)
+        ->sum('total_pickup_rate');
+
+        $total_dropoff = DropoffDetails::query()
+        ->where('booking_id', $bookingId)
+        ->sum('total_dropoff_rate');
+
+        $landTransfer = $bookings->pickup01_total + $bookings->pickup02_total + $bookings->pickup03_total+ $bookings->dropoff01_total + $bookings->dropoff02_total + $bookings->dropoff03_total + $total_pickup + $total_dropoff;
+
+        // $total_optional = OptionalArrangementDetails::query()
+        // ->where('booking_id', $bookingId)
+        // ->sum('optional_total');
+
+        // $total_optional_no_sst = OptionalArrangementDetails::query()
+        // ->where('booking_id', $bookingId)
+        // ->where('optional_sst', 0)
+        // ->sum('optional_total');
+
+        $find_total_optional = Bookings::query()
+        ->where('booking_id', $bookingId)
+        ->where('amend_id', $amendId)
+        ->first();
+        $optional01_total = 0;
+        $optional02_total = 0;
+        $optional03_total = 0;
+        $optional04_total = 0;
+        $optional05_total = 0;
+
+        $optional01_total_no_sst = 0;
+        $optional02_total_no_sst = 0;
+        $optional03_total_no_sst = 0;
+        $optional04_total_no_sst = 0;
+        $optional05_total_no_sst = 0;
+
+        if ($find_total_optional->optional01_GST == 1) {
+            $optional01_total = $find_total_optional->optional01_total;
+        } else {
+            $optional01_total_no_sst = $find_total_optional->optional01_total;
+        }
+
+        if ($find_total_optional->optional02_GST == 1) {
+            $optional02_total = $find_total_optional->optional02_total;
+        } else {
+            $optional02_total_no_sst = $find_total_optional->optional02_total;
+        }
+
+        if ($find_total_optional->optional03_GST == 1) {
+            $optional03_total = $find_total_optional->optional03_total;
+        } else {
+            $optional03_total_no_sst = $find_total_optional->optional03_total;
+        }
+
+        if ($find_total_optional->optional04_GST == 1) {
+            $optional04_total = $find_total_optional->optional04_total;
+        } else {
+            $optional04_total_no_sst = $find_total_optional->optional04_total;
+        }
+
+        if ($find_total_optional->optional05_GST == 1) {
+            $optional05_total = $find_total_optional->optional05_total;
+        } else {
+            $optional05_total_no_sst = $find_total_optional->optional05_total;
+        }
+
+        // $total_optional = $find_total_optional->optional01_total + $find_total_optional->optional02_total + $find_total_optional->optional03_total + $find_total_optional->optional04_total + $find_total_optional->optional05_total;
+        $total_optional = $optional01_total + $optional02_total + $optional03_total + $optional04_total + $optional05_total;
+        $total_optional_no_sst = $optional01_total_no_sst + $optional02_total_no_sst + $optional03_total_no_sst + $optional04_total_no_sst + $optional05_total_no_sst;
+
+        $optionalArrangements = $total_optional;
+
+        $grand_total_with_sst = $landTransfer + $optionalArrangements + $bookings->package_total;
+
+        $deposit = $grand_total_with_sst * 0.20;
+
+        Bookings::query()
+        ->where('booking_id', $bookingId)
+        ->where('amend_id', $amendId)
+        ->update([
+            'landtransfer_total' => $landTransfer,
+            'optional_total' => $optionalArrangements,
+            'deposit_amount'  =>  $deposit,
+        ]);
+
+        $total_sst = ($bookings->package_total + $landTransfer + $total_optional) / 1.08 * 0.08;
+
+        $total_amount_no_sst = $grand_total_with_sst - $total_sst;
+
+        $amount_due = $grand_total_with_sst - $deposit;
+
+        $receipts = receipt::query()
+        ->where('booking_ID', $bookingId)
+        ->get();
+
+        $totalpay = $receipts->sum('amount');
+        $lastpaid = receipt::query()
+        ->where('booking_ID', $bookingId)
+        ->orderBy('AI_ID', 'desc')
+        ->first();
+
+        $countreceipt = $receipts->count();
+
+        if ($countreceipt == 0) {
+            $latestReceipt = Receipt::query()
+            ->where('ID', '>', 0)
+            ->orderBy('AI_ID', 'desc')
+            ->value('ID');
+
+            receipt::insert([
+                'ID'            => $latestReceipt + 1,
+                'booking_ID'    => $bookingId,
+                'paid_date'  => now(),
+                'issue_date'  => now(),
+                'payment_from'  =>  '',
+                'amount'        =>  0,
+            ]);
+
+        }
+
+        return view('invoice', compact('bookings', 'total_optional_no_sst', 'total_sst',  'grand_total_with_sst', 'days', 'nights', 'total_amount_no_sst', 'deposit', 'amount_due', 'amendId', 'receipts', 'totalpay', 'lastpaid'));
     }
 
 

@@ -36,6 +36,7 @@ class ReportController extends Controller
                 DB::raw('SUM(pax_toddler) as sum_pax_toddler'),
                 DB::raw('SUM(pax_foc_tl) as sum_pax_foc_tl')
             )
+            ->where('cancel', 0)
             ->whereDate('check_in', $fdate)
             ->get() // Returns a collection
             ->first(); // Get the first (and only) result
@@ -64,6 +65,7 @@ class ReportController extends Controller
                 DB::raw('SUM(pax_toddler) as sum_pax_toddler'),
                 DB::raw('SUM(pax_foc_tl) as sum_pax_foc_tl')
             )
+            ->where('cancel', 0)
             ->whereDate('check_out', $fdate)
             ->get() // Returns a collection
             ->first(); // Get the first (and only) result

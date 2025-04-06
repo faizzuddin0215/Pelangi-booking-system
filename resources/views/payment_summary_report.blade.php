@@ -77,7 +77,7 @@
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900 dark:text-gray-100">
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                <form method="post" action="{{ route('room_list_report.filter') }}">
+                <form method="post" action="{{ route('payment_summary_report.filter') }}">
                     @csrf
                     <div class="flex flex-wrap items-center gap-4">
                         <div class="flex items-center text-sm">
@@ -98,7 +98,7 @@
                     <div class="card bg-white shadow rounded-lg">
                         <div class="p-4">
                             <div id="printArea" class="text-xs print:text-[6px]">
-                                <div class="text-xl">Room List Report</div>
+                                <div class="text-xl">Payment Summary Report</div>
                                 <div class="overflow-x-auto text-xs print:text-[7px]">
                                     <table class="table-auto w-full border-collapse border border-gray-300">
                                         <thead>
@@ -106,14 +106,13 @@
                                                 <th class="border border-gray-300 p-2 print:p-[2px] w-[20px]">#</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px]">Check In</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px]">Check Out</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Days</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Contact Name (Company)</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Pax</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Rooms</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Room Allocated</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">Remarks</th>
                                                 <th class="border border-gray-300 p-2 print:p-[2px]">ID</th>
-                                                <th class="border border-gray-300 p-2 print:p-[2px]">NL</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">Name (Company)</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">Description</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">Grand Total</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">Total Paid</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">Balance</th>
+                                                <th class="border border-gray-300 p-2 print:p-[2px]">Receive By</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -128,22 +127,68 @@
                                                     <td class="border border-gray-300 p-2 print:p-[2px] w-[85px] print:w-[50px]">
                                                         {{ $row->check_out }}
                                                     </td>
-                                                    @if ($row->nights)
-                                                        <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                            {{ $row->nights + 1 }}
-                                                        </td> 
-                                                    @else
-                                                        <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                            0
-                                                        </td>
-                                                    @endif
-
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                        <a href="{{ url('form') }}?booking={{ $row->booking_id }}" 
+                                                            class="text-blue-500 print:text-black">
+                                                            {{ $row->booking_id }}
+                                                        </a>
+                                                    </td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">
                                                         {{$row->group_name}} ({{ $row->company }})
                                                     </td>
 
-                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[60px] print:w-[35px]">
-                                                        {{ $row->pax_adult ?? '_' }} {{ $row->pax_child ?? '_' }} {{ $row->pax_toddler ?? '_' }} {{ $row->pax_pax_foc_tl ?? '_' }}
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[100px] print:w-[35px]">
+                                                        @php
+                                                            $roomTypes = [
+                                                                'd_adult' => 'Adult in Double Deluxe Rooms',
+                                                                't_adult' => 'Adult in Triple Deluxe Rooms',
+                                                                'q_adult' => 'Adult in Quad Deluxe Rooms',
+                                                                'd_adult_m' => 'Adult in Double Deluxe Rooms With Mattress',
+                                                                't_adult_m' => 'Adult in Triple Deluxe Rooms With Mattress',
+                                                                'q_adult_m' => 'Adult in Quad Deluxe Rooms With Mattress',
+
+                                                                'd_child' => 'Child in Double Deluxe Rooms',
+                                                                't_child' => 'child in Triple Deluxe Rooms',
+                                                                'q_child' => 'child in Quad Deluxe Rooms',
+                                                                'd_child_m' => 'child in Double Deluxe Rooms With Mattress',
+                                                                't_child_m' => 'child in Triple Deluxe Rooms With Mattress',
+                                                                'q_child_m' => 'child in Quad Deluxe Rooms With Mattress',
+
+                                                                'd_toddler' => 'Toddler in Double Deluxe Rooms',
+                                                                't_toddler' => 'Toddler in Triple Deluxe Rooms',
+                                                                'q_toddler' => 'Toddler in Quad Deluxe Rooms',
+
+                                                                'deluxe_d_adult' => 'Adult in Double Deluxe Rooms (Seaview)',
+                                                                'deluxe_t_adult' => 'Adult in Triple Deluxe Rooms (Seaview)',
+                                                                'deluxe_q_adult' => 'Adult in Quad Deluxe Rooms (Seaview)',
+                                                                'deluxe_d_adult_m' => 'Adult in Double Deluxe Rooms With Mattress (Seaview)',
+                                                                'deluxe_t_adult_m' => 'Adult in Triple Deluxe Rooms With Mattress (Seaview)',
+                                                                'deluxe_q_adult_m' => 'Adult in Quad Deluxe Rooms With Mattress (Seaview)',
+
+                                                                'deluxe_d_child' => 'Child in Double Deluxe Rooms (Seaview)',
+                                                                'deluxe_t_child' => 'child in Triple Deluxe Rooms (Seaview)',
+                                                                'deluxe_q_child' => 'child in Quad Deluxe Rooms (Seaview)',
+                                                                'deluxe_d_child_m' => 'child in Double Deluxe Rooms With Mattress (Seaview)',
+                                                                'deluxe_t_child_m' => 'child in Triple Deluxe Rooms With Mattress (Seaview)',
+                                                                'deluxe_q_child_m' => 'child in Quad Deluxe Rooms With Mattress (Seaview)',
+
+                                                                'deluxe_d_toddler' => 'Toddler in Double Deluxe Rooms (Seaview)',
+                                                                'deluxe_t_toddler' => 'Toddler in Triple Deluxe Rooms (Seaview)',
+                                                                'deluxe_q_toddler' => 'Toddler in Quad Deluxe Rooms (Seaview)',
+
+                                                            ];
+                                                        @endphp
+
+                                                        @foreach ($roomTypes as $key => $label)
+                                                            @php
+                                                                $pax = $row->{$key . '_pax'};
+                                                                $price = $row->{$key . '_price'};
+                                                            @endphp
+
+                                                            @if($pax)
+                                                            {{ (floor($price) == $price) ? number_format($price, 0) : number_format($price, 2) }}({{ $pax }}) + 
+                                                            @endif
+                                                        @endforeach
                                                     </td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px] w-[100px] print:w-[60px]">
                                                         @php
@@ -163,12 +208,6 @@
                                                         {{ implode(' ', $group->pluck('rooms')->filter()->toArray()) }}
                                                     </td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row->internal_remarks }}</td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                        <a href="{{ url('form') }}?booking={{ $row->booking_id }}" 
-                                                            class="text-blue-500 print:text-black">
-                                                            {{ $row->booking_id }}
-                                                        </a>
-                                                    </td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px] w-[60px] print:w-[30px]">
                                                         NL ({{ $row->pax_adult + $row->pax_child + $row->pax_toddler }})
                                                     </td>

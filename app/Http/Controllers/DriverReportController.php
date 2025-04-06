@@ -37,6 +37,7 @@ class DriverReportController extends Controller
                 DB::raw('SUM(pax_foc_tl) as sum_pax_foc_tl')
             )
             ->whereDate('check_in', $fdate)
+            ->where('cancel', 0)
             ->get() // Returns a collection
             ->first(); // Get the first (and only) result
         
@@ -65,6 +66,7 @@ class DriverReportController extends Controller
                 DB::raw('SUM(pax_foc_tl) as sum_pax_foc_tl')
             )
             ->whereDate('check_out', $fdate)
+            ->where('cancel', 0)
             ->get() // Returns a collection
             ->first(); // Get the first (and only) result
         
