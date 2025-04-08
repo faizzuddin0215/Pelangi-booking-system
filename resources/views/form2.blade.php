@@ -179,10 +179,10 @@
                                         name="agent" 
                                         id="agent" 
                                         class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                    >
-                                        <option value="0" {{ old('agent') == '0' ? 'selected' : '' }}>Normal Selling Rate</option>
-                                        <option value="1" {{ old('agent') == '1' ? 'selected' : '' }}>Agent Tier 1</option>
-                                        <option value="2" {{ old('agent') == '2' ? 'selected' : '' }}>Agent Tier 2</option>
+                                        onchange="agentRate()">
+                                        <option value="0" {{ $bookings->agent == '0' ? 'selected' : '' }}>Normal Selling Rate</option>
+                                        <option value="1" {{ $bookings->agent == '1' ? 'selected' : '' }}>Agent Tier 1</option>
+                                        <option value="2" {{ $bookings->agent == '2' ? 'selected' : '' }}>Agent Tier 2</option>
                                     </select>
                                 </div>
                                 <div class="flex-1 min-w-[80px]">
@@ -1536,6 +1536,39 @@
             amendid : amendId,
             check_in: document.getElementById('check_in').value,
             check_out: document.getElementById('check_out').value,
+        };
+
+        fetch(`{{ url('/form2') }}/${bookingId}/getRate`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify(paxData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // alert('Successfully Updated!');
+            window.location.href = "{{ url('form2') }}/" + bookingId + "/" + amendId;
+        })
+        .catch(error => console.error('Error updating dates:', error));
+
+    }
+
+    function agentRate() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
+        
+
+        const paxData = {
+            type: 'date',
+            field: 'agent',
+            submit : 'submit',
+            amendid : amendId,
+            check_in: document.getElementById('check_in').value,
+            check_out: document.getElementById('check_out').value,
+            agentTier: document.getElementById('agent').value
         };
 
         fetch(`{{ url('/form2') }}/${bookingId}/getRate`, {

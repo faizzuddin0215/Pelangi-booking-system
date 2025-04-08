@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -24,11 +26,20 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $password = Hash::make($request->password);
+        $userStatus = User::query()
+        ->where('name', $request->name)
+        ->value('user_status_id');
 
-        $request->session()->regenerate();
+        if ($userStatus == 1) {
+            $request->authenticate();
 
-        return redirect()->intended(route('form', absolute: false));
+            $request->session()->regenerate();
+    
+            return redirect()->intended(route('form', absolute: false));
+        } else {
+            return redirect()->intended(route('login', absolute: false));
+        }
     }
 
     /**
