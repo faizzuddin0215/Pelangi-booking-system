@@ -348,7 +348,7 @@
                         <div class="flex items-center space-x-4">
                             <label for="handleby" class="text-xs font-medium text-gray-700 dark:text-gray-300 w-20">PIC</label>
                             <div class="w-full md:w-2/3">
-                                <input type="text" name="handleby" id="handleby" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700">
+                                <input type="text" name="handleby" id="handleby" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700" value="{{ Auth::check() ? Auth::user()->name : '' }}">
                             </div>
                         </div>
                         <div class="flex items-center space-x-4">

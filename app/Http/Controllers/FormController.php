@@ -36,7 +36,6 @@ class FormController extends Controller
     
             // Format the date to 'Y-m-d' (or any other format)
             $formattedDate = $carbonDate->format('Y-m-d');
-    
             $booking = Bookings::create([
                 'attention' => $request['name'],
                 'company' => $request['company'],
@@ -50,7 +49,7 @@ class FormController extends Controller
                 'date' => $formattedDate,
                 'leads' => $request['lead'] ? $request['lead'] : 0,
                 'cancel' => $request['cancel'],
-                'agent' => $request['agent'],
+                'agent' => 0,
                 'dive_pckg' => 0,
                 'insurance' => 0,
                 // 'check_in' => 0,
@@ -58,7 +57,210 @@ class FormController extends Controller
                 'pax_adult' => 0,
                 'pax_child' => 0,
                 'pax_toddler' => 0,
-                'pax_foc_tl' => 0
+                'pax_foc_tl' => 0,
+                'booking_id' => 0,
+                'amend_id' => 0,
+                'company_frml' => '',
+                'company_ID' => 0,
+                'GST_ID' => '',
+                'group_name' => '',
+                'group_contact' => '',
+                'name_list' => 0,
+                'bb_pckg' => 0,
+                'seaview' => 0,
+                'resort' => 0,
+                'AM_Rooms' => 0,
+                'room_double' => 0,
+                'room_double_m' => 0,
+                'room_triple' => 0,
+                'room_triple_m' => 0,
+                'room_quad' => 0,
+                'room_quad_m' => 0,
+                'deluxe_double' => 0,
+                'deluxe_double_m' => 0,
+                'deluxe_triple' => 0,
+                'deluxe_triple_m' => 0,
+                'deluxe_quad' => 0,
+                'deluxe_quad_m' => 0,
+                'room_D1' => 0,
+                'room_D2' => 0,
+                'room_tour_leader' => 0,
+                'room_tour_leader_female' => 0,
+                'd_adult_pax' => 0,
+                'd_adult_price' => 0,
+                'd_adult_frml' => '=Calculation!I23',
+                'd_adult_m_pax' => 0,
+                'd_adult_m_price' => 0,
+                'd_adult_m_frml' => '=Calculation!K23',
+                'd_child_pax' => 0,
+                'd_child_price' => 0,
+                'd_child_frml' => '=Calculation!I23',
+                'd_child_m_pax' => 0,
+                'd_child_m_price' => 0,
+                'd_child_m_frml' => '=Calculation!L23',
+                'd_toddler_pax' => 0,
+                'd_toddler_price' => 0,
+                't_adult_pax' => 0,
+                't_adult_price' => 0,
+                't_adult_frml' => '=IF(SUM(R16:R17)<>0, T16,Calculation!M23)',
+                't_adult_m_pax' => 0,
+                't_adult_m_price' => 0,
+                't_adult_m_frml' => '=IF(SUM(R16:R17)<>0,L16,0)',
+                't_child_pax' => 0,
+                't_child_price' => 0,
+                't_child_frml' => '=IF(SUM(R16:R17)<>0, T17,Calculation!N23)',
+                't_child_m_pax' => 0,
+                't_child_m_price' => 0,
+                't_child_m_frml' => '=IF(SUM(R16:R17)<>0,L17,0)',
+                't_toddler_pax' => 0,
+                't_toddler_price' => 0,
+                'q_adult_pax' => 0,
+                'q_adult_price' => 0,
+                'q_adult_frml' => '=Calculation!O23',
+                'q_adult_m_pax' => 0,
+                'q_adult_m_price' => 0,
+                'q_adult_m_frml' => '=Calculation!Q23',
+                'q_child_pax' => 0,
+                'q_child_price' => 0,
+                'q_child_frml' => '=Calculation!P23',
+                'q_child_m_pax' => 0,
+                'q_child_m_price' => 0,
+                'q_child_m_frml' => '=Calculation!R23',
+                'q_toddler_pax' => 0,
+                'q_toddler_price' => 0,
+                'deluxe_d_adult_pax' => 0,
+                'deluxe_d_adult_price' => 0,
+                'deluxe_d_adult_frml' => '=Calculation!I23+Calculation!S23',
+                'deluxe_d_adult_m_pax' => 0,
+                'deluxe_d_adult_m_price' => 0,
+                'deluxe_d_adult_m_frml' => '=Calculation!K23+Calculation!S23',
+                'deluxe_d_child_pax' => 0,
+                'deluxe_d_child_price' => 0,
+                'deluxe_d_child_frml' => '=Calculation!I23+Calculation!S23',
+                'deluxe_d_child_m_pax' => 0,
+                'deluxe_d_child_m_price' => 0,
+                'deluxe_d_child_m_frml' => '=Calculation!L23+Calculation!S23',
+                'deluxe_d_toddler_pax' => 0,
+                'deluxe_d_toddler_price' => 0,
+                'deluxe_t_adult_pax' => 0,
+                'deluxe_t_adult_price' => 0,
+                'deluxe_t_adult_frml' => '=IF(SUM(R22:R23)<>0, T22,Calculation!M23+Calculation!S23)',
+                'deluxe_t_adult_m_pax' => 0,
+                'deluxe_t_adult_m_price' => 0,
+                'deluxe_t_adult_m_frml' => '=IF(SUM(R22:R23)<>0,L22,0)',
+                'deluxe_t_child_pax' => 0,
+                'deluxe_t_child_price' => 0,
+                'deluxe_t_child_frml' => '=IF(SUM(R22:R23)<>0, T23,Calculation!N23+Calculation!S23)',
+                'deluxe_t_child_m_pax' => 0,
+                'deluxe_t_child_m_price' => 0,
+                'deluxe_t_child_m_frml' => '=IF(SUM(R22:R23)<>0,L23,0)',
+                'deluxe_t_toddler_pax' => 0,
+                'deluxe_t_toddler_price' => 0,
+                'deluxe_q_adult_pax' => 0,
+                'deluxe_q_adult_price' => 0,
+                'deluxe_q_adult_frml' => '=Calculation!O23+Calculation!S23',
+                'deluxe_q_adult_m_pax' => 0,
+                'deluxe_q_adult_m_price' => 0,
+                'deluxe_q_adult_m_frml' => '=Calculation!Q23+Calculation!S23',
+                'deluxe_q_child_pax' => 0,
+                'deluxe_q_child_price' => 0,
+                'deluxe_q_child_frml' => '=Calculation!P23+Calculation!S23',
+                'deluxe_q_child_m_pax' => 0,
+                'deluxe_q_child_m_price' => 0,
+                'deluxe_q_child_m_frml' => '=Calculation!R23+Calculation!S23',
+                'deluxe_q_toddler_pax' => 0,
+                'deluxe_q_toddler_price' => 0,
+                'pickup01_method' => '',
+                'pickup01_pax' => 0,
+                'pickup01_price' => 0,
+                'pickup01_total' => 0,
+                'pickup02_method' => '',
+                'pickup02_pax' => 0,
+                'pickup02_price' => 0,
+                'pickup02_total' => 0,
+                'pickup03_method' => '',
+                'pickup03_pax' => 0,
+                'pickup03_price' => 0,
+                'pickup03_total' => 0,
+                'pickup_total' => 0,
+                'dropoff01_method' => '',
+                'dropoff01_pax' => 0,
+                'dropoff01_price' => 0,
+                'dropoff01_total' => 0,
+                'dropoff02_method' => '',
+                'dropoff02_pax' => 0,
+                'dropoff02_price' => 0,
+                'dropoff02_total' => 0,
+                'dropoff03_method' => '',
+                'dropoff03_pax' => 0,
+                'dropoff03_price' => 0,
+                'dropoff03_total' => 0,
+                'dropoff_total' => 0,
+                'optional01_desc' => '',
+                'optional01_GST' => 0,
+                'optional01_bill_to' => '',
+                'optional01_pax' => 0,
+                'optional01_price' => 0,
+                'optional01_total' => 0,
+                'optional02_desc' => '',
+                'optional02_GST' => 0,
+                'optional02_bill_to' => '',
+                'optional02_pax' => 0,
+                'optional02_price' => 0,
+                'optional02_total' => 0,
+                'optional03_desc' => '',
+                'optional03_GST' => 0,
+                'optional03_bill_to' => '',
+                'optional03_pax' => 0,
+                'optional03_price' => 0,
+                'optional03_total' => 0,
+                'optional04_desc' => '',
+                'optional04_GST' => 0,
+                'optional04_bill_to' => '',
+                'optional04_pax' => 0,
+                'optional04_price' => 0,
+                'optional04_total' => 0,
+                'optional05_desc' => '',
+                'optional05_GST' => 0,
+                'optional05_bill_to' => '',
+                'optional05_pax' => 0,
+                'optional05_price' => 0,
+                'optional05_total' => 0,
+                'optional_total' => 0,
+                'package_total' => 0,
+                'landtransfer_total' => 0,
+                'others_total' => 0,
+                'others_total_with_No_GST' => 0,
+                'grand_total' => 0,
+                'GST' => 0,
+                'grand_total_with_GST' => 0,
+                'deposit_amount' => 0,
+                'deposit_frml' => '=(D12+H12)*200',
+                'deposit_due_date' => $formattedDate,
+                'balance_amount' => 0,
+                'balance_due_date' => $formattedDate,
+                'remarks_customer' => '',
+                'internal_remarks' => '',
+                'divecentre_remarks' => '',
+                'amend01' => '',
+                'amend02' => '',
+                'amend03' => '',
+                'amend04' => '',
+                'amend05' => '',
+                'amend06' => '',
+                'amend07' => '',
+                'amend08' => '',
+                'amend09' => '',
+                'amend10' => '',
+                'total_paid' => 0,
+                'actual_balance' => 0,
+                'invoice_no' => 0,
+                'total_paid_vh' => 0,
+                'invoice_no_vh' => 0,
+                'vh_comm' => 0,
+                'rooms_allocated' => 0,
+                'duplicated_VH' => 0,
+                'duplicated_DR' => 0,
             ]);
 
             // Get the latest booking ID
@@ -400,7 +602,6 @@ class FormController extends Controller
         $optional03_total_no_sst = 0;
         $optional04_total_no_sst = 0;
         $optional05_total_no_sst = 0;
-        info($booking->optional01_GST);
 
         if ($booking->optional01_GST == 1) {
             $optional01_total = $booking->optional01_total;
@@ -434,7 +635,6 @@ class FormController extends Controller
 
         $total_optional = $optional01_total + $optional02_total + $optional03_total + $optional04_total + $optional05_total;
         $total_optional_no_sst = $optional01_total_no_sst + $optional02_total_no_sst + $optional03_total_no_sst + $optional04_total_no_sst + $optional05_total_no_sst;
-        info($total_optional_no_sst);
         if ($booking) {
             return response()->json([
                 'success' => true,
@@ -568,7 +768,7 @@ class FormController extends Controller
         //     $bookings = BookingsAmend::where('booking_id', $bookingId)->where('amend_id', $amendId)->first();
         // }
         $bookings = Bookings::where('booking_id', $bookingId)->where('amend_id', $amendId)->first();
-
+        
         $optionalbooking_total = $bookings->optional01_total + $bookings->optional02_total + $bookings->optional03_total + $bookings->optional04_total + $bookings->optional05_total;
         $optionalArrangementstotal = $optionalArrangements->sum('optional_total');
         $total_optional = number_format($optionalbooking_total + $optionalArrangementstotal, 2);
@@ -748,15 +948,12 @@ class FormController extends Controller
 
     public function changeValue(Request $request, $bookingId) {   
         $check_in = Carbon::parse( $request->check_in); // Start date
-        info($check_in);
         $check_out = Carbon::parse( $request->check_out);   // End date
-        info($check_out);
 
         $days = $check_in->diffInDays($check_out) + 1; // Including both start and end date
         $nights = $check_in->diffInDays($check_out); 
         
         $days = $days;
-        info($days);
 
         if ($request->type == 'date') {
 
@@ -764,11 +961,28 @@ class FormController extends Controller
             $extra_charge_child = 0;
 
             $rates = DB::table('calendar as c')
-            ->select('r.*')
             ->join('rates as r', 'c.price_ID', '=', 'r.price_ID')
             ->where('c.dates', $check_in)
             ->select('c.*', 'r.*')
             ->first();
+
+            if ($request->agentTier == 1) {
+                $rates = Rates::query()
+                ->where('weekend', $rates->price_ID)
+                ->whereIn('price_ID', [704, 705, 706])
+                ->first();
+            } elseif ($request->agentTier == 2) {
+                $rates = Rates::query()
+                ->where('weekend', $rates->price_ID)
+                ->whereIn('price_ID', [716, 717, 718])
+                ->first();
+            } else {
+                $rates = DB::table('calendar as c')
+                ->join('rates as r', 'c.price_ID', '=', 'r.price_ID')
+                ->where('c.dates', $check_in)
+                ->select('c.*', 'r.*')
+                ->first();
+            }
 
             $holiday_rates = 0;
 
@@ -776,13 +990,38 @@ class FormController extends Controller
                 $date_after_two_night = $check_in->addDays(2);
                 $previousDate = $check_out->subDay();
 
-                $add_rates = DB::table('calendar as c')
-                ->select('r.*')
-                ->join('rates as r', 'c.price_ID', '=', 'r.price_ID')
-                ->whereBetween('c.dates', [$date_after_two_night, $previousDate])
-                ->select('c.*', 'r.*')
-                ->get();
+                if ($days > 3) {
+                    $add_rates = DB::table('calendar as c')
+                    ->join('rates as r', 'c.price_ID', '=', 'r.price_ID')
+                    ->whereBetween('c.dates', [$date_after_two_night, $previousDate])
+                    ->select('c.*', 'r.*')
+                    ->get();  
 
+                    $extra_charge_adult = $add_rates->sum('add_a');
+                    $extra_charge_child = $add_rates->sum('add_c');
+
+                    if ($request->agentTier == 1) {
+                        foreach ($add_rates as $rowt1) {
+                            $add_rates = Rates::query()
+                            ->where('weekend', $rowt1->price_ID)
+                            ->whereIn('price_ID', [704, 705, 706])
+                            ->first();
+                            $extra_charge_adult += $add_rates->add_a;
+                            $extra_charge_child += $add_rates->add_c;
+                        }
+                    } elseif ($request->agentTier == 2) {
+                        foreach ($add_rates as $rowt2) {
+                            $add_rates = Rates::query()
+                            ->where('weekend', $rowt2->price_ID)
+                            ->whereIn('price_ID', [716, 717, 718])
+                            ->first();
+
+                            $extra_charge_adult += $add_rates->add_a;
+                            $extra_charge_child += $add_rates->add_c;
+                        }
+                    }
+                }
+    
                 $chck_in = Carbon::parse( $request->check_in);
                 $chck_out = Carbon::parse( $request->check_out)->subDay();
                 $find_rate_school_hol = DB::table('calendar as c')
@@ -797,10 +1036,6 @@ class FormController extends Controller
                     }
                 }
 
-                if ($days > 3) {
-                    $extra_charge_adult = $add_rates->sum('add_a');
-                    $extra_charge_child = $add_rates->sum('add_c');
-                }
             }
 
             $double_adult_rates = $rates->double_a + $extra_charge_adult + $holiday_rates;
@@ -814,9 +1049,6 @@ class FormController extends Controller
             $triple_toddler_rates = 100;
 
             $quad_adult_rates = $rates->quad_a + $extra_charge_adult + $holiday_rates;
-            info('$rates->quad_a -> '.$rates->quad_a);
-            info('extra_charge_adult -> '.$extra_charge_adult);
-            info('holiday_rates -> '.$holiday_rates);
             $quad_adult_mat_rates = $rates->quad_m_a + $extra_charge_adult + $holiday_rates;
             $quad_child_rates =  $rates->quad_c + $extra_charge_child + $holiday_rates;
             $quad_child_mat_rates = $rates->quad_m_c + $extra_charge_child + $holiday_rates;
@@ -878,6 +1110,7 @@ class FormController extends Controller
                     'deluxe_q_child_price' =>   $sea_quad_child_rates,
                     'deluxe_q_child_m_price' => $sea_quad_child_mat_rates,
                     'deluxe_q_toddler_price' => $sea_quad_toddler_rates,
+                    'agent'                  => $request['agentTier']
                 ]);
 
                 $booking_details = Bookings::query()
