@@ -1077,85 +1077,44 @@ class FormController extends Controller
             $sea_quad_toddler_rates = 100;
 
             //update rates into bookings table
-            // if ($request->amendid == 0) {
-                Bookings::query()
-                ->where('booking_id', $bookingId)
-                ->where('amend_id', $request->amendid)
-                ->update([
-                    'check_in'  =>  $request->check_in,
-                    'check_out' =>  $request->check_out,
-                    'd_adult_price' =>  $double_adult_rates,
-                    'd_adult_m_price' =>    $double_adult_mat_rates,
-                    'd_child_price' =>  $double_child_rates,
-                    'd_child_m_price' =>    $double_child_mat_rates,
-                    'd_toddler_price' =>    $double_toddler_rates,
-                    't_adult_price' =>  $triple_adult_rates,
-                    't_child_price' =>  $triple_child_rates,
-                    't_toddler_price' =>    $triple_toddler_rates,
-                    'q_adult_price' =>  $quad_adult_rates,
-                    'q_adult_m_price' =>    $quad_adult_mat_rates,
-                    'q_child_price' =>  $quad_child_rates,
-                    'q_child_m_price' =>    $quad_child_mat_rates,
-                    'q_toddler_price' =>    $quad_toddler_rates,
-                    'deluxe_d_adult_price' =>   $sea_double_adult_rates,
-                    'deluxe_d_adult_m_price' => $sea_double_adult_mat_rates,
-                    'deluxe_d_child_price' =>   $sea_double_child_rates,
-                    'deluxe_d_child_m_price' => $sea_double_child_mat_rates,
-                    'deluxe_d_toddler_price' => $sea_double_toddler_rates,
-                    'deluxe_t_adult_price' =>   $sea_triple_adult_rates,
-                    'deluxe_t_child_price' =>   $sea_triple_child_rates,
-                    'deluxe_t_toddler_price' => $sea_triple_toddler_rates,
-                    'deluxe_q_adult_price' =>   $sea_quad_adult_rates,
-                    'deluxe_q_adult_m_price' => $sea_quad_adult_mat_rates,
-                    'deluxe_q_child_price' =>   $sea_quad_child_rates,
-                    'deluxe_q_child_m_price' => $sea_quad_child_mat_rates,
-                    'deluxe_q_toddler_price' => $sea_quad_toddler_rates,
-                    'agent'                  => $request['agentTier']
-                ]);
+            Bookings::query()
+            ->where('booking_id', $bookingId)
+            ->where('amend_id', $request->amendid)
+            ->update([
+                'check_in'  =>  $request->check_in,
+                'check_out' =>  $request->check_out,
+                'd_adult_price' =>  $double_adult_rates,
+                'd_adult_m_price' =>    $double_adult_mat_rates,
+                'd_child_price' =>  $double_child_rates,
+                'd_child_m_price' =>    $double_child_mat_rates,
+                'd_toddler_price' =>    $double_toddler_rates,
+                't_adult_price' =>  $triple_adult_rates,
+                't_child_price' =>  $triple_child_rates,
+                't_toddler_price' =>    $triple_toddler_rates,
+                'q_adult_price' =>  $quad_adult_rates,
+                'q_adult_m_price' =>    $quad_adult_mat_rates,
+                'q_child_price' =>  $quad_child_rates,
+                'q_child_m_price' =>    $quad_child_mat_rates,
+                'q_toddler_price' =>    $quad_toddler_rates,
+                'deluxe_d_adult_price' =>   $sea_double_adult_rates,
+                'deluxe_d_adult_m_price' => $sea_double_adult_mat_rates,
+                'deluxe_d_child_price' =>   $sea_double_child_rates,
+                'deluxe_d_child_m_price' => $sea_double_child_mat_rates,
+                'deluxe_d_toddler_price' => $sea_double_toddler_rates,
+                'deluxe_t_adult_price' =>   $sea_triple_adult_rates,
+                'deluxe_t_child_price' =>   $sea_triple_child_rates,
+                'deluxe_t_toddler_price' => $sea_triple_toddler_rates,
+                'deluxe_q_adult_price' =>   $sea_quad_adult_rates,
+                'deluxe_q_adult_m_price' => $sea_quad_adult_mat_rates,
+                'deluxe_q_child_price' =>   $sea_quad_child_rates,
+                'deluxe_q_child_m_price' => $sea_quad_child_mat_rates,
+                'deluxe_q_toddler_price' => $sea_quad_toddler_rates,
+                'agent'                  => $request['agentTier'],
+            ]);
 
-                $booking_details = Bookings::query()
-                ->where('booking_id', $bookingId)
-                ->first();
-            // } else {
-            //     BookingsAmend::query()
-            //     ->where('booking_id', $bookingId)
-            //     ->where('amend_id', $request->amendid)
-            //     ->update([
-            //         'check_in'  =>  $request->check_in,
-            //         'check_out' =>  $request->check_out,
-            //         'd_adult_price' =>  $double_adult_rates,
-            //         'd_adult_m_price' =>    $double_adult_mat_rates,
-            //         'd_child_price' =>  $double_child_rates,
-            //         'd_child_m_price' =>    $double_child_mat_rates,
-            //         'd_toddler_price' =>    $double_toddler_rates,
-            //         't_adult_price' =>  $triple_adult_rates,
-            //         't_child_price' =>  $triple_child_rates,
-            //         't_toddler_price' =>    $triple_toddler_rates,
-            //         'q_adult_price' =>  $quad_adult_rates,
-            //         'q_adult_m_price' =>    $quad_adult_mat_rates,
-            //         'q_child_price' =>  $quad_child_rates,
-            //         'q_child_m_price' =>    $quad_child_mat_rates,
-            //         'q_toddler_price' =>    $quad_toddler_rates,
-            //         'deluxe_d_adult_price' =>   $sea_double_adult_rates,
-            //         'deluxe_d_adult_m_price' => $sea_double_adult_mat_rates,
-            //         'deluxe_d_child_price' =>   $sea_double_child_rates,
-            //         'deluxe_d_child_m_price' => $sea_double_child_mat_rates,
-            //         'deluxe_d_toddler_price' => $sea_double_toddler_rates,
-            //         'deluxe_t_adult_price' =>   $sea_triple_adult_rates,
-            //         'deluxe_t_child_price' =>   $sea_triple_child_rates,
-            //         'deluxe_t_toddler_price' => $sea_triple_toddler_rates,
-            //         'deluxe_q_adult_price' =>   $sea_quad_adult_rates,
-            //         'deluxe_q_adult_m_price' => $sea_quad_adult_mat_rates,
-            //         'deluxe_q_child_price' =>   $sea_quad_child_rates,
-            //         'deluxe_q_child_m_price' => $sea_quad_child_mat_rates,
-            //         'deluxe_q_toddler_price' => $sea_quad_toddler_rates,
-            //     ]);
-
-            //     $booking_details = BookingsAmend::query()
-            //     ->where('booking_id', $bookingId)
-            //     ->where('amend_id', $request->amendid)
-            //     ->first();
-            // }
+            $booking_details = Bookings::query()
+            ->where('booking_id', $bookingId)
+            ->first();
 
             return response()->json([
                 'message' => 'Dates updated successfully.',

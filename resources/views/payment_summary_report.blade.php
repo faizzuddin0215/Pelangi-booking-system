@@ -98,7 +98,7 @@
                     <div class="card bg-white shadow rounded-lg">
                         <div class="p-4">
                             <div id="printArea" class="text-xs print:text-[6px]">
-                                <div class="text-xl">Payment Summary Report</div>
+                                <div class="text-xl">Payment Summary Report ({{ \Carbon\Carbon::parse($fdate)->format('d/m/Y') }})</div>
                                 <div class="overflow-x-auto text-xs print:text-[7px]">
                                     <table class="table-auto w-full border-collapse border border-gray-300">
                                         <thead>
@@ -118,7 +118,10 @@
                                         <tbody>
                                             @if ($booking_details && count($booking_details) > 0)
                                                 @foreach ($booking_details as $group)
-                                                @php $row = $group->first(); @endphp
+                                                @php 
+                                                    $row = $group->first(); 
+                                                    $totalpay = $receipts[$row->booking_id]->sum('amount') ?? 0;
+                                                @endphp
                                                 <tr class="odd:bg-white even:bg-gray-50">
                                                     <td class="border border-gray-300 p-2 print:p-[2px] w-[50px] print:w-[20px]">{{ $loop->iteration }}</td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px] w-[85px] print:w-[50px]">
@@ -137,7 +140,7 @@
                                                         {{$row->group_name}} ({{ $row->company }})
                                                     </td>
 
-                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[100px] print:w-[35px]">
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[300px] print:w-[250px]">
                                                         @php
                                                             $roomTypes = [
                                                                 'd_adult' => 'Adult in Double Deluxe Rooms',
@@ -146,70 +149,95 @@
                                                                 'd_adult_m' => 'Adult in Double Deluxe Rooms With Mattress',
                                                                 't_adult_m' => 'Adult in Triple Deluxe Rooms With Mattress',
                                                                 'q_adult_m' => 'Adult in Quad Deluxe Rooms With Mattress',
-
                                                                 'd_child' => 'Child in Double Deluxe Rooms',
                                                                 't_child' => 'child in Triple Deluxe Rooms',
                                                                 'q_child' => 'child in Quad Deluxe Rooms',
                                                                 'd_child_m' => 'child in Double Deluxe Rooms With Mattress',
                                                                 't_child_m' => 'child in Triple Deluxe Rooms With Mattress',
                                                                 'q_child_m' => 'child in Quad Deluxe Rooms With Mattress',
-
                                                                 'd_toddler' => 'Toddler in Double Deluxe Rooms',
                                                                 't_toddler' => 'Toddler in Triple Deluxe Rooms',
                                                                 'q_toddler' => 'Toddler in Quad Deluxe Rooms',
-
                                                                 'deluxe_d_adult' => 'Adult in Double Deluxe Rooms (Seaview)',
                                                                 'deluxe_t_adult' => 'Adult in Triple Deluxe Rooms (Seaview)',
                                                                 'deluxe_q_adult' => 'Adult in Quad Deluxe Rooms (Seaview)',
                                                                 'deluxe_d_adult_m' => 'Adult in Double Deluxe Rooms With Mattress (Seaview)',
                                                                 'deluxe_t_adult_m' => 'Adult in Triple Deluxe Rooms With Mattress (Seaview)',
                                                                 'deluxe_q_adult_m' => 'Adult in Quad Deluxe Rooms With Mattress (Seaview)',
-
                                                                 'deluxe_d_child' => 'Child in Double Deluxe Rooms (Seaview)',
                                                                 'deluxe_t_child' => 'child in Triple Deluxe Rooms (Seaview)',
                                                                 'deluxe_q_child' => 'child in Quad Deluxe Rooms (Seaview)',
                                                                 'deluxe_d_child_m' => 'child in Double Deluxe Rooms With Mattress (Seaview)',
                                                                 'deluxe_t_child_m' => 'child in Triple Deluxe Rooms With Mattress (Seaview)',
                                                                 'deluxe_q_child_m' => 'child in Quad Deluxe Rooms With Mattress (Seaview)',
-
                                                                 'deluxe_d_toddler' => 'Toddler in Double Deluxe Rooms (Seaview)',
                                                                 'deluxe_t_toddler' => 'Toddler in Triple Deluxe Rooms (Seaview)',
                                                                 'deluxe_q_toddler' => 'Toddler in Quad Deluxe Rooms (Seaview)',
-
                                                             ];
-                                                        @endphp
-
-                                                        @foreach ($roomTypes as $key => $label)
-                                                            @php
+                                                    
+                                                            $output = '';
+                                                    
+                                                            foreach ($roomTypes as $key => $label) {
                                                                 $pax = $row->{$key . '_pax'};
                                                                 $price = $row->{$key . '_price'};
-                                                            @endphp
-
-                                                            @if($pax)
-                                                            {{ (floor($price) == $price) ? number_format($price, 0) : number_format($price, 2) }}({{ $pax }}) + 
-                                                            @endif
-                                                        @endforeach
+                                                                if ($pax) {
+                                                                    $formattedPrice = (floor($price) == $price) ? number_format($price, 0) : number_format($price, 2);
+                                                                    $output .= "{$formattedPrice}({$pax}) + ";
+                                                                }
+                                                            }
+                                                    
+                                                            $transports = [
+                                                                'pickup01' => 'Pickup',
+                                                                'pickup02' => 'Pickup',
+                                                                'pickup03' => 'Pickup',
+                                                                'pickup04' => 'Pickup',
+                                                                'dropoff01' => 'Dropoff',
+                                                                'dropoff02' => 'Dropoff',
+                                                                'dropoff03' => 'Dropoff',
+                                                                'dropoff04' => 'Dropoff',
+                                                            ];
+                                                    
+                                                            foreach ($transports as $key => $type) {
+                                                                $pax = $row->{$key . '_pax'} ?? null;
+                                                                $price = $row->{$key . '_price'} ?? 0;
+                                                                if ($pax) {
+                                                                    $formattedPrice = (floor($price) == $price) ? number_format($price, 0) : number_format($price, 2);
+                                                                    $output .= "{$formattedPrice}({$pax}) + ";
+                                                                }
+                                                            }
+                                                    
+                                                            $optionals = [
+                                                                'optional01' => 'Optional',
+                                                                'optional02' => 'Optional',
+                                                                'optional03' => 'Optional',
+                                                            ];
+                                                    
+                                                            foreach ($optionals as $key => $type) {
+                                                                $pax = $row->{$key . '_pax'} ?? null;
+                                                                $price = $row->{$key . '_price'} ?? 0;
+                                                                if ($pax) {
+                                                                    $formattedPrice = (floor($price) == $price) ? number_format($price, 0) : number_format($price, 2);
+                                                                    $output .= "{$formattedPrice}({$pax}) + ";
+                                                                }
+                                                            }
+                                                    
+                                                            $output = rtrim($output, ' + ');
+                                                        @endphp
+                                                    
+                                                        {{ $output }}
                                                     </td>
                                                     <td class="border border-gray-300 p-2 print:p-[2px] w-[100px] print:w-[60px]">
-                                                        @php
-                                                            $roomTypes = ['Q', 'T', 'D', 'DL'];
-                                                            $deluxeRoomTypes = ['Deluxe_Q', 'Deluxe_T', 'Deluxe_D'];
-
-                                                            $standardCounts = array_map(fn($type) => $row->room_type_count[$type] ?? '_', $roomTypes);
-                                                            $deluxeCounts = array_map(fn($type) => $row->room_type_count[$type] ?? '_', $deluxeRoomTypes);
-                                                        @endphp
-                                                        {{ implode(' ', $standardCounts) }} @ {{ implode(' ', $deluxeCounts) }}
-                                                        {{-- @foreach($row->room_type_count as $roomType => $count)
-                                                            {{ $count }}
-                                                        @endforeach --}}
+                                                        {{ number_format($row->grand_total_with_GST,2) }}
                                                     </td>
-                                                    
+                                                        
                                                     <td class="border border-gray-300 p-2 print:p-[2px]">
-                                                        {{ implode(' ', $group->pluck('rooms')->filter()->toArray()) }}
+                                                        {{ number_format($totalpay, 2) }}
                                                     </td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px]">{{ $row->internal_remarks }}</td>
-                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[60px] print:w-[30px]">
-                                                        NL ({{ $row->pax_adult + $row->pax_child + $row->pax_toddler }})
+                                                    <td class="border border-gray-300 p-2 print:p-[2px]">
+                                                        {{ number_format($row->grand_total_with_GST - $totalpay, 2) }}
+                                                    </td>
+                                                    <td class="border border-gray-300 p-2 print:p-[2px] w-[100px] print:w-[70px]">
+
                                                     </td>
                                                 </tr>
                                                 @endforeach
