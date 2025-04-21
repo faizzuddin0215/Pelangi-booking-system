@@ -1463,6 +1463,7 @@ class FormController extends Controller
     {
         if ($request->original == 'original') {
             if ($request->arrange_type == 'pickup'){
+                info($request);
                 if ($request->type == 'update rate') {
                     $pickup = Pickup::where('pickup_name', $request->pickup_name)->first();
 
@@ -1473,24 +1474,13 @@ class FormController extends Controller
                     } else {
                         $price_field = 'pickup03_price';
                     }
-
-                    // if ($request->amendid == 0) {
-                        Bookings::query()
-                        ->where('booking_id', $request->booking_id)
-                        ->where('amend_id', $request->amendid)
-                        ->update([
-                            $request->pickup_field   => $request->pickup_name,
-                            $price_field    => $pickup->pickup_rate    
-                        ]);
-                    // } else {
-                    //     BookingsAmend::query()
-                    //     ->where('booking_id', $request->booking_id)
-                    //     ->where('amend_id', $request->amendid)
-                    //     ->update([
-                    //         $request->pickup_field   => $request->pickup_name,
-                    //         $price_field    => $pickup->pickup_rate    
-                    //     ]);
-                    // }
+                    Bookings::query()
+                    ->where('booking_id', $request->booking_id)
+                    ->where('amend_id', $request->amendid)
+                    ->update([
+                        $request->pickup_field   => $request->pickup_name,
+                        $price_field    => $pickup->pickup_rate    
+                    ]);
 
                     if ($pickup) {
                         return response()->json([
@@ -1498,17 +1488,10 @@ class FormController extends Controller
                         ]);
                     }
                 } else {
-                    // if ($request->amendid == 0) {
-                        $find_pickup_details = Bookings::query()
-                        ->where('booking_id', $request->booking_id)
-                        ->where('amend_id', $request->amendid)
-                        ->first();
-                    // } else {
-                    //     $find_pickup_details = BookingsAmend::query()
-                    //     ->where('booking_id', $request->booking_id)
-                    //     ->where('amend_id', $request->amendid)
-                    //     ->first();
-                    // }
+                    $find_pickup_details = Bookings::query()
+                    ->where('booking_id', $request->booking_id)
+                    ->where('amend_id', $request->amendid)
+                    ->first();
 
                     if ($request->field == 'pickup01_method') {
                         $price = $find_pickup_details->pickup01_price;
@@ -1822,6 +1805,59 @@ class FormController extends Controller
             }
         }
         // return response()->json(['success' => false, 'message' => 'Pickup not found']);
+    }
+
+    public function getPickupDetailsOther(Request $request) {
+        $find_pickup_details = Bookings::query()
+        ->where('booking_id', $request->booking_id)
+        ->where('amend_id', $request->amendid)
+        ->first();
+
+        if ($request->field == 'pickup01_method') {
+            $total_price_field = 'pickup01_total';
+            $price = $find_pickup_details->pickup01_price;
+        } else if ($request->field == 'pickup02_method') {
+            $total_price_field = 'pickup02_total';
+            $price = $find_pickup_details->pickup02_price;
+        } else {
+            $total_price_field = 'pickup03_total';
+            $price = $find_pickup_details->pickup03_price;
+        }
+        $total_rate = $request->pickup_pax_value * $price;
+        Bookings::query()
+        ->where('booking_id', $request->booking_id)
+        ->where('amend_id', $request->amendid)
+        ->update([
+            $request->pickup_field   => $request->pickup_name,
+            $total_price_field => $total_rate
+        ]);
+    }
+
+    public function getDropoffDetailsOther(Request $request) {
+        info($request);
+        $find_dropoff_details = Bookings::query()
+        ->where('booking_id', $request->booking_id)
+        ->where('amend_id', $request->amendid)
+        ->first();
+
+        if ($request->field == 'dropoff01_method') {
+            $total_price_field = 'dropoff01_total';
+            $price = $find_dropoff_details->dropoff01_price;
+        } else if ($request->field == 'dropoff02_method') {
+            $total_price_field = 'dropoff02_total';
+            $price = $find_dropoff_details->dropoff02_price;
+        } else {
+            $total_price_field = 'dropoff03_total';
+            $price = $find_dropoff_details->dropoff03_price;
+        }
+        $total_rate = $request->dropoff_pax_value * $price;
+        Bookings::query()
+        ->where('booking_id', $request->booking_id)
+        ->where('amend_id', $request->amendid)
+        ->update([
+            $request->dropoff_field   => $request->dropoff_name,
+            $total_price_field => $total_rate
+        ]);
     }
 
     public function optionalDetails($bookingId) {
@@ -2374,42 +2410,6 @@ class FormController extends Controller
                             'pickup03_total' => 0,
                         ]);
                     }
-                // } else {
-                //     if ($request->pickupmethod == 'pickup01_method') {
-                //         BookingsAmend::query()
-                //         ->where('booking_id', $id)
-                //         ->where('amend_id', $request->amendid)
-                //         ->update([
-                //             'pickup01_method' => '',
-                //             'pickup01_pax' => 0,
-                //             'pickup01_price' => 0,
-                //             'pickup01_total' => 0,
-                //         ]);
-                //     }
-                //     if ($request->pickupmethod == 'pickup02_method') {
-                //         BookingsAmend::query()
-                //         ->where('booking_id', $id)
-                //         ->where('amend_id', $request->amendid)
-                //         ->update([
-                //             'pickup02_method' => '',
-                //             'pickup02_pax' => 0,
-                //             'pickup02_price' => 0,
-                //             'pickup02_total' => 0,
-                //         ]);
-                //     }
-                //     if ($request->pickupmethod == 'pickup03_method') {
-                //         BookingsAmend::query()
-                //         ->where('booking_id', $id)
-                //         ->where('amend_id', $request->amendid)
-                //         ->update([
-                //             'pickup03_method' => '',
-                //             'pickup03_pax' => 0,
-                //             'pickup03_price' => 0,
-                //             'pickup03_total' => 0,
-                //         ]);
-                //     }
-
-                // }
             } else {
                 // if ($request->amendid == 0) {
                     if ($request->dropoffmethod == 'dropoff01_method') {
@@ -2445,42 +2445,6 @@ class FormController extends Controller
                             'dropoff03_total' => 0,
                         ]);
                     }
-                // } else {
-                //     if ($request->dropoffmethod == 'dropoff01_method') {
-                //         BookingsAmend::query()
-                //         ->where('booking_id', $id)
-                //         ->where('amend_id', $request->amendid)
-                //         ->update([
-                //             'dropoff01_method' => '',
-                //             'dropoff01_pax' => 0,
-                //             'dropoff01_price' => 0,
-                //             'dropoff01_total' => 0,
-                //         ]);
-                //     }
-                //     if ($request->dropoffmethod == 'dropoff02_method') {
-                //         BookingsAmend::query()
-                //         ->where('booking_id', $id)
-                //         ->where('amend_id', $request->amendid)
-                //         ->update([
-                //             'dropoff02_method' => '',
-                //             'dropoff02_pax' => 0,
-                //             'dropoff02_price' => 0,
-                //             'dropoff02_total' => 0,
-                //         ]);
-                //     }
-                //     if ($request->dropoffmethod == 'dropoff03_method') {
-                //         BookingsAmend::query()
-                //         ->where('booking_id', $id)
-                //         ->where('amend_id', $request->amendid)
-                //         ->update([
-                //             'dropoff03_method' => '',
-                //             'dropoff03_pax' => 0,
-                //             'dropoff03_price' => 0,
-                //             'dropoff03_total' => 0,
-                //         ]);
-                //     }
-
-                // }
             }
         } else {
             if ($request->arrange_type == 'pickup') {

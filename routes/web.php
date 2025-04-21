@@ -4,6 +4,7 @@ use App\Http\Controllers\CheckInReportController;
 use App\Http\Controllers\DailyGuestSumReportController;
 use App\Http\Controllers\DriverReportController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\NameListReportController;
 use App\Http\Controllers\PaxReportController;
 use App\Http\Controllers\PaymentSummaryReportController;
 use App\Http\Controllers\ProfileController;
@@ -35,6 +36,8 @@ Route::post('/form2/{bookingId}/save', [FormController::class, 'saveValue'])->na
 Route::get('/form3/{bookingId}/{amendId}', [FormController::class, 'form3'])->name('form3');
 Route::get('/form3/{bookingId}/{amendId}', [FormController::class, 'pickupDetails']);
 Route::post('/form3/{bookingId}', [FormController::class, 'getPickupDetails'])->name('getPickupDetails');
+Route::post('/form3/{bookingId}/other', [FormController::class, 'getPickupDetailsOther'])->name('getPickupDetailsOther');
+Route::post('/form3/{bookingId}/otherDropoff', [FormController::class, 'getDropoffDetailsOther'])->name('getDropoffDetailsOther');
 Route::post('/form3/{bookingId}/optionalOriginal', [FormController::class, 'optionalOriginal'])->name('optionalOriginal');
 Route::post('/form3/{bookingId}/updateQtyOptional', [FormController::class, 'updateQtyOptional'])->name('updateQtyOptional');
 Route::delete('/form3/{id}/delete-pickup', [FormController::class, 'deletePickup'])->name('bookings.deletePickup');
@@ -64,6 +67,10 @@ Route::post('/driver_report', [DriverReportController::class, 'filter'])->name('
 Route::get('/room_list_report', [RoomListReportController::class, 'index'])->name('room_list_report');
 Route::get('/room_list_report', [RoomListReportController::class, 'report'])->name('room_list_report');
 Route::post('/room_list_report', [RoomListReportController::class, 'filter'])->name('room_list_report.filter');
+
+Route::get('/name_list_report', [NameListReportController::class, 'index'])->name('name_list_report');
+Route::get('/name_list_report', [NameListReportController::class, 'report'])->name('name_list_report');
+Route::post('/name_list_report', [NameListReportController::class, 'filter'])->name('name_list_report.filter');
 
 Route::get('/payment_summary_report', [PaymentSummaryReportController::class, 'index'])->name('payment_summary_report');
 Route::get('/payment_summary_report', [PaymentSummaryReportController::class, 'report'])->name('payment_summary_report');
