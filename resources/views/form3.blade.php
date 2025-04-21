@@ -144,253 +144,112 @@
                                     <thead class="bg-gray-100">
                                         <tr class="text-xs">
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Pickup Arrangement</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Pax</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Rate (RM)</th>
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Pax</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Total (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $pickups = [
+                                                ['method' => 'pickup01_method', 'price' => 'pickup01_price', 'pax' => 'pickup01_pax', 'total' => 'pickup01_total', 'input' => 'pickup01_other_input', 'price_input' => 'pickup01_other_price'],
+                                                ['method' => 'pickup02_method', 'price' => 'pickup02_price', 'pax' => 'pickup02_pax', 'total' => 'pickup02_total', 'input' => 'pickup02_other_input', 'price_input' => 'pickup02_other_price'],
+                                                ['method' => 'pickup03_method', 'price' => 'pickup03_price', 'pax' => 'pickup03_pax', 'total' => 'pickup03_total', 'input' => 'pickup03_other_input', 'price_input' => 'pickup03_other_price'],
+                                            ];
+                                        @endphp
+                                        
+                                        @foreach ($pickups as $index => $pickup)
                                         <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
+                                            {{-- Method Select + Other Input --}}
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <select
-                                                    class="pickup-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-pickup-name="{{ $bookings->pickup01_method }}"
-                                                    data-pickup-rate="{{ $bookings->pickup01_price }}"
-                                                    data-pickup-field="pickup01_method"
-                                                    onclick="handlePickupChangeOriginal(event)"
-                                                >
-                                                    <option value="other">Other</option>
-                                                    <option value="Please Choose" selected>{{ $bookings->pickup01_method }}</option>
-                                                    @foreach ($pickupOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                                {{-- <select
-                                                    id="pickup-method"
-                                                    class="pickup-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    class="pickup-select w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500"
+                                                    data-pickup-name="{{ $bookings[$pickup['method']] }}"
+                                                    data-pickup-rate="{{ $bookings[$pickup['price']] }}"
+                                                    data-pickup-field="{{ $pickup['method'] }}"
                                                     onchange="handlePickupChangeOriginal(event)"
                                                 >
-                                                    <option value="Please Choose" selected>{{ $bookings->pickup01_method }}</option>
-                                                    @foreach ($pickupOptions as $option)
-                                                        <option value="{{ $option }}" {{ $bookings->pickup01_method == $option ? 'selected' : '' }}>
-                                                            {{ $option }}
-                                                        </option>
-                                                    @endforeach
                                                     <option value="other">Other</option>
+                                                    <option value="Please Choose" selected>{{ $bookings[$pickup['method']] }}</option>
+                                                    @foreach ($pickupOptions as $option)
+                                                        <option value="{{ $option }}">{{ $option }}</option>
+                                                    @endforeach
                                                 </select>
-
-                                                <input 
-                                                    type="text" 
-                                                    id="custom-pickup-method"
-                                                    class="hidden mt-2 w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        
+                                                <input
+                                                    type="text"
+                                                    id="{{ $pickup['input'] }}"
+                                                    name="{{ str_replace('_method', '_other', $pickup['method']) }}"
+                                                    data-field="{{ $pickup['method'] }}"
+                                                    class="mt-2 hidden w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 text-xs"
                                                     placeholder="Enter custom pickup method"
-                                                    oninput="document.getElementById('final-pickup-method').value = this.value"
-                                                >
-
-                                                <input type="hidden" name="pickup01_method" id="final-pickup-method" value="{{ $bookings->pickup01_method }}"> --}}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value text-xs" data-pickup-name="{{ $bookings->pickup01_method }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->pickup01_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    {{-- onchange="updatePaxValueOriginal(event, {{ $bookings->pickup01_method }},'pickup01_method')"  --}}
-                                                    onchange="updatePaxValueOriginal(event, 'pickup01_method')"
+                                                    value="{{ $bookings[$pickup['method']] }}"
+                                                    onchange="handleCustomPickupBlur('{{ $pickup['input'] }}')"
                                                 />
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value text-xs" data-pickup-name="{{ $bookings->pickup01_method }}">
-                                                {{ $bookings->pickup01_price }}
+                                        
+                                            {{-- Rate Display + Editable Input --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value" data-pickup-name="{{ $bookings[$pickup['method']] }}">
+                                                {{ $bookings[$pickup['price']] }}
+                                                <input
+                                                    type="number"
+                                                    id="{{ $pickup['price_input'] }}"
+                                                    name="{{ $pickup['price_input'] }}"
+                                                    data-field="{{ $pickup['price'] }}"
+                                                    class="mt-2 hidden w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 text-xs"
+                                                    value="{{ $bookings[$pickup['price']] }}"
+                                                    onchange="handleCustomPickupPrice('{{ $pickup['price_input'] }}')"
+                                                />
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-pickup-name="{{ $bookings->pickup01_method }}">
-                                                {{ $bookings->pickup01_total }}
+                                        
+                                            {{-- Pax Input --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value" data-pickup-name="{{ $bookings[$pickup['method']] }}">
+                                                <input 
+                                                    type="number" 
+                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 text-xs" 
+                                                    value="{{ $bookings[$pickup['pax']] }}" 
+                                                    min="1" 
+                                                    step="1"
+                                                    onchange="updatePaxValueOriginal(event, '{{ $pickup['method'] }}')"
+                                                />
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
+                                        
+                                            {{-- Total --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value" data-pickup-name="{{ $bookings[$pickup['method']] }}">
+                                                {{ $bookings[$pickup['total']] }}
+                                            </td>
+                                        
+                                            {{-- Delete Icon --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-center">
                                                 <svg 
                                                     xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deletePickup({{ $bookings->booking_id }}, 'pickup01_method')"
+                                                    class="w-5 h-5 cursor-pointer"
+                                                    viewBox="0 0 48 48"
+                                                    onclick="deletePickup({{ $bookings->booking_id }}, '{{ $pickup['method'] }}')"
                                                 >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
+                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"/>
+                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828-14.14,14.14-2.828-2.828L29.656,15.516z"/>
+                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828-14.14-14.14 2.828-2.828L32.484,29.656z"/>
                                                 </svg>
                                             </td>
                                         </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="pickup-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-pickup2-name="{{ $bookings->pickup02_method }}"
-                                                    data-pickup2-rate="{{ $bookings->pickup02_price }}"
-                                                    data-pickup-field="pickup02_method"
-                                                    onclick="handlePickupChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->pickup02_method }}</option>
-                                                    @foreach ($pickupOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value text-xs" data-pickup2-name="{{ $bookings->pickup02_method }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->pickup02_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updatePaxValueOriginal(event, 'pickup02_method')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value text-xs" data-pickup2-name="{{ $bookings->pickup02_method }}">
-                                                {{ $bookings->pickup02_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-pickup2-name="{{ $bookings->pickup02_method }}">
-                                                {{ $bookings->pickup02_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deletePickup({{ $bookings->booking_id }}, 'pickup02_method')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="pickup-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-pickup3-name="{{ $bookings->pickup03_method }}"
-                                                    data-pickup3-rate="{{ $bookings->pickup03_price }}"
-                                                    data-pickup-field="pickup03_method"
-                                                    onclick="handlePickupChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->pickup03_method }}</option>
-                                                    @foreach ($pickupOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value text-xs" data-pickup3-name="{{ $bookings->pickup03_method }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->pickup03_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updatePaxValueOriginal(event, 'pickup03_method')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value text-xs" data-pickup3-name="{{ $bookings->pickup03_method }}">
-                                                {{ $bookings->pickup03_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-pickup3-name="{{ $bookings->pickup03_method }}">
-                                                {{ $bookings->pickup03_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deletePickup({{ $bookings->booking_id }}, 'pickup03_method')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
+                                        @endforeach
+                                        
+                                        {{-- Total Pickup Row --}}
                                         <tr class="bg-gray-100 hover:bg-gray-200 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700"></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value"></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value"><strong>Total (RM)</strong></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value">
-                                                {{ $total_pickup }}
-                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2"></td>
+                                            <td class="border border-gray-300 px-4 py-2 pax-value"></td>
+                                            <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Total (RM)</td>
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value">{{ $total_pickup }}</td>
                                         </tr>
+                                        
                                     </tbody>    
 
                                 </table>
 
 
                                 <br/>
-                                {{-- <table class="table-auto w-full border border-gray-300 text-left">
-                                    <thead class="bg-gray-100">
-                                        <tr class="text-xs">
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Pickup Arrangement</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Pax</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Rate (RM)</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Total (RM)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($pickups as $pickup)
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="pickup-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-row-id="{{ $loop->index }}"
-                                                    data-pickup-id="{{ $pickup->id }}"
-                                                    data-pickup-rate="{{ $pickup->pickup_rate }}"
-                                                    onclick="handlePickupChange(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $pickup->pickup_name }}</option>
-                                                    @foreach ($pickupOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value text-xs" data-row-id="{{ $loop->index }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $pickup->pickup_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updatePaxValue(event, {{ $pickup->id }}, {{ $loop->index }})" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value text-xs" data-row-id="{{ $loop->index }}">
-                                                {{ $pickup->pickup_rate }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-row-id="{{ $loop->index }}">
-                                                {{ $pickup->total_pickup_rate }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-row-id="{{ $loop->index }}">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deletePickupNew({{ $bookings->booking_id }}, {{$pickup->id}})"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
-                                        @endforeach                                
-                                        <!-- New Row at the Bottom -->
-                                        <tr class="bg-gray-100 hover:bg-gray-200 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700"></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value"></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value"><strong>Total (RM)</strong></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value">
-                                                {{ $total_pickup }}
-                                            </td>
-                                        </tr>
-                                    </tbody>    
-
-                                </table>
-                                <button onclick="addRow()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg">Add Row</button> --}}
                             </div>
                         </div>
                               
@@ -398,161 +257,111 @@
                         <div class="dropoff-table-container w-full text-xs mt-4">
                             <h2 class="text-sm font-bold text-gray-700 mb-4">Dropoff Arrangements</h2>
                             <div class="w-full overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
-
-
                                 <table class="table-auto w-full border border-gray-300 text-left">
                                     <thead class="bg-gray-100">
                                         <tr class="text-xs">
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Dropoff Arrangement</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Pax</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Rate (RM)</th>
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Pax</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Total (RM)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-dropoff-name="{{ $bookings->dropoff01_method }}"
-                                                    data-dropoff-rate="{{ $bookings->dropoff01_price }}"
-                                                    data-dropoff-field="dropoff01_method"
-                                                    onclick="handleDropoffChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->dropoff01_method }}</option>
-                                                    @foreach ($dropoffOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value text-xs" data-dropoff-name="{{ $bookings->dropoff01_method }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->dropoff01_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    {{-- onchange="updatePaxValueOriginal(event, {{ $bookings->pickup01_method }},'pickup01_method')"  --}}
-                                                    onchange="updatePaxValueDropoffOriginal(event, 'dropoff01_method')"
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value text-xs" data-dropoff-name="{{ $bookings->dropoff_method }}">
-                                                {{ $bookings->dropoff01_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-dropoff-name="{{ $bookings->dropoff_method }}">
-                                                {{ $bookings->dropoff01_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteDropoff({{ $bookings->booking_id }}, 'dropoff01_method')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
+                                        @php
+                                            $dropoffs = [
+                                                ['method' => 'dropoff01_method', 'price' => 'dropoff01_price', 'pax' => 'dropoff01_pax', 'total' => 'dropoff01_total', 'input' => 'dropoff01_other_input', 'price_input' => 'dropoff01_other_price'],
+                                                ['method' => 'dropoff02_method', 'price' => 'dropoff02_price', 'pax' => 'dropoff02_pax', 'total' => 'dropoff02_total', 'input' => 'dropoff02_other_input', 'price_input' => 'dropoff02_other_price'],
+                                                ['method' => 'dropoff03_method', 'price' => 'dropoff03_price', 'pax' => 'dropoff03_pax', 'total' => 'dropoff03_total', 'input' => 'dropoff03_other_input', 'price_input' => 'dropoff03_other_price'],
+                                            ];
+                                        @endphp
+                                    
+                                        @foreach ($dropoffs as $index => $dropoff)
                                         <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
+                                            {{-- Method Select + Other Input --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-dropoff2-name="{{ $bookings->dropoff02_method }}"
-                                                    data-dropoff2-rate="{{ $bookings->dropoff02_price }}"
-                                                    data-dropoff-field="dropoff02_method"
-                                                    onclick="handleDropoffChangeOriginal(event)"
+                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500"
+                                                    data-dropoff-name="{{ $bookings[$dropoff['method']] }}"
+                                                    data-dropoff-rate="{{ $bookings[$dropoff['price']] }}"
+                                                    data-dropoff-field="{{ $dropoff['method'] }}"
+                                                    onchange="handleDropoffChangeOriginal(event)"
                                                 >
-                                                    <option value="Please Choose" selected>{{ $bookings->dropoff02_method }}</option>
+                                                    <option value="other">Other</option>
+                                                    <option value="Please Choose" selected>{{ $bookings[$dropoff['method']] }}</option>
                                                     @foreach ($dropoffOptions as $option)
                                                         <option value="{{ $option }}">{{ $option }}</option>
                                                     @endforeach
                                                 </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value text-xs" data-dropoff2-name="{{ $bookings->dropoff02_method }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->dropoff02_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updatePaxValueDropoffOriginal(event, 'dropoff02_method')" 
+                                    
+                                                <input
+                                                    type="text"
+                                                    id="{{ $dropoff['input'] }}"
+                                                    name="{{ str_replace('_method', '_other', $dropoff['method']) }}"
+                                                    data-field="{{ $dropoff['method'] }}"
+                                                    class="mt-2 hidden w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 text-xs"
+                                                    placeholder="Enter custom dropoff method"
+                                                    value="{{ $bookings[$dropoff['method']] }}"
+                                                    onchange="handleCustomDropoffBlur('{{ $dropoff['input'] }}')"
                                                 />
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value text-xs" data-dropoff2-name="{{ $bookings->dropoff02_method }}">
-                                                {{ $bookings->dropoff02_price }}
+                                    
+                                            {{-- Rate Display + Editable Input --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value" data-dropoff-name="{{ $bookings[$dropoff['method']] }}">
+                                                {{ $bookings[$dropoff['price']] }}
+                                                <input
+                                                    type="number"
+                                                    id="{{ $dropoff['price_input'] }}"
+                                                    name="{{ $dropoff['price_input'] }}"
+                                                    data-field="{{ $dropoff['price'] }}"
+                                                    class="mt-2 hidden w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 text-xs"
+                                                    value="{{ $bookings[$dropoff['price']] }}"
+                                                    onchange="handleCustomDropoffPrice('{{ $dropoff['price_input'] }}')"
+                                                />
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-dropoff2-name="{{ $bookings->dropoff02_method }}">
-                                                {{ $bookings->dropoff02_total }}
+                                    
+                                            {{-- Pax Input --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value" data-dropoff-name="{{ $bookings[$dropoff['method']] }}">
+                                                <input 
+                                                    type="number" 
+                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 text-xs" 
+                                                    value="{{ $bookings[$dropoff['pax']] }}" 
+                                                    min="1" 
+                                                    step="1"
+                                                    onchange="updatePaxValueDropoffOriginal(event, '{{ $dropoff['method'] }}')"
+                                                />
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
+                                    
+                                            {{-- Total --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value" data-dropoff-name="{{ $bookings[$dropoff['method']] }}">
+                                                {{ $bookings[$dropoff['total']] }}
+                                            </td>
+                                    
+                                            {{-- Delete Icon --}}
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-center">
                                                 <svg 
                                                     xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteDropoff({{ $bookings->booking_id }}, 'dropoff02_method')"
+                                                    class="w-5 h-5 cursor-pointer"
+                                                    viewBox="0 0 48 48"
+                                                    onclick="deleteDropoff({{ $bookings->booking_id }}, '{{ $dropoff['method'] }}')"
                                                 >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
+                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"/>
+                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828-14.14,14.14-2.828-2.828L29.656,15.516z"/>
+                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828-14.14-14.14 2.828-2.828L32.484,29.656z"/>
                                                 </svg>
                                             </td>
                                         </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-dropoff3-name="{{ $bookings->dropoff03_method }}"
-                                                    data-dropoff3-rate="{{ $bookings->dropoff03_price }}"
-                                                    data-dropoff-field="dropoff03_method"
-                                                    onclick="handleDropoffChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->dropoff03_method }}</option>
-                                                    @foreach ($dropoffOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value text-xs" data-dropoff3-name="{{ $bookings->dropoff03_method }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->dropoff03_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updatePaxValueDropoffOriginal(event, 'dropoff03_method')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value text-xs" data-dropoff3-name="{{ $bookings->dropoff03_method }}">
-                                                {{ $bookings->dropoff03_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-dropoff3-name="{{ $bookings->dropoff03_method }}">
-                                                {{ $bookings->dropoff03_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteDropoff({{ $bookings->booking_id }}, 'dropoff03_method')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
+                                        @endforeach
+                                    
+                                        {{-- Total Dropoff Row --}}
                                         <tr class="bg-gray-100 hover:bg-gray-200 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700"></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 pax-value"></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 rate-value"><strong>Total (RM)</strong></td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value">
-                                                {{ $total_dropoff }}
-                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2"></td>
+                                            <td class="border border-gray-300 px-4 py-2 pax-value"></td>
+                                            <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Total (RM)</td>
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value">{{ $total_dropoff }}</td>
                                         </tr>
-                                    </tbody>    
-
+                                    </tbody>
+                                    
+                                
                                 </table>
 
                                 <br />
@@ -1076,53 +885,6 @@
         const bookingId = window.location.pathname.split('/')[4];
         const amendId = window.location.pathname.split('/')[5];
         window.location.href = "{{ url('form4') }}/" + bookingId + "/" + amendId;
-        // Hide the "Next form 2" button
-        // document.getElementById("form2").style.display = "none";
-        // Show the "Next form 3" button
-        // document.getElementById("form3-container").style.display = "flex";
-    }
-
-    function handlePickupChange(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-
-        const pickupName = event.target.value;  // Get the selected value
-        const rowId = event.target.getAttribute('data-row-id');  // Get the row ID
-        const pickupId = event.target.getAttribute('data-pickup-id'); // Pickup ID
-        const pickupRate = event.target.getAttribute('data-pickup-rate'); // Pickup ID
-
-        fetch(`{{ url('/form3') }}/${bookingId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                booking_id: bookingId,  // Pass bookingId in the request payload
-                pickup_name: pickupName,
-                pickup_id: pickupId,
-                pickup_rate: pickupRate,
-                type: 'update rate',
-                arrange_type: 'pickup'
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the related table cells dynamically
-                document.querySelector(`.pax-value[data-row-id="${rowId}"]`).innerText = data.pickup_pax;
-                document.querySelector(`.rate-value[data-row-id="${rowId}"]`).innerText = data.pickup_rate;
-                document.querySelector(`.total-value[data-row-id="${rowId}"]`).innerText = data.pickup_total_rate;
-                location.reload();
-                
-            } else {
-                alert(data.message || 'Failed to fetch pickup details');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching pickup details:', error);
-        });
-
     }
 
     function updatePaxValue(event, rowId, id) {
@@ -1545,6 +1307,7 @@
         const amendId = window.location.pathname.split('/')[5];
 
         const pickupName = event.target.value;  // Get the selected value
+        console.log(pickupName);
 
         const dataField = event.target.getAttribute('data-pickup-field');
         const pickupId = '';
@@ -1553,26 +1316,141 @@
         if (dataField == 'pickup01_method') {
             const pickupId = event.target.getAttribute('data-pickup-name'); // Pickup ID
             const pickupRate = event.target.getAttribute('data-pickup-rate'); // Pickup ID
-        } else if (dataField == 'pickup01_method') {
+
+            const otherInput = document.getElementById('pickup01_other_input');
+            const otherInputPrice = document.getElementById('pickup01_other_price');
+
+            if (pickupName === 'other') {
+                if (otherInput) {
+                    otherInput.classList.remove('hidden');
+                    otherInput.focus();
+                }
+
+                if (otherInputPrice) {
+                    otherInputPrice.classList.remove('hidden');
+                    otherInputPrice.focus();
+                }
+                return; // Don't continue if waiting for user input
+            } else {
+                if (otherInput) {
+                    otherInput.classList.add('hidden');
+                    otherInput.value = '';
+                }
+            }
+        } else if (dataField == 'pickup02_method') {
             const pickupId = event.target.getAttribute('data-pickup2-name'); // Pickup ID
             const pickupRate = event.target.getAttribute('data-pickup2-rate'); // Pickup ID
+            const otherInput = document.getElementById('pickup02_other_input');
+            const otherInputPrice = document.getElementById('pickup02_other_price');
+
+            if (pickupName === 'other') {
+                if (otherInput) {
+                    otherInput.classList.remove('hidden');
+                    otherInput.focus();
+                }
+
+                if (otherInputPrice) {
+                    otherInputPrice.classList.remove('hidden');
+                    otherInputPrice.focus();
+                }
+                return; // Don't continue if waiting for user input
+            } else {
+                if (otherInput) {
+                    otherInput.classList.add('hidden');
+                    otherInput.value = '';
+                }
+            }
         } else {
             const pickupId = event.target.getAttribute('data-pickup3-name'); // Pickup ID
             const pickupRate = event.target.getAttribute('data-pickup3-rate'); // Pickup ID
+
+            const otherInput = document.getElementById('pickup03_other_input');
+            const otherInputPrice = document.getElementById('pickup03_other_price');
+
+            if (pickupName === 'other') {
+                if (otherInput) {
+                    otherInput.classList.remove('hidden');
+                    otherInput.focus();
+                }
+
+                if (otherInputPrice) {
+                    otherInputPrice.classList.remove('hidden');
+                    otherInputPrice.focus();
+                }
+                return; // Don't continue if waiting for user input
+            } else {
+                if (otherInput) {
+                    otherInput.classList.add('hidden');
+                    otherInput.value = '';
+                }
+            }
         }
 
-        fetch(`{{ url('/form3') }}/${bookingId}`, {
+        if (pickupName != 'other') {
+            fetch(`{{ url('/form3') }}/${bookingId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    booking_id: bookingId,  // Pass bookingId in the request payload
+                    amendid: amendId,
+                    pickup_name: pickupName,
+                    pickup_id: pickupId,
+                    pickup_rate: pickupRate,
+                    pickup_field: dataField,
+                    type: 'update rate',
+                    arrange_type: 'pickup',
+                    original: 'original'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the related table cells dynamically
+                    // document.querySelector(`.pax-value[data-row-id="${rowId}"]`).innerText = data.pickup_pax;
+                    // document.querySelector(`.rate-value[data-row-id="${rowId}"]`).innerText = data.pickup_rate;
+                    // document.querySelector(`.total-value[data-row-id="${rowId}"]`).innerText = data.pickup_total_rate;
+                    location.reload();
+                    
+                } else {
+                    alert(data.message || 'Failed to fetch pickup details');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching pickup details:', error);
+            });
+        }
+    }
+
+    function handleCustomPickupBlur(inputId) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        // Grab the input value
+        const otherValue = input.value.trim();
+        const dataField = input.getAttribute('data-field');
+
+        // If the value is empty, stop execution
+        if (!otherValue) return;
+
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
+
+        // Send the request
+        fetch(`{{ url('/form3') }}/${bookingId}/other`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({
-                booking_id: bookingId,  // Pass bookingId in the request payload
+                booking_id: bookingId,
                 amendid: amendId,
-                pickup_name: pickupName,
-                pickup_id: pickupId,
-                pickup_rate: pickupRate,
+                pickup_name: otherValue,
+                pickup_id: 'other',
+                pickup_rate: 0,
                 pickup_field: dataField,
                 type: 'update rate',
                 arrange_type: 'pickup',
@@ -1582,96 +1460,157 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update the related table cells dynamically
-                // document.querySelector(`.pax-value[data-row-id="${rowId}"]`).innerText = data.pickup_pax;
-                // document.querySelector(`.rate-value[data-row-id="${rowId}"]`).innerText = data.pickup_rate;
-                // document.querySelector(`.total-value[data-row-id="${rowId}"]`).innerText = data.pickup_total_rate;
                 location.reload();
-                
             } else {
-                alert(data.message || 'Failed to fetch pickup details');
+                alert(data.message || 'Failed to save custom pickup');
             }
         })
         .catch(error => {
-            console.error('Error fetching pickup details:', error);
+            console.error('Error saving custom pickup:', error);
         });
-
     }
 
-    // function handlePickupChangeOriginal(event) {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const bookingId = window.location.pathname.split('/')[4];
+    function handleCustomPickupPrice(inputId) {
+        // const pax = document.getElementById('pickup01_pax_input').value;
+        const input = document.getElementById(inputId);
+        if (!input) return;
 
-    //     const pickupName = event.target.value;  // Get the selected value
-    //     const dataField = event.target.getAttribute('data-pickup-field');
+        // Grab the input value
+        const otherValue = input.value.trim();
+        console.log(otherValue);
+        const dataField = input.getAttribute('data-field');
 
-    //     let pickupId = '';
-    //     let pickupRate = 0;
+        // If the value is empty, stop execution
+        if (!otherValue) return;
 
-    //     const customInput = document.getElementById('custom-pickup-method');
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
 
-    //     if (pickupName === 'other') {
-    //         // Show the input field when "Other" is selected
-    //         customInput.classList.remove('hidden');
-    //         customInput.value = "";
-    //         customInput.focus();
-            
-    //         // Clear the hidden input value
-    //         document.getElementById('final-pickup-method').value = "";
-            
-    //         return;  // Stop execution to prevent API call when selecting "Other"
-    //     } else {
-    //         // Hide the custom input field when switching back to a dropdown option
-    //         customInput.classList.add('hidden');
-    //         customInput.value = ""; // Reset input field
-    //     }
+        // Send the request
+        fetch(`{{ url('/form3') }}/${bookingId}/other`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                booking_id: bookingId,
+                amendid: amendId,
+                pickup_name: otherValue,
+                pickup_id: 'other',
+                pickup_rate: 0,
+                pickup_field: dataField,
+                type: 'update rate',
+                arrange_type: 'pickup',
+                original: 'original'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.message || 'Failed to save custom pickup');
+            }
+        })
+        .catch(error => {
+            console.error('Error saving custom pickup:', error);
+        });
+    }
 
-    //     // Get pickupId and pickupRate based on the field
-    //     if (dataField === 'pickup01_method') {
-    //         pickupId = event.target.getAttribute('data-pickup-name');
-    //         pickupRate = event.target.getAttribute('data-pickup-rate');
-    //     } else if (dataField === 'pickup02_method') {
-    //         pickupId = event.target.getAttribute('data-pickup2-name');
-    //         pickupRate = event.target.getAttribute('data-pickup2-rate');
-    //     } else if (dataField === 'pickup03_method') {
-    //         pickupId = event.target.getAttribute('data-pickup3-name');
-    //         pickupRate = event.target.getAttribute('data-pickup3-rate');
-    //     }
+    function handleCustomDropoffBlur(inputId) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
 
-    //     // Update the hidden input value (useful for form submission)
-    //     document.getElementById('final-pickup-method').value = pickupName;
+        // Grab the input value
+        const otherValue = input.value.trim();
+        const dataField = input.getAttribute('data-field');
 
-    //     // Perform fetch API call
-    //     fetch(`{{ url('/form3') }}/${bookingId}`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    //         },
-    //         body: JSON.stringify({
-    //             booking_id: bookingId,
-    //             pickup_name: pickupName,
-    //             pickup_id: pickupId,
-    //             pickup_rate: pickupRate,
-    //             pickup_field: dataField,
-    //             type: 'update rate',
-    //             arrange_type: 'pickup',
-    //             original: 'original'
-    //         })
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         if (data.success) {
-    //             location.reload();
-    //         } else {
-    //             alert(data.message || 'Failed to fetch pickup details');
-    //         }
-    //     })
-    //     .catch(error => {
-    //         console.error('Error fetching pickup details:', error);
-    //     });
-    // }
+        // If the value is empty, stop execution
+        if (!otherValue) return;
 
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
+
+        // Send the request
+        fetch(`{{ url('/form3') }}/${bookingId}/otherDropoff`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                booking_id: bookingId,
+                amendid: amendId,
+                dropoff_name: otherValue,
+                dropoff_id: 'other',
+                dropoff_rate: 0,
+                dropoff_field: dataField,
+                type: 'update rate',
+                arrange_type: 'dropoff',
+                original: 'original'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.message || 'Failed to save custom pickup');
+            }
+        })
+        .catch(error => {
+            console.error('Error saving custom pickup:', error);
+        });
+    }
+
+    function handleCustomDropoffPrice(inputId) {
+        // const pax = document.getElementById('pickup01_pax_input').value;
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        // Grab the input value
+        const otherValue = input.value.trim();
+        console.log(otherValue);
+        const dataField = input.getAttribute('data-field');
+
+        // If the value is empty, stop execution
+        if (!otherValue) return;
+
+        const bookingId = window.location.pathname.split('/')[4];
+        const amendId = window.location.pathname.split('/')[5];
+
+        // Send the request
+        fetch(`{{ url('/form3') }}/${bookingId}/otherDropoff`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                booking_id: bookingId,
+                amendid: amendId,
+                dropoff_name: otherValue,
+                dropoff_id: 'other',
+                dropoff_rate: 0,
+                dropoff_field: dataField,
+                type: 'update rate',
+                arrange_type: 'dropoff',
+                original: 'original'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.message || 'Failed to save custom pickup');
+            }
+        })
+        .catch(error => {
+            console.error('Error saving custom pickup:', error);
+        });
+    }
 
     function updatePaxValueOriginal(event, field) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -1725,12 +1664,75 @@
         if (dataField == 'dropoff01_method') {
             const dropoffId = event.target.getAttribute('data-dropoff-name'); // Pickup ID
             const dropoffRate = event.target.getAttribute('data-dropoff-rate'); // Pickup ID
-        } else if (dataField == 'dropoff01_method') {
+
+            const otherInput = document.getElementById('dropoff01_other_input');
+            const otherInputPrice = document.getElementById('dropoff01_other_price');
+
+            if (dropoffName === 'other') {
+                if (otherInput) {
+                    otherInput.classList.remove('hidden');
+                    otherInput.focus();
+                }
+
+                if (otherInputPrice) {
+                    otherInputPrice.classList.remove('hidden');
+                    otherInputPrice.focus();
+                }
+                return; // Don't continue if waiting for user input
+            } else {
+                if (otherInput) {
+                    otherInput.classList.add('hidden');
+                    otherInput.value = '';
+                }
+            }
+        } else if (dataField == 'dropoff02_method') {
             const dropoffId = event.target.getAttribute('data-dropoff2-name'); // Pickup ID
             const dropoffRate = event.target.getAttribute('data-dropoff2-rate'); // Pickup ID
+
+            const otherInput = document.getElementById('dropoff02_other_input');
+            const otherInputPrice = document.getElementById('dropoff02_other_price');
+
+            if (dropoffName === 'other') {
+                if (otherInput) {
+                    otherInput.classList.remove('hidden');
+                    otherInput.focus();
+                }
+
+                if (otherInputPrice) {
+                    otherInputPrice.classList.remove('hidden');
+                    otherInputPrice.focus();
+                }
+                return; // Don't continue if waiting for user input
+            } else {
+                if (otherInput) {
+                    otherInput.classList.add('hidden');
+                    otherInput.value = '';
+                }
+            }
         } else {
             const dropoffId = event.target.getAttribute('data-dropoff3-name'); // Pickup ID
             const dropoffRate = event.target.getAttribute('data-dropoff3-rate'); // Pickup ID
+
+            const otherInput = document.getElementById('dropoff03_other_input');
+            const otherInputPrice = document.getElementById('dropoff03_other_price');
+
+            if (dropoffName === 'other') {
+                if (otherInput) {
+                    otherInput.classList.remove('hidden');
+                    otherInput.focus();
+                }
+
+                if (otherInputPrice) {
+                    otherInputPrice.classList.remove('hidden');
+                    otherInputPrice.focus();
+                }
+                return; // Don't continue if waiting for user input
+            } else {
+                if (otherInput) {
+                    otherInput.classList.add('hidden');
+                    otherInput.value = '';
+                }
+            }
         }
 
         fetch(`{{ url('/form3') }}/${bookingId}`, {

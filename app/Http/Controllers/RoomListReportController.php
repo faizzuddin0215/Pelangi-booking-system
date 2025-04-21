@@ -92,6 +92,7 @@ class RoomListReportController extends Controller
 
                 // Add the room_type_count to the booking group
                 $bookingGroup[0]->room_type_count = $roomTypeCount;
+                
 
                 // Return the booking group (you can just return the first room as the booking)
                 return $bookingGroup;

@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\CheckInReportController;
+use App\Http\Controllers\DailyGuestSumReportController;
 use App\Http\Controllers\DriverReportController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\NameListReportController;
+use App\Http\Controllers\PaxReportController;
 use App\Http\Controllers\PaymentSummaryReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoomListReportController;
+use App\Http\Controllers\SnorkellingReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +36,8 @@ Route::post('/form2/{bookingId}/save', [FormController::class, 'saveValue'])->na
 Route::get('/form3/{bookingId}/{amendId}', [FormController::class, 'form3'])->name('form3');
 Route::get('/form3/{bookingId}/{amendId}', [FormController::class, 'pickupDetails']);
 Route::post('/form3/{bookingId}', [FormController::class, 'getPickupDetails'])->name('getPickupDetails');
+Route::post('/form3/{bookingId}/other', [FormController::class, 'getPickupDetailsOther'])->name('getPickupDetailsOther');
+Route::post('/form3/{bookingId}/otherDropoff', [FormController::class, 'getDropoffDetailsOther'])->name('getDropoffDetailsOther');
 Route::post('/form3/{bookingId}/optionalOriginal', [FormController::class, 'optionalOriginal'])->name('optionalOriginal');
 Route::post('/form3/{bookingId}/updateQtyOptional', [FormController::class, 'updateQtyOptional'])->name('updateQtyOptional');
 Route::delete('/form3/{id}/delete-pickup', [FormController::class, 'deletePickup'])->name('bookings.deletePickup');
@@ -62,9 +68,25 @@ Route::get('/room_list_report', [RoomListReportController::class, 'index'])->nam
 Route::get('/room_list_report', [RoomListReportController::class, 'report'])->name('room_list_report');
 Route::post('/room_list_report', [RoomListReportController::class, 'filter'])->name('room_list_report.filter');
 
+Route::get('/name_list_report', [NameListReportController::class, 'index'])->name('name_list_report');
+Route::get('/name_list_report', [NameListReportController::class, 'report'])->name('name_list_report');
+Route::post('/name_list_report', [NameListReportController::class, 'filter'])->name('name_list_report.filter');
+
 Route::get('/payment_summary_report', [PaymentSummaryReportController::class, 'index'])->name('payment_summary_report');
 Route::get('/payment_summary_report', [PaymentSummaryReportController::class, 'report'])->name('payment_summary_report');
 Route::post('/payment_summary_report', [PaymentSummaryReportController::class, 'filter'])->name('payment_summary_report.filter');
+
+Route::get('/pax_report', [PaxReportController::class, 'index'])->name('pax_report');
+Route::get('/pax_report', [PaxReportController::class, 'report'])->name('pax_report');
+Route::post('/pax_report', [PaxReportController::class, 'filter'])->name('pax_report.filter');
+
+Route::get('/daily_guest_sum_report', [DailyGuestSumReportController::class, 'index'])->name('daily_guest_sum_report');
+Route::get('/daily_guest_sum_report', [DailyGuestSumReportController::class, 'report'])->name('daily_guest_sum_report');
+Route::post('/daily_guest_sum_report', [DailyGuestSumReportController::class, 'filter'])->name('daily_guest_sum_report.filter');
+
+Route::get('/snorkelling_report', [SnorkellingReportController::class, 'index'])->name('snorkelling_report');
+Route::get('/snorkelling_report', [SnorkellingReportController::class, 'report'])->name('snorkelling_report');
+Route::post('/snorkelling_report', [SnorkellingReportController::class, 'filter'])->name('snorkelling_report.filter');
 
 Route::get('/check_in_report', [CheckInReportController::class, 'index'])->name('check_in_report');
 Route::get('/check_in_report', [CheckInReportController::class, 'report'])->name('check_in_report');

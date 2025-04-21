@@ -45,7 +45,16 @@
                         <x-dropdown-link :href="route('driver_report')">
                             {{ __('Driver Report') }}
                         </x-dropdown-link>
-                        {{-- Additional Dropdown Items (Uncomment if needed) --}}
+                        <x-dropdown-link :href="route('pax_report')">
+                            {{ __('Pax Report') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('daily_guest_sum_report')">
+                            {{ __('Daily Guest Sum Report') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('name_list_report')">
+                            {{ __('Name List Report') }}
+                        </x-dropdown-link>
+                            {{-- Additional Dropdown Items (Uncomment if needed) --}}
                         {{-- <a href="{{ route('form.sub2') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             {{ __('Sub Form 2') }}
                         </a>
@@ -144,6 +153,18 @@
                     </x-dropdown-link>
                     <x-dropdown-link :href="route('driver_report')">
                         {{ __('Driver Report') }}
+                    </x-dropdown-link>
+                    <x-dropdown-link :href="route('pax_report')">
+                        {{ __('Pax Report') }}
+                    </x-dropdown-link>
+                    <x-dropdown-link :href="route('daily_guest_sum_report')">
+                        {{ __('Daily Guest Sum Report') }}
+                    </x-dropdown-link>
+                    <x-dropdown-link :href="route('snorkelling_report')">
+                        {{ __('Snorkelling Report') }}
+                    </x-dropdown-link>
+                    <x-dropdown-link :href="route('name_list_report')">
+                        {{ __('Name List Report') }}
                     </x-dropdown-link>
                 </div>
             </div>
