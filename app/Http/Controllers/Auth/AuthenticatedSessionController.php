@@ -27,8 +27,12 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $password = Hash::make($request->password);
+        // $userStatus = User::query()
+        // ->where('name', $request->name)
+        // ->value('user_status_id');
+
         $userStatus = User::query()
-        ->where('name', $request->name)
+        ->where('login_name', $request->login_name)
         ->value('user_status_id');
 
         if ($userStatus == 1) {
@@ -38,7 +42,8 @@ class AuthenticatedSessionController extends Controller
     
             return redirect()->intended(route('form', absolute: false));
         } else {
-            return redirect()->intended(route('login', absolute: false));
+            return redirect()->intended(route('login', absolute: false))
+            ->with('error', 'Your account is inactive. Please contact support.');;
         }
     }
 
