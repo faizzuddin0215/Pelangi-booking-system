@@ -1,8 +1,13 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('login') }}">
+    <!-- Flash Error Message -->
+    @if (session('error'))
+        <div class="mb-4 text-sm text-red-600">
+            {{ session('error') }}
+        </div>
+    @endif
+        <form method="POST" action="{{ route('login') }}">
         @csrf
 
         <!-- Email Address -->
@@ -11,10 +16,16 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div> --}}
-        <div>
+        {{-- <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+         --}}
+        <div>
+            <x-input-label for="login_name" :value="__('Username')" />
+            <x-text-input id="login_name" class="block mt-1 w-full" type="text" name="login_name" :value="old('login_name')" required autofocus autocomplete="login_name" />
+            <x-input-error :messages="$errors->get('login_name')" class="mt-2" />
         </div>
 
         <!-- Password -->

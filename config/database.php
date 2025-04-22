@@ -89,7 +89,7 @@ return [
             'port' => env('DB_PORT_THIRD', '3306'),
             'database' => env('DB_DATABASE_THIRD', 'laravel'),
             'username' => env('DB_USERNAME_THIRD', 'root'),
-            'password' => env('DB_PASSWOR_THIRD', ''),
+            'password' => env('DB_PASSWORD_THIRD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
