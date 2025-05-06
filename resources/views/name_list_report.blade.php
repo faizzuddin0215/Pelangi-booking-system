@@ -77,7 +77,7 @@
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900 dark:text-gray-100">
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                {{-- <form method="post" action="{{ route('room_list_report.filter') }}">
+                <form method="post" action="{{ route('room_list_report.filter') }}">
                     @csrf
                     <div class="flex flex-wrap items-center gap-4">
                         <div class="flex items-center text-sm">
@@ -91,9 +91,8 @@
                             <button type="submit" class="btn bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto text-sm">Submit</button>
                         </div>
                         <button onclick="printDiv('printArea')" class="bg-blue-500 text-white px-4 py-2 rounded text-sm">Print</button>
-
                     </div>
-                </form> --}}
+                </form>
                 <div class="flex flex-col space-y-4">
                     <div class="card bg-white shadow rounded-lg">
                         <div class="p-4">

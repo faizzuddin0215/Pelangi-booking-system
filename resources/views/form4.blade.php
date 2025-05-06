@@ -132,8 +132,7 @@
                                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
                                         rows="3"
                                         placeholder="Enter your text here..."
-                                        oninput="updateField({{ $bookings->booking_id }}, 'remarks_customer', this.value)"
-                                        >{{ $bookings->remarks_customer }}
+                                        id="remarks_customer">{{ $bookings->remarks_customer }}
                                     </textarea>
                                 </div>
                                 <br />
@@ -150,8 +149,7 @@
                                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
                                         rows="3"
                                         placeholder="Enter your text here..."
-                                        oninput="updateField({{ $bookings->booking_id }}, 'internal_remarks', this.value)"
-                                        >{{ $bookings->internal_remarks }}
+                                        id="internal_remarks">{{ $bookings->internal_remarks }}
                                     </textarea>
                                 </div>
                                 <br />
@@ -168,8 +166,7 @@
                                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
                                         rows="3"
                                         placeholder="Enter your text here..."
-                                        oninput="updateField({{ $bookings->booking_id }}, 'divecentre_remarks', this.value)"
-                                        >{{ $bookings->divecentre_remarks }}
+                                        id="divecentre_remarks">{{ $bookings->divecentre_remarks }}
                                     </textarea>
                                 </div>
                             </div>
@@ -292,17 +289,78 @@
 
                 </div>
     
-                <div class="flex justify-end">
+                <br/>
+                <br/>
+                {{-- <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end space-x-4 z-50">
                     <button
-                        type="submit"
+                        type="button"
+                        id="back"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 text-xs"
+                        onclick="back()"
+                    >
+                        Back
+                    </button>
+                    <button
+                        type="button"
+                        id="save"
+                        class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-xs"
+                        onclick="save('save')"
+                    >
+                        Save
+                    </button>
+                    <button
+                        type="button"
                         id="form2"
-                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        onclick="showForm3()"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 text-xs"
+                        onclick="save('saveNext')"
+                    >
+                        Save & Next
+                    </button>
+                </div>                                                 --}}
+                <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end gap-3 z-50 shadow-md">
+                    <!-- Navigation Buttons -->
+                    <button
+                        type="button"
+                        id="btn-back"
+                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition text-sm"
+                        onclick="back()"
+                        aria-label="Go Back"
+                    >
+                        Back
+                    </button>
+                
+                    <button
+                        type="button"
+                        id="btn-next"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm"
+                        onclick="next()"
+                        aria-label="Go to Next Step"
                     >
                         Next
                     </button>
-                </div>
                 
+                    <!-- Save Buttons -->
+                    <button
+                        type="button"
+                        id="btn-save"
+                        class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition text-sm"
+                        onclick="save('save')"
+                        aria-label="Save Form"
+                    >
+                        Save
+                    </button>
+                
+                    <button
+                        type="button"
+                        id="btn-save-next"
+                        class="px-6 py-3 bg-green-700 text-white rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-600 transition text-sm"
+                        onclick="save('saveNext')"
+                        aria-label="Save and Proceed"
+                    >
+                        Save & Next
+                    </button>
+                </div>
+
                                 
             </div>
         </div>
@@ -315,9 +373,18 @@
 
     function showForm3() {
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
         window.location.href = "{{ url('form5') }}/" + bookingId + "/" + amendId;
         // Hide the "Next form 2" button
         // document.getElementById("form2").style.display = "none";
@@ -325,14 +392,103 @@
         // document.getElementById("form3-container").style.display = "flex";
     }
 
+    function back() {
+
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+        window.location.href = "{{ url('form3') }}/" + bookingId + "/" + amendId;
+
+    }
+
+    function next() {
+
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+        window.location.href = "{{ url('form5') }}/" + bookingId + "/" + amendId;
+
+    }
+
+
+    function save(type) {
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+        const remarkData = {
+            amendid : amendId,
+            remarks_customer: document.getElementById('remarks_customer').value,
+            internal_remarks: document.getElementById('internal_remarks').value,
+            divecentre_remarks: document.getElementById('divecentre_remarks').value,
+        };
+
+
+        fetch(`{{ url('/form4') }}/${bookingId}/save`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify(remarkData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Successfully Updated!');
+            if (type == 'save') {
+                window.location.href = "{{ url('form4') }}/" + bookingId + "/" + amendId;
+            } else {
+                window.location.href = "{{ url('form5') }}/" + bookingId + "/" + amendId;
+            }
+        })
+        .catch(error => console.error('Error updating dates:', error));
+
+    }
+
+
+
     let typingTimers = {};
     const doneTypingInterval = 2000; // Delay before sending update (1 second)
 
     function updateField(bookingId, field, value) {
         // Clear previous timeout
         clearTimeout(typingTimers[field]);
-        const urlParams = new URLSearchParams(window.location.search);
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let amendId;
+
+        if (hostname === 'localhost') {
+            amendId = pathSegments[4];
+        } else {
+            amendId = pathSegments[2];
+        }
 
         // Set a new timeout to delay the request
         typingTimers[field] = setTimeout(() => {

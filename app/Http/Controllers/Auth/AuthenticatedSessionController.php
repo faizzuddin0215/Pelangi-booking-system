@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
 
             $request->session()->regenerate();
     
-            return redirect()->intended(route('form', absolute: false));
+            return redirect()->intended(route('check_rate', absolute: false));
         } else {
             return redirect()->intended(route('login', absolute: false))
             ->with('error', 'Your account is inactive. Please contact support.');;

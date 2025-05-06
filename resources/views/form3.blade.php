@@ -150,7 +150,7 @@
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="pickup-rows">
                                         @php
                                             $pickups = [
                                                 ['method' => 'pickup01_method', 'price' => 'pickup01_price', 'pax' => 'pickup01_pax', 'total' => 'pickup01_total', 'input' => 'pickup01_other_input', 'price_input' => 'pickup01_other_price'],
@@ -165,6 +165,7 @@
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <select
                                                     class="pickup-select w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500"
+                                                    id="pickupmethod-{{ $index }}"
                                                     data-pickup-name="{{ $bookings[$pickup['method']] }}"
                                                     data-pickup-rate="{{ $bookings[$pickup['price']] }}"
                                                     data-pickup-field="{{ $pickup['method'] }}"
@@ -208,6 +209,9 @@
                                                 <input 
                                                     type="number" 
                                                     class="w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500 text-xs" 
+                                                    data-pickup-name="{{ $bookings[$pickup['method']] }}"
+                                                    data-pickup-rate="{{ $bookings[$pickup['price']] }}"
+                                                    data-pickup-field="{{ $pickup['method'] }}"
                                                     value="{{ $bookings[$pickup['pax']] }}" 
                                                     min="1" 
                                                     step="1"
@@ -216,7 +220,7 @@
                                             </td>
                                         
                                             {{-- Total --}}
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value" data-pickup-name="{{ $bookings[$pickup['method']] }}">
+                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value" data-pickup-name="{{ $bookings[$pickup['method']] }}" id="totalPickup">
                                                 {{ $bookings[$pickup['total']] }}
                                             </td>
                                         
@@ -266,7 +270,7 @@
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Total (RM)</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="dropoff-rows">
                                         @php
                                             $dropoffs = [
                                                 ['method' => 'dropoff01_method', 'price' => 'dropoff01_price', 'pax' => 'dropoff01_pax', 'total' => 'dropoff01_total', 'input' => 'dropoff01_other_input', 'price_input' => 'dropoff01_other_price'],
@@ -281,6 +285,7 @@
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <select
                                                     class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 bg-white focus:ring-2 focus:ring-blue-500"
+                                                    id="dropoffmethod-{{ $index }}"
                                                     data-dropoff-name="{{ $bookings[$dropoff['method']] }}"
                                                     data-dropoff-rate="{{ $bookings[$dropoff['price']] }}"
                                                     data-dropoff-field="{{ $dropoff['method'] }}"
@@ -477,259 +482,70 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-optional-name="{{ $bookings->optional01_desc }}"
-                                                    data-optional-rate="{{ $bookings->optional01_price }}"
-                                                    data-optional-field="optional01_desc"
-                                                    onclick="handleOptionalChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->optional01_desc }}</option>
-                                                    @foreach ($optionalOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 sst-value text-xs" data-optional-name="{{ $bookings->optional01_desc }}">
-                                                {{ $bookings->optional01_GST }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 code-value text-xs" data-optional-name="{{ $bookings->optional01_desc }}">
-                                                {{ $optional_code['optional_code01'] }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 qty-value text-xs" data-optional-name="{{ $bookings->optional01_desc }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->optional01_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updateQtyOriginalValue(event, 'optional01_desc', 'optional01_pax')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 price-value text-xs" data-optional-name="{{ $bookings->optional01_desc }}">
-                                                {{ $bookings->optional01_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-optional-name="{{ $bookings->optional01_desc }}">
-                                                {{ $bookings->optional01_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteOptionalOriginal({{ $bookings->booking_id }}, 'optional01_desc')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-optional-name="{{ $bookings->optional02_desc }}"
-                                                    data-optional-rate="{{ $bookings->optional02_price }}"
-                                                    data-optional-field="optional02_desc"
-                                                    onclick="handleOptionalChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->optional02_desc }}</option>
-                                                    @foreach ($optionalOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 sst-value text-xs" data-optional-name="{{ $bookings->optional02_desc }}">
-                                                {{ $bookings->optional02_GST }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 code-value text-xs" data-optional-name="{{ $bookings->optional02_desc }}">
-                                                {{ $optional_code['optional_code02'] }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 qty-value text-xs" data-optional-name="{{ $bookings->optional02_desc }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->optional02_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updateQtyOriginalValue(event, 'optional02_desc', 'optional02_pax')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 price-value text-xs" data-optional-name="{{ $bookings->optional02_desc }}">
-                                                {{ $bookings->optional02_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-optional-name="{{ $bookings->optional02_desc }}">
-                                                {{ $bookings->optional02_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteOptionalOriginal({{ $bookings->booking_id }}, 'optional02_desc')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-optional-name="{{ $bookings->optional03_desc }}"
-                                                    data-optional-rate="{{ $bookings->optional03_price }}"
-                                                    data-optional-field="optional03_desc"
-                                                    onclick="handleOptionalChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->optional03_desc }}</option>
-                                                    @foreach ($optionalOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 sst-value text-xs" data-optional-name="{{ $bookings->optional03_desc }}">
-                                                {{ $bookings->optional03_GST }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 code-value text-xs" data-optional-name="{{ $bookings->optional03_desc }}">
-                                                {{ $optional_code['optional_code03'] }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 qty-value text-xs" data-optional-name="{{ $bookings->optional03_desc }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->optional03_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updateQtyOriginalValue(event, 'optional03_desc', 'optional03_pax')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 price-value text-xs" data-optional-name="{{ $bookings->optional03_desc }}">
-                                                {{ $bookings->optional03_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-optional-name="{{ $bookings->optional03_desc }}">
-                                                {{ $bookings->optional03_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteOptionalOriginal({{ $bookings->booking_id }}, 'optional03_desc')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-optional-name="{{ $bookings->optional04_desc }}"
-                                                    data-optional-rate="{{ $bookings->optional04_price }}"
-                                                    data-optional-field="optional04_desc"
-                                                    onclick="handleOptionalChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->optional04_desc }}</option>
-                                                    @foreach ($optionalOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 sst-value text-xs" data-optional-name="{{ $bookings->optional04_desc }}">
-                                                {{ $bookings->optional04_GST }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 code-value text-xs" data-optional-name="{{ $bookings->optional04_desc }}">
-                                                {{ $optional_code['optional_code04'] }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 qty-value text-xs" data-optional-name="{{ $bookings->optional04_desc }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->optional04_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updateQtyOriginalValue(event, 'optional04_desc', 'optional04_pax')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 price-value text-xs" data-optional-name="{{ $bookings->optional04_desc }}">
-                                                {{ $bookings->optional04_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-optional-name="{{ $bookings->optional04_desc }}">
-                                                {{ $bookings->optional04_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteOptionalOriginal({{ $bookings->booking_id }}, 'optional04_desc')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-xs">
-                                                <select
-                                                    class="dropoff-select w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
-                                                    data-optional-name="{{ $bookings->optional05_desc }}"
-                                                    data-optional-rate="{{ $bookings->optional05_price }}"
-                                                    data-optional-field="optional05_desc"
-                                                    onclick="handleOptionalChangeOriginal(event)"
-                                                >
-                                                    <option value="Please Choose" selected>{{ $bookings->optional05_desc }}</option>
-                                                    @foreach ($optionalOptions as $option)
-                                                        <option value="{{ $option }}">{{ $option }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 sst-value text-xs" data-optional-name="{{ $bookings->optional05_desc }}">
-                                                {{ $bookings->optional05_GST }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 code-value text-xs" data-optional-name="{{ $bookings->optional05_desc }}">
-                                                {{ $optional_code['optional_code05'] }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 qty-value text-xs" data-optional-name="{{ $bookings->optional05_desc }}">
-                                                <input 
-                                                    type="number" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ $bookings->optional05_pax }}" 
-                                                    min="1" 
-                                                    step="1"
-                                                    onchange="updateQtyOriginalValue(event, 'optional05_desc', 'optional05_pax')" 
-                                                />
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 price-value text-xs" data-optional-name="{{ $bookings->optional05_desc }}">
-                                                {{ $bookings->optional05_price }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs" data-optional-name="{{ $bookings->optional05_desc }}">
-                                                {{ $bookings->optional05_total }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 total-value text-xs">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" 
-                                                    class="cursor-pointer"
-                                                    onclick="deleteOptionalOriginal({{ $bookings->booking_id }}, 'optional05_desc')"
-                                                >
-                                                    <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
-                                                    <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
-                                                    <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
-                                                </svg>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>    
-
+                                        @php
+                                            $optionals = [
+                                                'optional01' => 'optional_code01',
+                                                'optional02' => 'optional_code02',
+                                                'optional03' => 'optional_code03',
+                                                'optional04' => 'optional_code04',
+                                                'optional05' => 'optional_code05',
+                                            ];
+                                        @endphp
+                                    
+                                        @foreach ($optionals as $index => $codeKey)
+                                            @php
+                                                $fieldPrefix = $index;
+                                            @endphp
+                                            <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100" data-row-id="row-{{ $loop->index }}">
+                                                <td class="border px-4 py-2 text-xs text-gray-700">
+                                                    <select
+                                                        class="optional-select w-full border rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                                                        data-optional-field="{{ $fieldPrefix . '_desc' }}"
+                                                        onchange="handleOptionalChangeOriginal(event)"
+                                                    >
+                                                        <option value="Please Choose" selected>{{ $bookings->{$fieldPrefix . '_desc'} }}</option>
+                                                        @foreach ($optionalOptions as $option)
+                                                            <option value="{{ $option }}">{{ $option }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td class="border px-4 py-2 text-xs text-gray-700 sst-value">
+                                                    {{ $bookings->{$fieldPrefix . '_GST'} }}
+                                                </td>
+                                                <td class="border px-4 py-2 text-xs text-gray-700 code-value">
+                                                    {{ $bookings->{$fieldPrefix . '_bill_to'} }}
+                                                </td>
+                                                <td class="border px-4 py-2 text-xs text-gray-700 qty-value">
+                                                    <input 
+                                                        type="number" 
+                                                        class="w-full border rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
+                                                        value="{{ $bookings->{$fieldPrefix . '_pax'} }}" 
+                                                        min="1" 
+                                                        step="1"
+                                                        onchange="updateQtyOriginalValue(event, '{{ $fieldPrefix . '_desc' }}', '{{ $fieldPrefix . '_pax' }}')" 
+                                                    />
+                                                </td>
+                                                <td class="border px-4 py-2 text-xs text-gray-700 price-value">
+                                                    {{ $bookings->{$fieldPrefix . '_price'} }}
+                                                </td>
+                                                <td class="border px-4 py-2 text-xs text-gray-700 total-value">
+                                                    {{ $bookings->{$fieldPrefix . '_total'} }}
+                                                </td>
+                                                <td class="border px-4 py-2 text-xs text-gray-700">
+                                                    <svg 
+                                                        xmlns="http://www.w3.org/2000/svg" 
+                                                        width="20" height="20" viewBox="0 0 48 48" 
+                                                        class="cursor-pointer"
+                                                        onclick="deleteOptionalOriginal({{ $bookings->booking_id }}, '{{ $fieldPrefix . '_desc' }}')"
+                                                    >
+                                                        <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path>
+                                                        <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
+                                                        <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
+                                                    </svg>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
                                 </table>
 
                                 {{-- <table class="table-auto w-full border border-gray-300 text-left">
@@ -858,17 +674,77 @@
                     </div>
 
                 </div>
-                <div class="flex justify-end">
+                <br/>
+                {{-- <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end space-x-4 z-50">
                     <button
-                        type="submit"
+                        type="button"
+                        id="back"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 text-xs"
+                        onclick="back()"
+                    >
+                        Back
+                    </button>
+                    <button
+                        type="button"
+                        id="save"
+                        class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-xs"
+                        onclick="save('save')"
+                    >
+                        Save
+                    </button>
+                    <button
+                        type="button"
                         id="form2"
-                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        onclick="showForm3()"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 text-xs"
+                        onclick="save('saveNext')"
+                    >
+                        Save & Next
+                    </button>
+                </div>                                 --}}
+                <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end gap-3 z-50 shadow-md">
+                    <!-- Navigation Buttons -->
+                    <button
+                        type="button"
+                        id="btn-back"
+                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition text-sm"
+                        onclick="back()"
+                        aria-label="Go Back"
+                    >
+                        Back
+                    </button>
+                
+                    <button
+                        type="button"
+                        id="btn-next"
+                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm"
+                        onclick="next()"
+                        aria-label="Go to Next Step"
                     >
                         Next
                     </button>
-                </div>
                 
+                    <!-- Save Buttons -->
+                    <button
+                        type="button"
+                        id="btn-save"
+                        class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition text-sm"
+                        onclick="save('save')"
+                        aria-label="Save Form"
+                    >
+                        Save
+                    </button>
+                
+                    <button
+                        type="button"
+                        id="btn-save-next"
+                        class="px-6 py-3 bg-green-700 text-white rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-600 transition text-sm"
+                        onclick="save('saveNext')"
+                        aria-label="Save and Proceed"
+                    >
+                        Save & Next
+                    </button>
+                </div>
+
                                 
             </div>
         </div>
@@ -878,18 +754,194 @@
 @endsection
 
 <script>
+    function save(type) {
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3];
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1];
+            amendId = pathSegments[2];
+        }
+
+        const rows = document.querySelectorAll('tbody tr');
+        const paxData = {
+            amendid: amendId,
+            pickupData: [],
+            dropoffData: [],
+        };
+
+        // First: PICKUP rows (if you have a separate tbody for pickup)
+        const pickupRows = document.querySelectorAll('tbody.pickup-rows tr');
+        pickupRows.forEach((row, idx) => {
+            const selectEl = row.querySelector('select.pickup-select');
+            const paxInput = row.querySelector('td.pax-value input');
+            const totalTd = row.querySelector('td.total-value');
+
+            if (!selectEl || !paxInput || !totalTd) return;
+
+            const pickupField = selectEl.dataset.pickupField;
+            const pickupRate = parseFloat(paxInput.dataset.pickupRate || selectEl.dataset.pickupRate);
+
+            paxData.pickupData.push({
+                pickup_name: pickupField,
+                pickup_rate: pickupRate,
+                pickup_pax: parseInt(paxInput.value),
+                pickup_total: parseFloat(totalTd.textContent.trim()),
+                pickup_selected: selectEl.value !== 'other'
+                    ? selectEl.options[selectEl.selectedIndex].text.trim()
+                    : document.getElementById(selectEl.dataset.pickupField.replace('_method', '_other_input')).value.trim()
+            });
+        });
+
+        // Then: DROPOFF rows (separate tbody)
+        const dropoffRows = document.querySelectorAll('tbody.dropoff-rows tr');
+        dropoffRows.forEach((row, idx) => {
+            const selectElDropoff = row.querySelector('select.dropoff-select');
+            const paxInput = row.querySelector('td.pax-value input');
+            const totalTd = row.querySelector('td.total-value');
+
+            if (!selectElDropoff || !paxInput || !totalTd) return;
+
+            const dropoffField = selectElDropoff.dataset.dropoffField;
+            const dropoffRate = parseFloat(paxInput.dataset.dropoffRate || selectElDropoff.dataset.dropoffRate);
+
+            paxData.dropoffData.push({
+                dropoff_name: dropoffField,
+                dropoff_rate: dropoffRate,
+                dropoff_pax: parseInt(paxInput.value),
+                dropoff_total: parseFloat(totalTd.textContent.trim()),
+                dropoff_selected: selectElDropoff.value !== 'other'
+                    ? selectElDropoff.options[selectElDropoff.selectedIndex].text.trim()
+                    : document.getElementById(selectElDropoff.dataset.dropoffField.replace('_method', '_other_input')).value.trim()
+            });
+        });
+
+        const optionalRows = document.querySelectorAll('tbody tr'); // Update if you have a specific class
+
+        paxData.optionalData = [];
+
+        optionalRows.forEach(row => {
+            const selectEl = row.querySelector('select.optional-select'); // Assuming class is reused
+            const gstTd = row.querySelector('td.sst-value');
+            const codeTd = row.querySelector('td.code-value');
+            const qtyInput = row.querySelector('input[type="number"]');
+            const priceTd = row.querySelector('td.price-value');
+            const totalTd = row.querySelector('td.total-value');
+
+            if (!selectEl || !qtyInput || !priceTd || !totalTd || !codeTd || !gstTd) return;
+
+            paxData.optionalData.push({
+                optional_field: selectEl.dataset.optionalField,
+                optional_selected: selectEl.options[selectEl.selectedIndex].text.trim(),
+                optional_gst: gstTd.textContent.trim(),
+                optional_code: codeTd.textContent.trim(),
+                optional_qty: parseInt(qtyInput.value),
+                optional_price: parseFloat(priceTd.textContent.trim()),
+                optional_total: parseFloat(totalTd.textContent.trim())
+            });
+        });
+
+        console.log(paxData);
+
+        fetch(`{{ url('/form3') }}/${bookingId}/save`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                type,
+                booking_id: bookingId,
+                ...paxData
+            })
+        }).then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.success) {
+                alert('Successfully saved!');
+                if (type == 'saveNext') {
+                    window.location.href = "{{ url('form4') }}/" + bookingId + "/" + amendId;
+                } else {
+                    location.reload();
+                }
+            }
+        }).catch(err => {
+            console.error('Save failed', err);
+        });
+    }
+
+
+    function back() {
+
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+        window.location.href = "{{ url('form2') }}/" + bookingId + "/" + amendId;
+
+    }
+    function next() {
+
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+        window.location.href = "{{ url('form4') }}/" + bookingId + "/" + amendId;
+
+    }
 
     function showForm3() {
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+
         window.location.href = "{{ url('form4') }}/" + bookingId + "/" + amendId;
     }
 
     function updatePaxValue(event, rowId, id) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         const newPaxValue = event.target.value;
         const pickupId = rowId;
@@ -926,8 +978,18 @@
     }
 
     function addRow() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         fetch(`{{ url('/form3') }}/${bookingId}`, {
             method: 'POST',
@@ -957,8 +1019,18 @@
     }
 
     function handlePickupChangeDropoff(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         const dropoffName = event.target.value;  // Get the selected value
         const rowId = event.target.getAttribute('data-row-dropoff-id');  // Get the row ID
@@ -999,8 +1071,16 @@
     }
 
     function updatePaxValueDropoff(event, rowId, id) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+        } else {
+            bookingId = pathSegments[1]; 
+        }
 
         const newPaxValue = event.target.value;
         const dropoffId = rowId;
@@ -1036,8 +1116,16 @@
     }
 
     function addRowDropoff() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+        } else {
+            bookingId = pathSegments[1]; 
+        }
 
         fetch(`{{ url('/form3') }}/${bookingId}`, {
             method: 'POST',
@@ -1067,9 +1155,18 @@
     }
 
     function handleOptionalChange(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         const optionalName = event.target.value;  // Get the selected value
         const rowId = event.target.getAttribute('data-row-id');  // Get the row ID
@@ -1119,21 +1216,28 @@
     }
 
     function handleOptionalChangeOriginal(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        const hostname = window.location.hostname;
 
-        const optionalName = event.target.value;  // Get the selected value
-        const optionalField =  event.target.getAttribute('data-optional-field');
+        let bookingId = (hostname === 'localhost') ? pathSegments[3] : pathSegments[1];
+        let amendId = (hostname === 'localhost') ? pathSegments[4] : pathSegments[2];
+
+        const select = event.target;
+        const optionalName = select.value;
+        const optionalField = select.getAttribute('data-optional-field');
+        const row = select.closest('tr');
+        console.log(row);
+
+        const baseUrl = window.location.origin;
 
         fetch(`{{ url('/form3') }}/${bookingId}/optionalOriginal`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             body: JSON.stringify({
-                booking_id: bookingId,  // Pass bookingId in the request payload
+                booking_id: bookingId,
                 amendid: amendId,
                 optional_name: optionalName,
                 optionalField: optionalField,
@@ -1142,15 +1246,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update the related table cells dynamically
-                // document.querySelector(`.qty-value[data-row-id="${rowId}"]`).innerText = data.optional_qty;
-                // document.querySelector(`.price-value[data-row-id="${rowId}"]`).innerText = data.pickup_price;
-                // document.querySelector(`.sst-value[data-row-id="${rowId}"]`).innerText = data.pickup_sst;
-                // document.querySelector(`.code-value[data-row-id="${rowId}"]`).innerText = data.pickup_code;
-                // document.querySelector(`.total-value[data-row-id="${rowId}"]`).innerText = data.optional_total;
-
-                location.reload();
-                
+                // row.querySelector('.qty-value input').value = data.optional_qty;
+                row.querySelector('.sst-value').textContent = data.data.optional_sst;
+                row.querySelector('.code-value').textContent = data.data.optional_code;
+                row.querySelector('.price-value').textContent = data.data.optional_price;
+                // row.querySelector('.total-value').textContent = data.optional_total;
             } else {
                 alert(data.message || 'Failed to fetch optional arrangement details');
             }
@@ -1158,15 +1258,29 @@
         .catch(error => {
             console.error('Error fetching optional details:', error);
         });
-
     }
 
     function updateQtyOriginalValue(event, descfield, qtyfield) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         const newqtyValue = event.target.value;
+        const row = event.target.closest('tr');
+        const price = parseFloat(row.querySelector('.price-value').textContent) || 0;
+
+        // Calculate and update total on the frontend
+        const total = (newqtyValue * price).toFixed(2);
+        row.querySelector('.total-value').textContent = total;
 
         fetch(`{{ url('/form3') }}/${bookingId}/updateQtyOptional`, {
             method: 'POST',
@@ -1185,7 +1299,8 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload();
+                console.log(data);
+                // location.reload();
                 
             } else {
                 alert(data.message || 'Failed to fetch optional arrangement details');
@@ -1200,9 +1315,16 @@
         if (!confirm("Are you sure you want to delete?")) {
             return;
         }
-        const urlParams = new URLSearchParams(window.location.search);
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
 
+        let amendId;
+
+        if (hostname === 'localhost') {
+            amendId = pathSegments[4];
+        } else {
+            amendId = pathSegments[2];
+        }
 
         fetch(`{{ url('/form3') }}/${bookingId}/deleteoptional`, {
             method: "DELETE",
@@ -1232,8 +1354,16 @@
 
 
     function updateQtyValue(event, rowId, id) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+        } else {
+            bookingId = pathSegments[1]; 
+        }
 
         const newqtyValue = event.target.value;
         const optionalId = rowId;
@@ -1270,8 +1400,16 @@
     }
 
     function addRowOptional() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+        } else {
+            bookingId = pathSegments[1]; 
+        }
 
         fetch(`{{ url('/form3') }}/${bookingId}`, {
             method: 'POST',
@@ -1302,12 +1440,20 @@
 
     // original table - bookings
     function handlePickupChangeOriginal(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         const pickupName = event.target.value;  // Get the selected value
-        console.log(pickupName);
 
         const dataField = event.target.getAttribute('data-pickup-field');
         const pickupId = '';
@@ -1408,12 +1554,24 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update the related table cells dynamically
-                    // document.querySelector(`.pax-value[data-row-id="${rowId}"]`).innerText = data.pickup_pax;
-                    // document.querySelector(`.rate-value[data-row-id="${rowId}"]`).innerText = data.pickup_rate;
-                    // document.querySelector(`.total-value[data-row-id="${rowId}"]`).innerText = data.pickup_total_rate;
-                    location.reload();
-                    
+                    const rateField = data.price_field; // e.g., pickup01_price
+                    const rate = data.pickup_rate;
+
+                    // Find input and update its value
+                    const input = document.querySelector(`input[data-field="${rateField}"]`);
+                    if (input) {
+                        input.value = rate;
+
+                        // Update visible rate value in the same <td>
+                        const td = input.closest('td');
+                        if (td) {
+                            // Remove previous text and set new rate before input
+                            td.childNodes[0].nodeValue = ' ' + rate;
+                        }
+                    }
+
+                    // Optionally trigger a total update here
+                    // updateTotalPickup();
                 } else {
                     alert(data.message || 'Failed to fetch pickup details');
                 }
@@ -1435,8 +1593,18 @@
         // If the value is empty, stop execution
         if (!otherValue) return;
 
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         // Send the request
         fetch(`{{ url('/form3') }}/${bookingId}/other`, {
@@ -1529,8 +1697,18 @@
         // If the value is empty, stop execution
         if (!otherValue) return;
 
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         // Send the request
         fetch(`{{ url('/form3') }}/${bookingId}/otherDropoff`, {
@@ -1571,14 +1749,23 @@
 
         // Grab the input value
         const otherValue = input.value.trim();
-        console.log(otherValue);
         const dataField = input.getAttribute('data-field');
 
         // If the value is empty, stop execution
         if (!otherValue) return;
 
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         // Send the request
         fetch(`{{ url('/form3') }}/${bookingId}/otherDropoff`, {
@@ -1612,13 +1799,89 @@
         });
     }
 
-    function updatePaxValueOriginal(event, field) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+    // function updatePaxValueOriginal(event, field) {
+    //     const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+    //     const hostname = window.location.hostname;
 
-        const newPaxValue = event.target.value;
+    //     let bookingId, amendId;
+
+    //     if (hostname === 'localhost') {
+    //         bookingId = pathSegments[3]; 
+    //         amendId = pathSegments[4];
+    //     } else {
+    //         bookingId = pathSegments[1]; 
+    //         amendId = pathSegments[2];
+    //     }
+
+    //     const newPaxValue = event.target.value;
         
+    //     fetch(`{{ url('/form3') }}/${bookingId}`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //         },
+    //         body: JSON.stringify({
+    //             pickup_pax_value: newPaxValue,
+    //             amendid:   amendId,
+    //             booking_id: bookingId,
+    //             field: field,
+    //             type: 'update total',
+    //             arrange_type: 'pickup',
+    //             original: 'original'
+    //         })
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         if (data.success) {
+    //             // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
+    //             // location.reload();
+    //         } else {
+    //             alert(data.message || 'Failed to fetch pickup details');
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error('Error fetching pickup details:', error);
+    //     });
+
+    // }
+
+    function updatePaxValueOriginal(event, field) {
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+
+        const input = event.target;
+        const newPaxValue = parseInt(input.value);
+        const row = input.closest('tr');
+
+        // Get rate from the .rate-value td in the same row
+        const rateTd = row.querySelector('td.rate-value');
+        let rate = parseFloat(rateTd.textContent.trim());
+        if (isNaN(rate)) rate = 0;
+
+        // Calculate new total
+        const newTotal = rate * newPaxValue;
+
+        // Update total <td> in the DOM
+        const totalTd = row.querySelector('td.total-value');
+        if (totalTd) {
+            totalTd.textContent = newTotal.toFixed(2);
+        }
+
+        // Also update the final summary total row
+        updateTotalPickup();
+
+        // Send updated pax value to backend
         fetch(`{{ url('/form3') }}/${bookingId}`, {
             method: 'POST',
             headers: {
@@ -1627,7 +1890,7 @@
             },
             body: JSON.stringify({
                 pickup_pax_value: newPaxValue,
-                amendid:   amendId,
+                amendid: amendId,
                 booking_id: bookingId,
                 field: field,
                 type: 'update total',
@@ -1637,23 +1900,92 @@
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
-                location.reload();
-            } else {
-                alert(data.message || 'Failed to fetch pickup details');
+            if (!data.success) {
+                alert(data.message || 'Failed to update pax');
             }
         })
         .catch(error => {
-            console.error('Error fetching pickup details:', error);
+            console.error('Error updating pax:', error);
         });
-
     }
 
+    function updateTotalPickup() {
+        let totalPickup = 0;
+
+        // Loop through each rate and pax in the table rows
+        document.querySelectorAll('tr').forEach(row => {
+            const rateTd = row.querySelector('td.rate-value');
+            const paxInput = row.querySelector('td.pax-value input');
+            const totalTd = row.querySelector('td.total-value');
+
+            if (rateTd && paxInput && totalTd) {
+                let rate = parseFloat(rateTd.textContent.trim());
+                let pax = parseInt(paxInput.value);
+
+                if (isNaN(rate)) rate = 0;
+                if (isNaN(pax)) pax = 0;
+
+                const rowTotal = rate * pax;
+                totalTd.textContent = rowTotal.toFixed(2);
+
+                totalPickup += rowTotal;
+            }
+        });
+
+        // Update the final total row (last .total-value cell)
+        const totalCells = document.querySelectorAll('td.total-value');
+        if (totalCells.length > 0) {
+            const lastTotalCell = totalCells[totalCells.length - 1];
+            lastTotalCell.textContent = totalPickup.toFixed(2);
+        }
+    }
+
+    function updateTotalDropoff() {
+        let totalDropoff = 0;
+
+        // Loop through each rate and pax in the table rows
+        document.querySelectorAll('tr').forEach(row => {
+            const rateTd = row.querySelector('td.rate-value');
+            const paxInput = row.querySelector('td.pax-value input');
+            const totalTd = row.querySelector('td.total-value');
+
+            if (rateTd && paxInput && totalTd) {
+                let rate = parseFloat(rateTd.textContent.trim());
+                let pax = parseInt(paxInput.value);
+
+                if (isNaN(rate)) rate = 0;
+                if (isNaN(pax)) pax = 0;
+
+                const rowTotal = rate * pax;
+                totalTd.textContent = rowTotal.toFixed(2);
+
+                totalDropoff += rowTotal;
+            }
+        });
+
+        // Update the final total row (last .total-value cell)
+        const totalCells = document.querySelectorAll('td.total-value');
+        if (totalCells.length > 0) {
+            const lastTotalCell = totalCells[totalCells.length - 1];
+            lastTotalCell.textContent = totalDropoff.toFixed(2);
+        }
+    }
+
+
+
     function handleDropoffChangeOriginal(event) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         const dropoffName = event.target.value;  // Get the selected value
 
@@ -1756,15 +2088,27 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update the related table cells dynamically
-                // document.querySelector(`.pax-value[data-row-id="${rowId}"]`).innerText = data.pickup_pax;
-                // document.querySelector(`.rate-value[data-row-id="${rowId}"]`).innerText = data.pickup_rate;
-                // document.querySelector(`.total-value[data-row-id="${rowId}"]`).innerText = data.pickup_total_rate;
-                location.reload();
-                
-            } else {
-                alert(data.message || 'Failed to fetch dropoff details');
-            }
+                    const rateField = data.price_field; // e.g., pickup01_price
+                    const rate = data.dropoff_rate;
+
+                    // Find input and update its value
+                    const input = document.querySelector(`input[data-field="${rateField}"]`);
+                    if (input) {
+                        input.value = rate;
+
+                        // Update visible rate value in the same <td>
+                        const td = input.closest('td');
+                        if (td) {
+                            // Remove previous text and set new rate before input
+                            td.childNodes[0].nodeValue = ' ' + rate;
+                        }
+                    }
+
+                    // Optionally trigger a total update here
+                    // updateTotalPickup();
+                } else {
+                    alert(data.message || 'Failed to fetch pickup details');
+                }
         })
         .catch(error => {
             console.error('Error fetching dropoff details:', error);
@@ -1773,12 +2117,41 @@
     }
 
     function updatePaxValueDropoffOriginal(event, field) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
 
-        const newPaxValue = event.target.value;
-        
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+
+        const input = event.target;
+        const newPaxValue = parseInt(input.value);
+        const row = input.closest('tr');
+
+        // Get rate from the .rate-value td in the same row
+        const rateTd = row.querySelector('td.rate-value');
+        let rate = parseFloat(rateTd.textContent.trim());
+        if (isNaN(rate)) rate = 0;
+
+        // Calculate new total
+        const newTotal = rate * newPaxValue;
+
+        // Update total <td> in the DOM
+        const totalTd = row.querySelector('td.total-value');
+        if (totalTd) {
+            totalTd.textContent = newTotal.toFixed(2);
+        }
+
+        // Also update the final summary total row
+        updateTotalDropoff();
+
+        // Send updated pax value to backend
         fetch(`{{ url('/form3') }}/${bookingId}`, {
             method: 'POST',
             headers: {
@@ -1786,7 +2159,7 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({
-                dropoff_pax_value: newPaxValue,  
+                dropoff_pax_value: newPaxValue,
                 amendid: amendId,
                 booking_id: bookingId,
                 field: field,
@@ -1797,15 +2170,12 @@
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                // document.querySelector(`.total-value[data-row-id="${id}"]`).innerText = data.pickup_total_rate;
-                location.reload();
-            } else {
-                alert(data.message || 'Failed to fetch pickup details');
+            if (!data.success) {
+                alert(data.message || 'Failed to update pax');
             }
         })
         .catch(error => {
-            console.error('Error fetching pickup details:', error);
+            console.error('Error updating pax:', error);
         });
 
     }
@@ -1814,9 +2184,18 @@
         if (!confirm("Are you sure you want to delete this pickup method?")) {
             return;
         }
-        const urlParams = new URLSearchParams(window.location.search);
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
 
+        let amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         fetch(`{{ url('/form3') }}/${bookingId}/delete-pickup`, {
             method: "DELETE",
@@ -1884,8 +2263,18 @@
         if (!confirm("Are you sure you want to delete this dropoff method?")) {
             return;
         }
-        const urlParams = new URLSearchParams(window.location.search);
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         fetch(`{{ url('/form3') }}/${bookingId}/delete-pickup`, {
             method: "DELETE",
