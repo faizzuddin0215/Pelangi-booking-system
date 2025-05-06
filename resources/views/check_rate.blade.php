@@ -35,104 +35,9 @@
 <div class="max-w-full mx-auto sm:px-6 lg:px-8">
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900 dark:text-gray-100">
-            <!-- Breadcrumb Container -->
-            <div class="flex justify-between items-center flex-wrap">
-                <nav class="mb-4">
-                    <!-- Mobile Menu Toggle -->
-                    <input type="checkbox" id="menu-toggle" class="peer hidden">
-                    <label for="menu-toggle" class="md:hidden flex items-center cursor-pointer text-gray-600 dark:text-gray-300 p-2">
-                        ☰
-                    </label>
-                
-                    <!-- Desktop Breadcrumb Menu -->
-                    <ol class="hidden md:flex flex-wrap items-center space-x-3 text-sm text-gray-600 dark:text-gray-300">
-                        <li>
-                            <a href="{{ url('form') }}?booking={{ $bookings->booking_id }}&amend={{ $amendId }}" class="hover:text-indigo-500">
-                                Basic Information
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form2', [$bookings->booking_id, $amendId]) }}" class="text-indigo-600 font-semibold">
-                                Room Details
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form3', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
-                                Land Transfer & Optional
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form4', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
-                                Remarks
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('form5', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
-                                Summary & Payment
-                            </a>
-                        </li>
-                        <li><span class="text-gray-400">|</span></li>
-                        <li>
-                            <a href="{{ url('invoice', [$bookings->booking_id, $amendId]) }}" class="hover:text-indigo-500">
-                                Invoice
-                            </a>
-                        </li>
-                    </ol>
-                
-                    <!-- Mobile Dropdown Menu -->
-                    <ol class="hidden peer-checked:block md:hidden mt-2 space-y-2 text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 p-3 rounded-md shadow-md text-sm">
-                        <li>
-                            <a href="{{ url('form') }}?booking={{ $bookings->booking_id }}&amend={{ $amendId }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                                Basic Information
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('form2', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                                Room Details
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('form3', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                                Land Transfer & Optional
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('form4', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                                Remarks
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('form5', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                                Summary & Payment
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('invoice', [$bookings->booking_id, $amendId]) }}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                                Invoice
-                            </a>
-                        </li>
-                    </ol>
-                </nav>
-                
-        
-                <!-- Booking Info -->
-                <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1 text-right">
-                    <div class="text-lg font-semibold text-gray-900 dark:text-white">#{{ $bookings->booking_id }}-{{ $bookings->amend_id }} {{ $days }}D{{ $nights }}N</div>
-                    <p>{{ $bookings->attention }} <span class="text-gray-500">({{ $bookings->company }})</span></p>
-                    <p>
-                        <strong>Check In:</strong> {{ $bookings->check_in }} |
-                        <strong>Check Out:</strong> {{ $bookings->check_out }}
-                    </p>
-                    <p><strong>PIC:</strong> {{ $bookings->handle_by }}</p>
-                </div>
-            </div>
             <div id="form3-container">
                 <div class="form-container flex flex-col md:flex-row gap-8">
-                    <div id="mainContainer" class="w-full md:w-9/12 p-4">
+                    <div class="w-full p-4">
                         <div class="w-full overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
 
                             <div class="flex flex-wrap gap-4 items-center p-4 bg-white dark:bg-gray-900 shadow-md rounded-lg">
@@ -145,7 +50,7 @@
                                             name="check_in" 
                                             id="check_in" 
                                             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                            value="{{ $bookings->check_in }}" 
+                                            value="" 
                                             onchange="dateRate()"
                                         >
                                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -163,7 +68,7 @@
                                             name="check_out" 
                                             id="check_out" 
                                             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                            value="{{ $bookings->check_out }}" 
+                                            value="" 
                                             onchange="dateRate()"
                                         >
                                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -179,10 +84,10 @@
                                         name="agent" 
                                         id="agent" 
                                         class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                        onchange="agentRate()">
-                                        <option value="0" {{ $bookings->agent == '0' ? 'selected' : '' }}>Normal Selling Rate</option>
-                                        <option value="1" {{ $bookings->agent == '1' ? 'selected' : '' }}>Agent Tier 1</option>
-                                        <option value="2" {{ $bookings->agent == '2' ? 'selected' : '' }}>Agent Tier 2</option>
+                                        onchange="dateRate()">
+                                        <option value="0" >Normal Selling Rate</option>
+                                        <option value="1" >Agent Tier 1</option>
+                                        <option value="2" >Agent Tier 2</option>
                                     </select>
                                 </div>
                                 <div class="flex-1 min-w-[80px]">
@@ -192,7 +97,7 @@
                                         name="adult" 
                                         id="adult" 
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-center focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                        value="{{ $bookings->pax_adult }}"
+                                        value=""
                                     >
                                 </div>
                                 <div class="flex-1 min-w-[80px]">
@@ -202,7 +107,7 @@
                                         name="child" 
                                         id="child" 
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-center focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                        value="{{ $bookings->pax_child }}"
+                                        value=""
                                     >
                                 </div>
                                 <div class="flex-1 min-w-[80px]">
@@ -212,7 +117,7 @@
                                         name="toddler" 
                                         id="toddler" 
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-center focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                        value="{{ $bookings->pax_toddler }}"
+                                        value=""
                                     >
                                 </div>
                                 <div class="flex-1 min-w-[80px]">
@@ -222,25 +127,13 @@
                                         name="tl" 
                                         id="tl" 
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-center focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 text-xs"
-                                        value="{{ $bookings->pax_foc_tl }}"
+                                        value=""
                                     >
                                 </div>
                                 
                             </div>
                             <br />
-                                                                                                                                            
-                            {{-- <div class="mb-6">
-                                <label for="package_amount" class="block text-xs font-medium text-gray-700 dark:text-gray-300">Package Amount (RM)</label> 
-                                        <input 
-                                            type="number" 
-                                            name="package_amount" 
-                                            id="package_amount" 
-                                            class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
-                                            value="{{ $bookings->package_total }}" readonly
-                                        >
-                            </div> --}}
-                                                                                        
-
+                                                                                                                                        
                             <div class="overflow-x-auto">
                                 <table class="table-auto w-full border border-gray-300 text-left">
                                     <thead class="bg-gray-100">
@@ -254,46 +147,40 @@
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Room Type</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Double (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">x</th>
-                                            {{-- <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sum_double'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sum_double_pax" value="0">{{ $sum_rooms['sum_double_ceil'] }}</th> --}}
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sum_double'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sum_double_pax" value="0">
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sum_double_pax" value="0">
                                                 <input 
                                                     id="sum_double_pax_input" 
                                                     type="text" 
-                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none {{ (fmod($sum_rooms['sum_double'], 1) !== 0.0) ? 'text-red-500' : '' }}" 
-                                                    value="{{ $bookings->room_double }}" 
+                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none" 
+                                                    value="0" 
                                                 />
                                             </th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Matt (RM)</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sum_double_mat_pax" value="0">{{ $sum_rooms['sum_double_mat'] }}</th>
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sum_double_mat_pax" value="0"></th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Triple (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">x</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sum_triple'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sum_triple_pax" value="0">
-                                                {{-- {{ $sum_rooms['sum_triple_ceil'] }} --}}
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sum_triple_pax" value="0">
                                                 <input 
                                                     id="sum_triple_pax_input" 
                                                     type="text" 
-                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none {{ (fmod($sum_rooms['sum_triple'], 1) !== 0.0) ? 'text-red-500' : '' }}" 
-                                                    value="{{ $bookings->room_triple }}"
+                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none" 
+                                                    value="0"
                                                 />
                                             </th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Matt (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">0</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Quad (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">x</th>
-                                            {{-- <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sum_quad'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sum_quad_pax" value="0">
-                                                {{ $sum_rooms['sum_quad_ceil'] }}
-                                            </th> --}}
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sum_quad'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sum_quad_pax" value="0">
-                                                {{-- {{ $sum_rooms['sum_quad_ceil'] }} --}}
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sum_quad_pax" value="0">
                                                 <input 
                                                     id="sum_quad_pax_input" 
                                                     type="text" 
-                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none {{ (fmod($sum_rooms['sum_quad'], 1) !== 0.0) ? 'text-red-500' : '' }}" 
-                                                    value="{{ $bookings->room_quad }}" 
+                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none" 
+                                                    value="0"
                                                 />
                                             </th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Matt (RM)</th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sum_quad_mat_pax" value="0">{{ $sum_rooms['sum_quad_mat'] }}</th>
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sum_quad_mat_pax" value="0"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -303,12 +190,10 @@
                                             </td>
                                             
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->d_adult_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['double_adult'], 2) }} --}}
                                                 <input
                                                     id="double_adult" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->d_adult_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                                 
                                             </td>
@@ -319,32 +204,28 @@
                                                 <input
                                                     id="double_adult_pax" 
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->d_adult_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->d_adult_m_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['double_adult_mat'], 2) }} --}}
                                                 <input
                                                     id="double_adult_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->d_adult_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="double_adult_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->d_adult_m_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->t_adult_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['triple_adult'], 2) }} --}}
                                                 <input
                                                     id="triple_adult" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->t_adult_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -354,25 +235,19 @@
                                                 <input 
                                                     id="triple_adult_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->t_adult_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ number_format($bookings->t_adult_m_price, 2) }}
+                                                {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- <input 
-                                                    type="text" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                /> --}}
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->q_adult_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['quad_adult'], 2) }} --}}
                                                 <input
                                                     id="quad_adult" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->q_adult_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -382,23 +257,21 @@
                                                 <input 
                                                     id="quad_adult_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->q_adult_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->q_adult_m_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['quad_adult_mat'], 2) }} --}}
                                                 <input
                                                     id="quad_adult_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->q_adult_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="quad_adult_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->q_adult_m_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                         </tr>
@@ -407,12 +280,10 @@
                                                 Child
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->d_child_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['double_child'], 2) }} --}}
                                                 <input
                                                     id="double_child" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->d_child_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -422,32 +293,28 @@
                                                 <input 
                                                     id="double_child_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->d_child_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->d_child_m_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['double_child_mat'], 2) }} --}}
                                                 <input
                                                     id="double_child_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->d_child_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="double_child_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->d_child_m_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->t_child_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['triple_child'], 2) }} --}}
                                                 <input
                                                     id="triple_child" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->t_child_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -457,26 +324,20 @@
                                                 <input 
                                                     id="triple_child_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->t_child_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="t_child_m_price" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ number_format($bookings->t_child_m_price, 2) }}
+                                                {{ number_format(0, 2) }}
                                                 
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- <input 
-                                                    type="text" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                /> --}}
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->q_child_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['quad_child'], 2) }} --}}
                                                 <input
                                                     id="quad_child" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->q_child_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -486,23 +347,21 @@
                                                 <input 
                                                     id="quad_child_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->q_child_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->q_child_m_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['quad_child_mat'], 2) }} --}}
                                                 <input
                                                     id="quad_child_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->q_child_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="quad_child_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->q_child_m_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                         </tr>
@@ -511,12 +370,10 @@
                                                 Toddler
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->d_toddler_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['double_toddler'], 2) }} --}}
                                                 <input
                                                     id="double_toddler" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->d_toddler_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -526,22 +383,20 @@
                                                 <input 
                                                     id="double_toddler_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->d_toddler_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="d_toddler_m_price" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ number_format($bookings->d_toddler_m_price, 2) }}
+                                                {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->t_toddler_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['triple_toddler'], 2) }} --}}
                                                 <input
                                                     id="triple_toddler" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->t_toddler_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -551,22 +406,20 @@
                                                 <input 
                                                     id="triple_toddler_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->t_toddler_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="t_toddler_m_price" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ number_format($bookings->t_toddler_m_price, 2) }}
+                                                {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($bookings->q_toddler_price, 2) }} --}}
-                                                {{-- {{ number_format($room_rates['quad_toddler'], 2) }} --}}
                                                 <input
                                                     id="quad_toddler" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->q_toddler_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -576,11 +429,11 @@
                                                 <input 
                                                     id="quad_toddler_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="{{ $bookings->q_toddler_pax ?? 0 }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="q_toddler_m_price" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ number_format($bookings->q_toddler_m_price, 2) }}
+                                                {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 
@@ -602,41 +455,36 @@
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Room Type</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Double (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">x</th>
-                                            {{-- <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sea_sum_double_pax" value="0">
-
-                                            </th> --}}
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sea_sum_double'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sea_sum_double_pax" value="0">
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sea_sum_double_pax" value="0">
                                                 <input 
                                                     id="sea_sum_double_pax_input" 
                                                     type="text" 
-                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none {{ (fmod($sum_rooms['sea_sum_double'], 1) !== 0.0) ? 'text-red-500' : '' }}" 
-                                                    value="{{ $bookings->deluxe_double }}" 
+                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none" 
+                                                    value="0"
                                                 />
                                             </th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Matt (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sea_sum_double_mat_pax" value="0"></th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Triple (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">x</th>
-                                            {{-- <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sea_sum_triple_pax" value="0"></th> --}}
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sea_sum_triple'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sea_sum_triple_pax" value="0">
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sea_sum_triple_pax" value="0">
                                                 <input 
                                                     id="sea_sum_triple_pax_input" 
                                                     type="text" 
-                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none {{ (fmod($sum_rooms['sea_sum_triple'], 1) !== 0.0) ? 'text-red-500' : '' }}" 
-                                                    value="{{ $bookings->deluxe_triple }}"
+                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none" 
+                                                    value="0"
                                                 />
                                             </th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Matt (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">0</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Quad (RM)</th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">x</th>
-                                            {{-- <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sea_sum_quad_pax" value="0"></th> --}}
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700 {{ (fmod($sum_rooms['sea_sum_quad'], 1) !== 0.0) ? 'text-red-500' : '' }}" id="sea_sum_quad_pax" value="0">
+                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700" id="sea_sum_quad_pax" value="0">
                                                 <input 
                                                     id="sea_sum_quad_pax_input" 
                                                     type="text" 
-                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none {{ (fmod($sum_rooms['sea_sum_quad'], 1) !== 0.0) ? 'text-red-500' : '' }}" 
-                                                    value="{{ $bookings->deluxe_quad }}" 
+                                                    class="w-8 px-2 py-1 text-gray-700 text-xs bg-transparent border-none focus:outline-none" 
+                                                    value="0"
                                                 />
                                             </th>
                                             <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Matt (RM)</th>
@@ -649,12 +497,11 @@
                                                 Adult
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_double_adult'], 2) }} --}}
                                                 <input
                                                     id="sea_double_adult" 
                                                     type="text" 
                                                     class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" 
-                                                    value="{{ number_format($bookings->deluxe_d_adult_price, 2) }}"
+                                                    value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -665,30 +512,28 @@
                                                     id="sea_double_adult_pax"
                                                     type="text" 
                                                     class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()"
-                                                    value="{{ $bookings->deluxe_d_adult_pax }}"
+                                                    value="0"
                                                 />
                                             </td>
                                             <td  id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_double_adult_mat'], 2) }} --}}
                                                 <input
                                                     id="sea_double_adult_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_d_adult_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="sea_double_adult_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_d_adult_m_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td  id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_triple_adult'], 2) }} --}}
                                                 <input
                                                     id="sea_triple_adult" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_t_adult_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -698,24 +543,19 @@
                                                 <input 
                                                     id="sea_triple_adult_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_t_adult_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- <input 
-                                                    type="text" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                /> --}}
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_quad_adult'], 2) }} --}}
                                                 <input
                                                     id="sea_quad_adult" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_q_adult_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -725,23 +565,22 @@
                                                 <input 
                                                     id="sea_quad_adult_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"   onkeyup="changeValue()" value="{{ $bookings->deluxe_q_adult_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"   onkeyup="changeValue()" value="0"
                                                     value=""
                                                 />
                                             </td>
                                             <td  id=""class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_quad_adult_mat'], 2) }} --}}
                                                 <input
                                                     id="sea_quad_adult_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"" value="{{ number_format($bookings->deluxe_q_adult_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="sea_quad_adult_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_q_adult_m_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                         </tr>
@@ -750,11 +589,10 @@
                                                 Child
                                             </td>
                                             <td  id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_double_child'], 2) }} --}}
                                                 <input
                                                     id="sea_double_child" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_d_child_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -764,30 +602,28 @@
                                                 <input 
                                                     id="sea_double_child_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_d_child_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_double_child_mat'], 2) }} --}}
                                                 <input
                                                     id="sea_double_child_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_d_child_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="sea_double_child_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_d_child_m_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td  id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_triple_child'], 2) }} --}}
                                                 <input
                                                     id="sea_triple_child" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_t_child_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -797,24 +633,19 @@
                                                 <input 
                                                     id="sea_triple_child_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_t_child_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- <input 
-                                                    type="text" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                /> --}}
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_quad_child'], 2) }} --}}
                                                 <input
                                                     id="sea_quad_child" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_q_child_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -824,22 +655,21 @@
                                                 <input 
                                                     id="sea_quad_child_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_q_child_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_quad_child_mat'], 2) }} --}}
                                                 <input
                                                     id="sea_quad_child_mat" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_q_child_m_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input 
                                                     id="sea_quad_child_mat_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_q_child_m_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                         </tr>
@@ -848,11 +678,10 @@
                                                 Toddler
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_double_toddler'], 2) }} --}}
                                                 <input
                                                     id="sea_double_toddler" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"value="{{ number_format($bookings->deluxe_d_toddler_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -862,23 +691,19 @@
                                                 <input 
                                                     id="sea_double_toddler_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_d_toddler_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- <input 
-                                                    type="text" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                /> --}}
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 <input
                                                     id="sea_triple_toddler" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_t_toddler_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -888,24 +713,19 @@
                                                 <input 
                                                     id="sea_triple_toddler_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_t_toddler_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- <input 
-                                                    type="text" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                /> --}}
                                             </td>
                                             <td id="" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- {{ number_format($room_rates['sea_quad_toddler'], 2) }} --}}
                                                 <input
                                                     id="sea_quad_toddler" 
                                                     type="text" 
-                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format($bookings->deluxe_q_toddler_price, 2) }}"
+                                                    class="w-16 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs" value="{{ number_format(0, 2) }}"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
@@ -915,63 +735,21 @@
                                                 <input 
                                                     id="sea_quad_toddler_pax"
                                                     type="text" 
-                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="{{ $bookings->deluxe_q_toddler_pax }}"
+                                                    class="w-8 border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"  onkeyup="changeValue()" value="0"
                                                 />
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                                 {{ number_format(0, 2) }}
                                             </td>
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{-- <input 
-                                                    type="text" 
-                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                /> --}}
                                             </td>
                                         </tr>
-                                        {{-- <tr>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-right" colspan="3">
-                                                Total
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                0
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-right" colspan="1">
-                                                Total
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                0
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-right" colspan="2">
-                                                Total
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                0
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-right" colspan="1">
-                                                Total
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                0
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-right" colspan="2">
-                                                Total
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                0
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700 text-right" colspan="1">
-                                                Total
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                0
-                                            </td>
-                                        </tr> --}}
                                         <tr class="text-xs">
                                             <td class="border border-gray-300 px-4 py-2 text-gray-700 text-right" colspan="15">
                                                 <strong>Package Amount Total (RM)</strong>
                                             </td>
                                             <td id="package_amount" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                <strong>{{ $bookings->package_total }}</strong>
+                                                <strong>0</strong>
                                             </td>
                                         </tr>
                                                                             
@@ -983,154 +761,26 @@
 
                         </div>
                     </div>
-                    <div id="summaryContainer" class="w-full md:w-3/12 p-4 transition-all duration-300">
-                        <!-- Toggle Button -->
-                        <div class="flex justify-end w-full">
-                            <button 
-                                id="toggleSummaryBtn" 
-                                class="bg-blue-500 text-white px-3 py-2 rounded-md w-10 h-10 flex items-center justify-center"
-                                onclick="toggleSummary()"
-                            >
-                                <svg id="iconShow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75 21 21m0 0-5.25-5.25M21 21l-5.25-5.25M9 3.75A9 9 0 0 1 18 12a9 9 0 0 1-9 8.25A9 9 0 0 1 0 12a9 9 0 0 1 9-8.25z" />
-                                </svg>
-                                <svg id="iconHide" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 hidden">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18m-6.75-6.75A3 3 0 1 1 9.75 9.75m6.75 6.75A9 9 0 0 1 12 21a9 9 0 0 1-9-9 9 9 0 0 1 1.5-5.06M9.75 9.75A3 3 0 0 1 12 6a3 3 0 0 1 3 3 3 3 0 0 1-.75 2.25M3 3l18 18" />
-                                </svg>
-                            </button>
-                        </div>
-
-                    
-                        <!-- Summary Section -->
-                        <div id="summarySection" class="pickup-table-container w-full transition-all duration-300">
-                            <h2 class="text-sm font-bold text-gray-700 mb-4">Summary</h2>
-                            <div class="w-full overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
-                                <table class="table-auto w-full border border-gray-300 text-left">
-                                    <thead class="bg-gray-100">
-                                        <tr class="text-xs">
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700"></th>
-                                            <th class="border border-gray-300 px-4 py-2 font-semibold text-gray-700">Price (RM)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                Total Package
-                                            </td>
-                                            <td id="summary_package_amount" class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ $package_total }}
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                Land Transfer
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ $land_transfer_total }}
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                Optional Arrangement
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                {{ $optional_total }}
-                                            </td>
-                                        </tr>
-                                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                <strong>Total (RM)</strong>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2 text-gray-700">
-                                                <strong>{{ $total_summary }}</strong>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <br/>
-                {{-- <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end space-x-4 z-50">
-                    <button
-                        type="button"
-                        id="save"
-                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 text-xs"
-                        onclick="back()"
-                    >
-                        Back
-                    </button>
+                <div class="flex justify-end space-x-4">
                     <button
                         type="button"
                         id="save"
                         class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-xs"
-                        onclick="save('save')"
+                        onclick="save()"
                     >
                         Save
                     </button>
                     <button
                         type="button"
                         id="form2"
-                        class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-xs"
-                        onclick="save('saveNext')"
+                        class="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 text-xs"
+                        onclick="showForm3()"
                     >
-                        Save & Next
-                    </button>
-                    <button
-                        type="button"
-                        id="form2"
-                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 text-xs"
-                        onclick="next()"
-                    >
-                        Next
+                        Clear
                     </button>
                     
-                </div> --}}
-                <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end gap-3 z-50 shadow-md">
-                    <!-- Navigation Buttons -->
-                    <button
-                        type="button"
-                        id="btn-back"
-                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition text-sm"
-                        onclick="back()"
-                        aria-label="Go Back"
-                    >
-                        Back
-                    </button>
-                
-                    <button
-                        type="button"
-                        id="btn-next"
-                        class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm"
-                        onclick="next()"
-                        aria-label="Go to Next Step"
-                    >
-                        Next
-                    </button>
-                
-                    <!-- Save Buttons -->
-                    <button
-                        type="button"
-                        id="btn-save"
-                        class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition text-sm"
-                        onclick="save('save')"
-                        aria-label="Save Form"
-                    >
-                        Save
-                    </button>
-                
-                    <button
-                        type="button"
-                        id="btn-save-next"
-                        class="px-6 py-3 bg-green-700 text-white rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-600 transition text-sm"
-                        onclick="save('saveNext')"
-                        aria-label="Save and Proceed"
-                    >
-                        Save & Next
-                    </button>
                 </div>
-                
                 
                                 
             </div>
@@ -1185,57 +835,14 @@
         // Check if "pax" is in the id
         return element.value || 0;
     }
-
-    function back() {
-
-        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
-        const hostname = window.location.hostname;
-
-        let bookingId, amendId;
-
-        if (hostname === 'localhost') {
-            bookingId = pathSegments[3]; 
-            amendId = pathSegments[4];
-        } else {
-            bookingId = pathSegments[1]; 
-            amendId = pathSegments[2];
-        }
-        window.location.href = "{{ url('form') }}?booking=" + bookingId + "&amend=" + amendId;
-
-}
-    function next() {
-
-        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
-        const hostname = window.location.hostname;
-
-        let bookingId, amendId;
-
-        if (hostname === 'localhost') {
-            bookingId = pathSegments[3]; 
-            amendId = pathSegments[4];
-        } else {
-            bookingId = pathSegments[1]; 
-            amendId = pathSegments[2];
-        }
-        window.location.href = "{{ url('form3') }}?booking=" + bookingId + "&amend=" + amendId;
+    function showForm3() {
+        window.location.href = "{{ url('check_rate') }}";
 
     }
 
-    function save(type) {
-        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
-        const hostname = window.location.hostname;
+    function save() {
 
-        let bookingId, amendId;
-
-        if (hostname === 'localhost') {
-            bookingId = pathSegments[3]; 
-            amendId = pathSegments[4];
-        } else {
-            bookingId = pathSegments[1]; 
-            amendId = pathSegments[2];
-        }
         const paxData = {
-            amendid : amendId,
             check_in: document.getElementById('check_in').value,
             check_out: document.getElementById('check_out').value,
             pax_adult: document.getElementById('adult').value,
@@ -1334,7 +941,7 @@
             }
         };
 
-        fetch(`{{ url('/form2') }}/${bookingId}/save`, {
+        fetch(`{{ url('/check_rate') }}/save`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -1350,7 +957,7 @@
                 if (data.status == 'spare') {
                     const confirmSpareRoom = window.confirm(data.result);
 
-                    fetch(`{{ url('/form2') }}/${bookingId}/saveSpareRoom`, {
+                    fetch(`{{ url('/check_rate') }}/saveSpareRoom`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -1360,21 +967,23 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        alert('Successfully Updated!');
-                        if (type == 'save') {
-                            window.location.href = "{{ url('form2') }}/" + bookingId + "/" + amendId;
-                        } else {
-                            window.location.href = "{{ url('form3') }}/" + bookingId + "/" + amendId;
+                        const bookingID = data.bookingID;
+                        const amendID = 0;
+
+                        const confirmRedirect = window.confirm("Proceed to the form for Booking ID: " + bookingID + "?");
+                        if (confirmRedirect) {
+                            window.location.href = "{{ url('form') }}?booking=" + bookingID + "&amend=" + amendID;
                         }
                     })
                     .catch(error => console.error('Error updating dates:', error));
 
                 } else {
-                    alert('Successfully Updated!');
-                    if (type == 'save') {
-                        window.location.href = "{{ url('form2') }}/" + bookingId + "/" + amendId;
-                    } else {
-                        window.location.href = "{{ url('form3') }}/" + bookingId + "/" + amendId;
+                    const bookingID = data.bookingID;
+                    const amendID = 0;
+
+                    const confirmRedirect = window.confirm("Proceed to the form for Booking ID: " + bookingID + "?");
+                    if (confirmRedirect) {
+                        window.location.href = "{{ url('form') }}?booking=" + bookingID + "&amend=" + amendID;
                     }
                 }
             }
@@ -1384,19 +993,6 @@
     }
 
     function changeValue() {
-        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
-        const hostname = window.location.hostname;
-
-        let bookingId, amendId;
-
-        if (hostname === 'localhost') {
-            bookingId = pathSegments[3]; 
-            amendId = pathSegments[4];
-        } else {
-            bookingId = pathSegments[1]; 
-            amendId = pathSegments[2];
-        }
-
         let checkIn = document.getElementById('check_in').value;
         let checkOut = document.getElementById('check_out').value;
 
@@ -1491,7 +1087,7 @@
                 }
             }
         };
-        fetch(`{{ url('/form2') }}/${bookingId}/getRate`, {
+        fetch(`{{ url('/check_rate') }}/getRate`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -1499,7 +1095,6 @@
             },
             body: JSON.stringify({
                 type: 'change',
-                amend: amendId,
                 check_in: checkIn,
                 check_out: checkOut,
                 pax
@@ -1510,7 +1105,6 @@
         .then(data => {
             if (data.type == 'change') {
                 document.getElementById('package_amount').textContent = data.total_package.toFixed(2);
-                document.getElementById('summary_package_amount').textContent = data.total_package.toFixed(2);
 
                 document.getElementById('sum_double_mat_pax').textContent = data.sum_mat_pax.sum_double_mat_pax;
                 document.getElementById('sum_quad_mat_pax').textContent = data.sum_mat_pax.sum_quad_mat_pax;
@@ -1519,6 +1113,30 @@
                 document.getElementById('sea_sum_double_mat_pax').textContent = data.sum_mat_pax.sea_sum_double_mat_pax;
                 document.getElementById('sea_sum_quad_mat_pax').textContent = data.sum_mat_pax.sea_sum_quad_mat_pax;
 
+                // let paxIds = [
+                //     'sum_double_pax',
+                //     'sum_triple_pax',
+                //     'sum_quad_pax',
+                //     'sea_sum_double_pax',
+                //     'sea_sum_triple_pax',
+                //     'sea_sum_quad_pax',
+                // ];
+
+                // paxIds.forEach(id => {
+                //     let element = document.getElementById(id);
+                //     let value = data.sum_pax[id]; // Dynamically access the corresponding value
+
+                //     let roundedValue = (value % 1 !== 0) ? Math.ceil(value) : value; // Round up if decimal
+
+                //     element.textContent = roundedValue; // Set the updated value
+
+                //     // Apply or remove red text class based on decimal check
+                //     if (value % 1 !== 0) { 
+                //         element.classList.add('text-red-500');
+                //     } else {
+                //         element.classList.remove('text-red-500');
+                //     }
+                // });
                 let paxIds = [
                     'sum_double_pax',
                     'sum_triple_pax',
@@ -1532,17 +1150,20 @@
                     let element = document.getElementById(id);
                     let value = data.sum_pax[id]; // Dynamically access the corresponding value
 
-                    let roundedValue = (value % 1 !== 0) ? Math.ceil(value) : value; // Round up if decimal
+                    if (element && value !== undefined) {
+                        let roundedValue = (value % 1 !== 0) ? Math.ceil(value) : value;
+                        element.textContent = roundedValue;
 
-                    element.textContent = roundedValue; // Set the updated value
-
-                    // Apply or remove red text class based on decimal check
-                    if (value % 1 !== 0) { 
-                        element.classList.add('text-red-500');
+                        if (value % 1 !== 0) {
+                            element.classList.add('text-red-500');
+                        } else {
+                            element.classList.remove('text-red-500');
+                        }
                     } else {
-                        element.classList.remove('text-red-500');
+                        console.warn(`Element or value not found for ID: ${id}`);
                     }
                 });
+
             } else {
                 // document.getElementById('double_adult').textContent = data.room_rate.double_adult.toFixed(2);
                 document.getElementById('double_adult').value = data.room_rate.double_adult.toFixed(2);
@@ -1625,71 +1246,17 @@
         .catch(error => console.error('Error updating dates:', error));
     }
 
-
     function dateRate() {
-        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
-        const hostname = window.location.hostname;
-
-        let bookingId, amendId;
-
-        if (hostname === 'localhost') {
-            bookingId = pathSegments[3]; 
-            amendId = pathSegments[4];
-        } else {
-            bookingId = pathSegments[1]; 
-            amendId = pathSegments[2];
-        }
 
         const paxData = {
             type: 'date',
             submit : 'submit',
-            amendid : amendId,
-            check_in: document.getElementById('check_in').value,
-            check_out: document.getElementById('check_out').value,
-        };
-
-        fetch(`{{ url('/form2') }}/${bookingId}/getRate`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify(paxData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            // alert('Successfully Updated!');
-            window.location.href = "{{ url('form2') }}/" + bookingId + "/" + amendId;
-        })
-        .catch(error => console.error('Error updating dates:', error));
-
-    }
-
-    function agentRate() {
-        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
-        const hostname = window.location.hostname;
-
-        let bookingId, amendId;
-
-        if (hostname === 'localhost') {
-            bookingId = pathSegments[3]; 
-            amendId = pathSegments[4];
-        } else {
-            bookingId = pathSegments[1]; 
-            amendId = pathSegments[2];
-        }
-
-        const paxData = {
-            type: 'date',
-            field: 'agent',
-            submit : 'submit',
-            amendid : amendId,
             check_in: document.getElementById('check_in').value,
             check_out: document.getElementById('check_out').value,
             agentTier: document.getElementById('agent').value
         };
 
-        fetch(`{{ url('/form2') }}/${bookingId}/getRate`, {
+        fetch(`{{ url('/check_rate') }}/getRate`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -1699,13 +1266,50 @@
         })
         .then(response => response.json())
         .then(data => {
-            // alert('Successfully Updated!');
-            window.location.href = "{{ url('form2') }}/" + bookingId + "/" + amendId;
+            const pax = data.pax;
+            document.getElementById('double_adult').value = parseFloat(pax.d_adult_price).toFixed(2);
+            document.getElementById('double_child').value = parseFloat(pax.d_child_price).toFixed(2);
+            document.getElementById('double_toddler').value = parseFloat(pax.d_toddler_price).toFixed(2);
+            document.getElementById('triple_adult').value = parseFloat(pax.t_adult_price).toFixed(2);
+            document.getElementById('triple_child').value = parseFloat(pax.t_child_price).toFixed(2);
+            document.getElementById('triple_toddler').value = parseFloat(pax.t_toddler_price).toFixed(2);
+            document.getElementById('quad_adult').value = parseFloat(pax.q_adult_price).toFixed(2);
+            document.getElementById('quad_child').value = parseFloat(pax.q_child_price).toFixed(2);
+            document.getElementById('quad_toddler').value = parseFloat(pax.q_toddler_price).toFixed(2);
+
+            document.getElementById('double_adult_mat').value = parseFloat(pax.d_adult_m_price).toFixed(2);
+            document.getElementById('double_child_mat').value = parseFloat(pax.d_child_m_price).toFixed(2);
+            // document.getElementById('double_toddler_mat').value = parseFloat(pax.d_toddler_m_price).toFixed(2);
+            // document.getElementById('triple_adult_mat').value = parseFloat(pax.t_adult_m_price).toFixed(2);
+            // document.getElementById('triple_child_mat').value = parseFloat(pax.t_child_m_price).toFixed(2);
+            // document.getElementById('triple_toddler_mat').value = parseFloat(pax.t_toddler_m_price).toFixed(2);
+            document.getElementById('quad_adult_mat').value = parseFloat(pax.q_adult_m_price).toFixed(2);
+            document.getElementById('quad_child_mat').value = parseFloat(pax.q_child_m_price).toFixed(2);
+            // document.getElementById('quad_toddler_mat').value = parseFloat(pax.q_toddler_m_price).toFixed(2);
+
+            document.getElementById('sea_double_adult').value = parseFloat(pax.deluxe_d_adult_price).toFixed(2);
+            document.getElementById('sea_double_child').value = parseFloat(pax.deluxe_d_child_price).toFixed(2);
+            document.getElementById('sea_double_toddler').value = parseFloat(pax.deluxe_d_toddler_price).toFixed(2);
+            document.getElementById('sea_triple_adult').value = parseFloat(pax.deluxe_t_adult_price).toFixed(2);
+            document.getElementById('sea_triple_child').value = parseFloat(pax.deluxe_t_child_price).toFixed(2);
+            document.getElementById('sea_triple_toddler').value = parseFloat(pax.deluxe_t_toddler_price).toFixed(2);
+            document.getElementById('sea_quad_adult').value = parseFloat(pax.deluxe_q_adult_price).toFixed(2);
+            document.getElementById('sea_quad_child').value = parseFloat(pax.deluxe_q_child_price).toFixed(2);
+            document.getElementById('sea_quad_toddler').value = parseFloat(pax.deluxe_q_toddler_price).toFixed(2);
+
+            document.getElementById('sea_double_adult_mat').value = parseFloat(pax.deluxe_d_adult_m_price).toFixed(2);
+            document.getElementById('sea_double_child_mat').value = parseFloat(pax.deluxe_d_child_m_price).toFixed(2);
+            // document.getElementById('sea_double_toddler_mat').value = parseFloat(pax.deluxe_d_toddler_m_price).toFixed(2);
+            // document.getElementById('sea_triple_adult_mat').value = parseFloat(pax.deluxe_t_adult_m_price).toFixed(2);
+            // document.getElementById('sea_triple_child_mat').value = parseFloat(pax.deluxe_t_child_m_price).toFixed(2);
+            // document.getElementById('sea_triple_toddler_mat').value = parseFloat(pax.deluxe_t_toddler_m_price).toFixed(2);
+            document.getElementById('sea_quad_adult_mat').value = parseFloat(pax.deluxe_q_adult_m_price).toFixed(2);
+            document.getElementById('sea_quad_child_mat').value = parseFloat(pax.deluxe_q_child_m_price).toFixed(2);
+            // document.getElementById('sea_quad_toddler_mat').value = parseFloat(pax.deluxe_q_toddler_m_price).toFixed(2);
+
         })
         .catch(error => console.error('Error updating dates:', error));
 
     }
-
-
 
 </script>

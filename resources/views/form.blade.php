@@ -275,6 +275,13 @@
                     hover:bg-green-700 transition focus:outline-none focus:ring-2 focus:ring-green-500">
                     🔍 <span class="hidden sm:inline"> Search</span>
                 </button>
+
+                <button id="clearBooking" onclick="clearBooking()" 
+                    aria-label="Clear Booking"
+                    class="bg-red-600 text-sm text-white px-3 py-2 rounded-lg shadow-md 
+                        hover:bg-red-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    🔄 <span class="hidden sm:inline">Clear</span>
+                </button>
             </div>
             {{-- <form method="POST" action="{{ route('form.submit') }}" id="form" onsubmit="handleFormSubmit(event)"> --}}
             @if (session('success'))
@@ -283,7 +290,7 @@
                 </div>
             @endif
             <form method="POST" action="{{ route('form.submit') }}">
-                    @csrf
+                 @csrf
                 <div class="form-container">
 
                     <div class="form-section first-section space-y-4">
@@ -448,10 +455,14 @@
                     @endif
                     
                 </div>
+                <br/>
+                <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end space-x-4 z-50">
+                    <button type="submit" id="saveForm" name="saveForm" class="px-6 py-3 bg-green-600 text-xs rounded-md text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        Save
+                    </button>
 
-                <div class="flex justify-end">
-                    <button type="submit" id="formButton" class="px-6 py-3 bg-indigo-600 text-xs rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" onclick="redirectToForm2()">
-                        Next
+                    <button type="submit" id="saveNext" name="saveNext" class="ml-2 px-6 py-3 bg-indigo-600 text-xs rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        Save & Next
                     </button>
                 </div>
             </form>
@@ -480,6 +491,9 @@
         fetchBookingData(bookingId);
     }
 
+    function clearBooking() {
+        window.location.href = "{{ url('form') }}";
+    }
 
     function searchBookingID() {
         var bookingId = document.getElementById('booking_id').value;
@@ -518,6 +532,7 @@
             .then(data => {
                 if (data.success) {
                     var amendBookingData = data.amendBooking;
+                    console.log(amendBookingData);
                     populateAmendDropdown(amendBookingData, data.booking);
                     // Update form fields with the received data
                     fillFormFields(data.booking, data.password, amendID);
@@ -622,10 +637,12 @@
         document.getElementById('password').value = password;
         document.getElementById('amend').value = amendID;
         document.getElementById('amendid').value = amendID;
+        document.getElementById('saveForm').value = 'saveForm';
+        document.getElementById('saveNext').value = 'saveNext';
 
         // Select the container div
         const bookingContainer = document.getElementById('booking-container');
-        const navigatianContainer = document.getElementById('navigation-container');
+        // const navigatianContainer = document.getElementById('navigation-container');
         const summaryContainer = document.getElementById('summaryContainer') ;
 
         if (!bookingContainer) {
@@ -689,17 +706,17 @@
         const landTransferTotal = Number(booking.landtransfer_total) || 0;
         const optionalTotal = Number(booking.optional_total) || 0;
 
-        const optional01_total = 0;
-        const optional02_total = 0;
-        const optional03total = 0;
-        const optional04_total = 0;
-        const optional05_total = 0;
+        let optional01_total = 0;
+        let optional02_total = 0;
+        let optional03total = 0;
+        let optional04_total = 0;
+        let optional05_total = 0;
 
-        const optional01_total_no_sst = 0;
-        const optional02_total_no_sst = 0;
-        const optional03_total_no_sst = 0;
-        const optional04_total_no_sst = 0;
-        const optional05_total_no_sst = 0;
+        let optional01_total_no_sst = 0;
+        let optional02_total_no_sst = 0;
+        let optional03_total_no_sst = 0;
+        let optional04_total_no_sst = 0;
+        let optional05_total_no_sst = 0;
 
         if (booking.optional01_GST == 1) {
             optional01_total = booking.optional01_total;
@@ -731,12 +748,15 @@
             optional05_total_no_sst = booking.optional05_total;
         }
 
-        const total_optional = optional01_total + optional02_total + optional03_total + optional04_total + optional05_total;
+        // const total_optional = optional01_total + optional02_total + optional03_total + optional04_total + optional05_total;
         const total_optional_no_sst = optional01_total_no_sst + optional02_total_no_sst + optional03_total_no_sst + optional04_total_no_sst + optional05_total_no_sst;
 
         const totalAmount = packageTotal + landTransferTotal + optionalTotal;
 
-        summaryContainer.innerHTML = `
+        var bookingId = "{{ $booking_id }}";
+
+        if (!bookingId) {
+            summaryContainer.innerHTML = `
             <div class="form-section third-section">
                 <div class="pickup-table-container w-full">
                     <h2 class="text-sm font-bold text-gray-700 mb-4">Summary</h2>
@@ -773,14 +793,6 @@
                                         ${booking.optional_total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </td>
                                 </tr>
-                                <tr class="bg-gray-50">
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            Optional Arrangement (RM) SST Free
-                                        </td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            ${total_optional_no_sst.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                        </td>
-                                    </tr>
                                 <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-xs">
                                     <td class="border border-gray-300 px-4 py-2 text-gray-700">
                                         <strong>Total (RM)</strong>
@@ -796,70 +808,71 @@
                     </div>
                 </div>
             </div>
-        `;
+            `;
+        }
 
-        navigatianContainer.innerHTML = `
-            <nav class="mb-4">
-                <!-- Mobile Hamburger Button -->
-                <input type="checkbox" id="menu-toggle" class="peer hidden">
-                <label for="menu-toggle" class="md:hidden block text-gray-600 dark:text-gray-300 cursor-pointer p-2">
-                    ☰ Menu
-                </label>
+        // navigatianContainer.innerHTML = `
+        //     <nav class="mb-4">
+        //         <!-- Mobile Hamburger Button -->
+        //         <input type="checkbox" id="menu-toggle" class="peer hidden">
+        //         <label for="menu-toggle" class="md:hidden block text-gray-600 dark:text-gray-300 cursor-pointer p-2">
+        //             ☰ Menu
+        //         </label>
 
-                <!-- Desktop Breadcrumb Menu -->
-                <ol class="hidden md:flex flex-wrap items-center space-x-3 text-sm text-gray-600 dark:text-gray-300">
-                    <li>
-                        <a href="form?booking=${booking.booking_id}" class="text-indigo-600 font-semibold">
-                            Basic Information
-                        </a>
-                    </li>
-                    <li><span class="text-gray-400">|</span></li>
-                    <li><a href="form2/${booking.booking_id}" class="hover:text-indigo-500">Room Details</a></li>
-                    <li><span class="text-gray-400">|</span></li>
-                    <li><a href="form3/${booking.booking_id}" class="hover:text-indigo-500">Land Transfer & Optional</a></li>
-                    <li><span class="text-gray-400">|</span></li>
-                    <li><a href="form4/${booking.booking_id}" class="hover:text-indigo-500">Remarks</a></li>
-                    <li><span class="text-gray-400">|</span></li>
-                    <li><a href="form5/${booking.booking_id}" class="hover:text-indigo-500">Summary & Payment</a></li>
-                    <li><span class="text-gray-400">|</span></li>
-                    <li><a href="invoice/${booking.booking_id}" class="hover:text-indigo-500">Invoice</a></li>
-                </ol>
+        //         <!-- Desktop Breadcrumb Menu -->
+        //         <ol class="hidden md:flex flex-wrap items-center space-x-3 text-sm text-gray-600 dark:text-gray-300">
+        //             <li>
+        //                 <a href="form?booking=${booking.booking_id}" class="text-indigo-600 font-semibold">
+        //                     Basic Information
+        //                 </a>
+        //             </li>
+        //             <li><span class="text-gray-400">|</span></li>
+        //             <li><a href="form2/${booking.booking_id}" class="hover:text-indigo-500">Room Details</a></li>
+        //             <li><span class="text-gray-400">|</span></li>
+        //             <li><a href="form3/${booking.booking_id}" class="hover:text-indigo-500">Land Transfer & Optional</a></li>
+        //             <li><span class="text-gray-400">|</span></li>
+        //             <li><a href="form4/${booking.booking_id}" class="hover:text-indigo-500">Remarks</a></li>
+        //             <li><span class="text-gray-400">|</span></li>
+        //             <li><a href="form5/${booking.booking_id}" class="hover:text-indigo-500">Summary & Payment</a></li>
+        //             <li><span class="text-gray-400">|</span></li>
+        //             <li><a href="invoice/${booking.booking_id}" class="hover:text-indigo-500">Invoice</a></li>
+        //         </ol>
 
-                <!-- Mobile Dropdown Menu (Hidden by default) -->
-                <ol class="hidden peer-checked:block md:hidden mt-2 space-y-2 text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 p-3 rounded-md shadow-md">
-                    <li>
-                        <a href="form?booking=${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Basic Information
-                        </a>
-                    </li>
-                    <li>
-                        <a href="form2/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Room Details
-                        </a>
-                    </li>
-                    <li>
-                        <a href="form3/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Land Transfer & Optional
-                        </a>
-                    </li>
-                    <li>
-                        <a href="form4/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Remarks
-                        </a>
-                    </li>
-                    <li>
-                        <a href="form5/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Summary & Payment
-                        </a>
-                    </li>
-                    <li>
-                        <a href="invoice/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Invoice
-                        </a>
-                    </li>
-                </ol>
-            </nav>
-        `;
+        //         <!-- Mobile Dropdown Menu (Hidden by default) -->
+        //         <ol class="hidden peer-checked:block md:hidden mt-2 space-y-2 text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 p-3 rounded-md shadow-md">
+        //             <li>
+        //                 <a href="form?booking=${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        //                     Basic Information
+        //                 </a>
+        //             </li>
+        //             <li>
+        //                 <a href="form2/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        //                     Room Details
+        //                 </a>
+        //             </li>
+        //             <li>
+        //                 <a href="form3/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        //                     Land Transfer & Optional
+        //                 </a>
+        //             </li>
+        //             <li>
+        //                 <a href="form4/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        //                     Remarks
+        //                 </a>
+        //             </li>
+        //             <li>
+        //                 <a href="form5/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        //                     Summary & Payment
+        //                 </a>
+        //             </li>
+        //             <li>
+        //                 <a href="invoice/${booking.booking_id}" class="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        //                     Invoice
+        //                 </a>
+        //             </li>
+        //         </ol>
+        //     </nav>
+        // `;
 
     }
 

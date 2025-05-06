@@ -1,16 +1,22 @@
 <?php
 
 use App\Http\Controllers\CheckInReportController;
+use App\Http\Controllers\CheckRateController;
 use App\Http\Controllers\DailyGuestSumReportController;
 use App\Http\Controllers\DriverReportController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\LandOptionalController;
 use App\Http\Controllers\NameListReportController;
 use App\Http\Controllers\PaxReportController;
 use App\Http\Controllers\PaymentSummaryReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RemarksController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RoomDetailsController;
 use App\Http\Controllers\RoomListReportController;
 use App\Http\Controllers\SnorkellingReportController;
+use App\Http\Controllers\SummaryPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,33 +34,41 @@ Route::get('/form/{booking_id}/getBookingData/{amend_id}', [FormController::clas
 Route::get('/form/{booking_id}/getBookingAmendData', [FormController::class, 'getBookingAmendData']);
 Route::post('/form/{booking_id}', [FormController::class, 'amendBooking']);
 
-Route::get('/form2/{bookingId}/{amendId}', [FormController::class, 'form2'])->name('form2');
-Route::get('/form2/{bookingId}/{amendId}', [FormController::class, 'booking']);
-Route::post('/form2/{bookingId}/getRate', [FormController::class, 'changeValue'])->name('change-value');
-Route::post('/form2/{bookingId}/save', [FormController::class, 'saveValue'])->name('save-value');
+Route::get('/form2/{bookingId}/{amendId}', [RoomDetailsController::class, 'form2'])->name('form2');
+Route::get('/form2/{bookingId}/{amendId}', [RoomDetailsController::class, 'booking']);
+Route::post('/form2/{bookingId}/getRate', [RoomDetailsController::class, 'changeValue'])->name('change-value');
+Route::post('/form2/{bookingId}/save', [RoomDetailsController::class, 'saveValue'])->name('save-value');
+Route::post('/form2/{bookingId}/saveSpareRoom', [RoomDetailsController::class, 'saveSpareRoom'])->name('save-Spare-Room');
 
-Route::get('/form3/{bookingId}/{amendId}', [FormController::class, 'form3'])->name('form3');
-Route::get('/form3/{bookingId}/{amendId}', [FormController::class, 'pickupDetails']);
-Route::post('/form3/{bookingId}', [FormController::class, 'getPickupDetails'])->name('getPickupDetails');
-Route::post('/form3/{bookingId}/other', [FormController::class, 'getPickupDetailsOther'])->name('getPickupDetailsOther');
-Route::post('/form3/{bookingId}/otherDropoff', [FormController::class, 'getDropoffDetailsOther'])->name('getDropoffDetailsOther');
-Route::post('/form3/{bookingId}/optionalOriginal', [FormController::class, 'optionalOriginal'])->name('optionalOriginal');
-Route::post('/form3/{bookingId}/updateQtyOptional', [FormController::class, 'updateQtyOptional'])->name('updateQtyOptional');
-Route::delete('/form3/{id}/delete-pickup', [FormController::class, 'deletePickup'])->name('bookings.deletePickup');
-Route::delete('/form3/{bookingId}/deleteoptional', [FormController::class, 'deleteoptional'])->name('bookings.deleteoptional');
+Route::get('/check_rate', [CheckRateController::class, 'check_rate'])->name('check_rate');
+Route::post('/check_rate/getRate', [CheckRateController::class, 'changeValue'])->name('change-value');
+Route::post('/check_rate/save', [CheckRateController::class, 'saveValue'])->name('save-value');
+Route::post('/check_rate/saveSpareRoom', [CheckRateController::class, 'saveSpareRoom'])->name('save-Spare-Room');
 
-Route::get('/form4/{bookingId}/{amendId}', [FormController::class, 'form4'])->name('form4');
-Route::get('/form4/{bookingId}/{amendId}', [FormController::class, 'bookingDetails']);
-Route::post('/form4/{bookingId}', [FormController::class, 'updateField'])->name('update.field');
+Route::get('/form3/{bookingId}/{amendId}', [LandOptionalController::class, 'form3'])->name('form3');
+Route::get('/form3/{bookingId}/{amendId}', [LandOptionalController::class, 'pickupDetails']);
+Route::post('/form3/{bookingId}', [LandOptionalController::class, 'getPickupDetails'])->name('getPickupDetails');
+Route::post('/form3/{bookingId}/save', [LandOptionalController::class, 'save'])->name('save');
+Route::post('/form3/{bookingId}/other', [LandOptionalController::class, 'getPickupDetailsOther'])->name('getPickupDetailsOther');
+Route::post('/form3/{bookingId}/otherDropoff', [LandOptionalController::class, 'getDropoffDetailsOther'])->name('getDropoffDetailsOther');
+Route::post('/form3/{bookingId}/optionalOriginal', [LandOptionalController::class, 'optionalOriginal'])->name('optionalOriginal');
+Route::post('/form3/{bookingId}/updateQtyOptional', [LandOptionalController::class, 'updateQtyOptional'])->name('updateQtyOptional');
+Route::delete('/form3/{id}/delete-pickup', [LandOptionalController::class, 'deletePickup'])->name('bookings.deletePickup');
+Route::delete('/form3/{bookingId}/deleteoptional', [LandOptionalController::class, 'deleteoptional'])->name('bookings.deleteoptional');
 
-Route::get('/form5/{bookingId}/{amendId}', [FormController::class, 'form5'])->name('form5');
-Route::get('/form5/{bookingId}/{amendId}', [FormController::class, 'totalDetails']);
-Route::post('/form5/{bookingId}', [FormController::class, 'changeDeposit']); 
-Route::post('/form5/{bookingId}/save', [FormController::class, 'savePayment']); 
-Route::post('/form5/{bookingId}/addPayment', [FormController::class, 'addPayment']); 
+Route::get('/form4/{bookingId}/{amendId}', [RemarksController::class, 'form4'])->name('form4');
+Route::get('/form4/{bookingId}/{amendId}', [RemarksController::class, 'bookingDetails']);
+Route::post('/form4/{bookingId}', [RemarksController::class, 'updateField'])->name('update.field');
+Route::post('/form4/{bookingId}/save', [RemarksController::class, 'save'])->name('save');
 
-Route::get('/invoice/{bookingId}/{amendId}', [FormController::class, 'invoice'])->name('invoice');
-Route::get('/invoice/{bookingId}/{amendId}', [FormController::class, 'totalDetailsInvoice']);
+Route::get('/form5/{bookingId}/{amendId}', [SummaryPaymentController::class, 'form5'])->name('form5');
+Route::get('/form5/{bookingId}/{amendId}', [SummaryPaymentController::class, 'totalDetails']);
+Route::post('/form5/{bookingId}', [SummaryPaymentController::class, 'changeDeposit']); 
+Route::post('/form5/{bookingId}/save', [SummaryPaymentController::class, 'savePayment']); 
+Route::post('/form5/{bookingId}/addPayment', [SummaryPaymentController::class, 'addPayment']); 
+
+Route::get('/invoice/{bookingId}/{amendId}', [InvoiceController::class, 'invoice'])->name('invoice');
+Route::get('/invoice/{bookingId}/{amendId}', [InvoiceController::class, 'totalDetailsInvoice']);
 
 Route::get('/check_in_out_report', [ReportController::class, 'index'])->name('check_in_out_report');
 Route::get('/check_in_out_report', [ReportController::class, 'report'])->name('check_in_out_report');

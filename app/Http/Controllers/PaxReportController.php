@@ -36,7 +36,6 @@ class PaxReportController extends Controller
     {
         $duration = $request->duration ?? '';
         $fdate = Carbon::parse($request->input('fromdate', now()->subMonth()->toDateString()));
-        info($fdate);
         if ($duration == '7_days') {
             $tdate = Carbon::parse($fdate)->addDays(7)->toDateString();
         } else {
@@ -125,7 +124,6 @@ class PaxReportController extends Controller
         $generate_time = Carbon::now()->format('d/m/Y H:i:s');
         $formatted_fdate = Carbon::parse($request->input('fromdate', now()->subMonth()->toDateString()))
         ->toDateString();
-        info($formatted_fdate);
         return view('pax_report', compact('results', 'fdate', 'tdate', 'duration', 'generate_time', 'formatted_fdate'));
 
     }

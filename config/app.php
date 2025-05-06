@@ -51,8 +51,8 @@ return [
     | the application so that it's available within Artisan commands.
     |
     */
-
-    'url' => env('APP_URL', 'http://localhost/pelangi-booking-system'),
+    // 'url' => env('APP_URL', 'http://localhost/pelangi-booking-system'),
+    // 'url' => env('APP_URL', 'http://192.168.1.6/pelangi-booking-system'),
 
     /*
     |--------------------------------------------------------------------------

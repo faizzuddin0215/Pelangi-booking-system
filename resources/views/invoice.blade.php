@@ -152,7 +152,7 @@
                                 <th class="p-1 text-left">Fax</th>
                                 <td class="p-1 text-left">{{ $bookings->fax }}</td>
                                 <th class="p-1 text-right">Password</th>
-                                <td class="p-1 text-red-600 text-left">{{ $bookings->password }}</td>
+                                <td class="p-1 text-red-600 text-left">{{ $password }}</td>
                             </tr>
                         </table>
                         

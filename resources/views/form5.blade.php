@@ -333,22 +333,24 @@
                                 </table>
                             </div>
                             
-                            <!-- Add Row Button -->
-                            <div class="flex justify-end space-x-4">
-                                <button onclick="generatepayment()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-xs block w-full sm:w-auto">Generate Payment</button>
-                                <button onclick="viewinvoice()" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg text-xs block w-full sm:w-auto">View Invoice</button>
-                            </div>
-                            {{-- <br/>
-                            <div class="flex justify-end space-x-4">
+
+                            <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-4 py-3 flex justify-end gap-3 z-50 shadow-md">
+                                <!-- Navigation Buttons -->
                                 <button
                                     type="button"
-                                    id="save"
-                                    class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-xs"
-                                    onclick="save()"
+                                    id="btn-back"
+                                    class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition text-sm"
+                                    onclick="back()"
+                                    aria-label="Go Back"
                                 >
-                                    Save
+                                    Back
                                 </button>
-                            </div> --}}
+                            
+                                <button onclick="generatepayment()" class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm">Generate Payment</button>
+                            
+                                <button onclick="viewinvoice()" class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition text-sm">View Invoice</button>
+                            </div>
+            
                         </div>
                     </div>
                 </div>
@@ -361,9 +363,18 @@
 @endsection
 
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const bookingId = window.location.pathname.split('/')[4];
-    const amendId = window.location.pathname.split('/')[5];
+    const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+    const hostname = window.location.hostname;
+
+    let bookingId, amendId;
+
+    if (hostname === 'localhost') {
+        bookingId = pathSegments[3]; 
+        amendId = pathSegments[4];
+    } else {
+        bookingId = pathSegments[1]; 
+        amendId = pathSegments[2];
+    }
 
     let typingTimers = {};
     const doneTypingInterval = 1000; // Delay before sending update (1 second)
@@ -391,9 +402,18 @@
     }
 
     function save() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         let rows = document.querySelectorAll("tbody tr:not(:last-child):not(:nth-last-child(2))");
         let receiptData = [];
@@ -455,17 +475,35 @@
     }
 
     function viewinvoice() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
         window.location.href = "{{ url('invoice') }}/" + bookingId + "/" + amendId;
 
     }
 
     function generatepayment() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = window.location.pathname.split('/')[4];
-        const amendId = window.location.pathname.split('/')[5];
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
 
         const paymentDetails = {
             date : document.getElementById('datePicker').value,
@@ -499,5 +537,24 @@
             console.error('Error fetching pickup details:', error);
         });
     }
+
+    function back() {
+
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // removes empty segments
+        const hostname = window.location.hostname;
+
+        let bookingId, amendId;
+
+        if (hostname === 'localhost') {
+            bookingId = pathSegments[3]; 
+            amendId = pathSegments[4];
+        } else {
+            bookingId = pathSegments[1]; 
+            amendId = pathSegments[2];
+        }
+        window.location.href = "{{ url('form4') }}/" + bookingId + "/" + amendId;
+
+    }
+
 
 </script>
